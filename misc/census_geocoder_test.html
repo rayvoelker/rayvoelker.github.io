@@ -13080,6 +13080,7 @@ div#notebook {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">io</span>
 </pre></div>
@@ -13092,12 +13093,155 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Note</strong></p>
-<p>Address data in the file is formatted like this
+<h3 id="Note">Note<a class="anchor-link" href="#Note">&#182;</a></h3><p>Address data in the file is formatted like this
 (leave out the first line if it defines the column names):</p>
 <p><code>id,Street address,City,State,Zip</code></p>
 <p>or, this for example:</p>
 <p><code>481038546029,123 Fake Ln,Cincinnati,OH,45236</code></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="NOTE:">NOTE:<a class="anchor-link" href="#NOTE:">&#182;</a></h3><p>the sqlite database has been pre-created with 2 tables:</p>
+
+<pre><code>* patron_address_data
+* geocoding_output
+
+</code></pre>
+<p><strong>also note</strong> the table for geocoding_output has been set up to replace updated values for address data on conflicting primary keys</p>
+<div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="ss">&quot;patron_address_data&quot;</span> <span class="p">(</span>
+    <span class="ss">&quot;record_num&quot;</span>    <span class="nb">INTEGER</span><span class="p">,</span>
+    <span class="ss">&quot;id&quot;</span>    <span class="nb">INTEGER</span><span class="p">,</span>
+    <span class="ss">&quot;creation_date&quot;</span> <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;record_last_updated_date&quot;</span>  <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;ptype_code&quot;</span>    <span class="nb">INTEGER</span><span class="p">,</span>
+    <span class="ss">&quot;home_library_code&quot;</span> <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;expiration_date_gmt&quot;</span>   <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;birth_date_gmt&quot;</span>    <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;checkout_total&quot;</span>    <span class="nb">INTEGER</span><span class="p">,</span>
+    <span class="ss">&quot;renewal_total&quot;</span> <span class="nb">INTEGER</span><span class="p">,</span>
+    <span class="ss">&quot;activity_gmt&quot;</span>  <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;addr1&quot;</span> <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;addr2&quot;</span> <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;city&quot;</span>  <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;state&quot;</span> <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;postal_code&quot;</span>   <span class="nb">TEXT</span>
+<span class="p">);</span>
+
+<span class="c1">--</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="ss">&quot;geocoding_output&quot;</span> <span class="p">(</span>
+    <span class="ss">&quot;id&quot;</span>    <span class="nb">BIGINT</span><span class="p">,</span>
+    <span class="ss">&quot;address&quot;</span>    <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;outcome&quot;</span>    <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;confidence&quot;</span>    <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;census_address&quot;</span>    <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;cord&quot;</span>    <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="ss">&quot;tiger&quot;</span>    <span class="nb">BIGINT</span><span class="p">,</span>
+    <span class="ss">&quot;side&quot;</span>    <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">(</span><span class="ss">&quot;id&quot;</span><span class="p">)</span> <span class="k">ON</span> <span class="n">CONFLICT</span> <span class="k">REPLACE</span>
+<span class="p">);</span>
+</pre></div>
+<h3 id="the-sierra-query-to-fill-the-sqlite-table-patron_address_data-is-below:">the sierra query to fill the sqlite table patron_address_data is below:<a class="anchor-link" href="#the-sierra-query-to-fill-the-sqlite-table-patron_address_data-is-below:">&#182;</a></h3><div class="highlight"><pre><span></span><span class="k">select</span>
+<span class="n">r</span><span class="p">.</span><span class="n">record_num</span><span class="p">,</span>
+<span class="n">r</span><span class="p">.</span><span class="n">id</span><span class="p">,</span>
+<span class="nb">date</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">creation_date_gmt</span><span class="p">)</span> <span class="k">as</span> <span class="n">creation_date</span><span class="p">,</span>
+<span class="nb">date</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">record_last_updated_gmt</span><span class="p">)</span> <span class="k">as</span> <span class="n">record_last_updated_date</span><span class="p">,</span>
+<span class="n">p</span><span class="p">.</span><span class="n">ptype_code</span><span class="p">,</span>
+<span class="n">p</span><span class="p">.</span><span class="n">home_library_code</span><span class="p">,</span>
+<span class="n">p</span><span class="p">.</span><span class="n">expiration_date_gmt</span><span class="p">,</span>
+<span class="n">p</span><span class="p">.</span><span class="n">birth_date_gmt</span><span class="p">,</span>
+<span class="n">p</span><span class="p">.</span><span class="n">checkout_total</span><span class="p">,</span>
+<span class="n">p</span><span class="p">.</span><span class="n">renewal_total</span><span class="p">,</span>
+<span class="n">p</span><span class="p">.</span><span class="n">activity_gmt</span><span class="p">,</span>
+<span class="p">(</span>
+    <span class="k">SELECT</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">addr1</span>
+    <span class="k">from</span>
+    <span class="n">sierra_view</span><span class="p">.</span><span class="n">patron_record_address</span> <span class="k">as</span> <span class="n">a</span>
+    <span class="k">where</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">patron_record_id</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">id</span>
+
+    <span class="k">order</span> <span class="k">by</span>
+    <span class="n">display_order</span><span class="p">,</span>
+    <span class="n">patron_record_address_type_id</span>
+
+    <span class="k">limit</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">addr1</span><span class="p">,</span>
+<span class="p">(</span>
+    <span class="k">SELECT</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">addr2</span>
+    <span class="k">from</span>
+    <span class="n">sierra_view</span><span class="p">.</span><span class="n">patron_record_address</span> <span class="k">as</span> <span class="n">a</span>
+    <span class="k">where</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">patron_record_id</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">id</span>
+
+    <span class="k">order</span> <span class="k">by</span>
+    <span class="n">display_order</span><span class="p">,</span>
+    <span class="n">patron_record_address_type_id</span>
+
+    <span class="k">limit</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">addr2</span><span class="p">,</span>
+
+<span class="p">(</span>
+    <span class="k">SELECT</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">city</span>
+    <span class="k">from</span>
+    <span class="n">sierra_view</span><span class="p">.</span><span class="n">patron_record_address</span> <span class="k">as</span> <span class="n">a</span>
+    <span class="k">where</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">patron_record_id</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">id</span>
+
+    <span class="k">order</span> <span class="k">by</span>
+    <span class="n">display_order</span><span class="p">,</span>
+    <span class="n">patron_record_address_type_id</span>
+
+    <span class="k">limit</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">city</span><span class="p">,</span>
+<span class="p">(</span>
+    <span class="k">SELECT</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">region</span>
+    <span class="k">from</span>
+    <span class="n">sierra_view</span><span class="p">.</span><span class="n">patron_record_address</span> <span class="k">as</span> <span class="n">a</span>
+    <span class="k">where</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">patron_record_id</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">id</span>
+
+    <span class="k">order</span> <span class="k">by</span>
+    <span class="n">display_order</span><span class="p">,</span>
+    <span class="n">patron_record_address_type_id</span>
+
+    <span class="k">limit</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="k">as</span> <span class="k">state</span><span class="p">,</span>
+<span class="p">(</span>
+    <span class="k">SELECT</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">postal_code</span>
+    <span class="k">from</span>
+    <span class="n">sierra_view</span><span class="p">.</span><span class="n">patron_record_address</span> <span class="k">as</span> <span class="n">a</span>
+    <span class="k">where</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">patron_record_id</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">id</span>
+
+    <span class="k">order</span> <span class="k">by</span>
+    <span class="n">display_order</span><span class="p">,</span>
+    <span class="n">patron_record_address_type_id</span>
+
+    <span class="k">limit</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">postal_code</span>
+
+<span class="k">from</span>
+<span class="n">sierra_view</span><span class="p">.</span><span class="n">record_metadata</span> <span class="k">as</span> <span class="n">r</span>
+
+<span class="k">JOIN</span>
+<span class="n">sierra_view</span><span class="p">.</span><span class="n">patron_record</span> <span class="k">as</span> <span class="n">p</span>
+<span class="k">ON</span>
+  <span class="n">p</span><span class="p">.</span><span class="n">record_id</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">id</span>
+
+<span class="k">where</span>
+<span class="n">r</span><span class="p">.</span><span class="n">record_type_code</span> <span class="o">=</span> <span class="s1">&#39;p&#39;</span>
+<span class="k">and</span> <span class="n">r</span><span class="p">.</span><span class="n">campus_code</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">and</span> <span class="n">r</span><span class="p">.</span><span class="n">deletion_date_gmt</span> <span class="k">is</span> <span class="k">null</span>
+</pre></div>
 
 </div>
 </div>
@@ -13107,29 +13251,14 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># how many lines of input in the address data?</span>
-<span class="o">!</span>wc -l geocode_input_100000.csv
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># this is the name of our local database that has the address data pre-populated as described above</span>
+<span class="n">connection_uri</span> <span class="o">=</span> <span class="s1">&#39;sqlite:///patron_address.db&#39;</span>
+
+<span class="c1"># use sqlalchemy to create our database connection</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">connection_uri</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>10000 geocode_input_100000.csv
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -13139,8 +13268,9 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># how many bytes is the file?</span>
-<span class="o">!</span>ls -sh geocode_input_100000.csv
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># get the number of rows of addresses in our address table </span>
+<span class="n">num_rows</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;select count(*) as count from patron_address_data&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;num_rows: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_rows</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -13157,7 +13287,7 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>512K geocode_input_100000.csv
+<pre>num_rows: 599877
 </pre>
 </div>
 </div>
@@ -13171,59 +13301,27 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># this is the sql for the local database to assemble the csv data</span>
+<span class="c1"># NOTE that we&#39;ll supply the offset value in the loop below</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">SELECT</span>
+<span class="s1">id,</span>
+<span class="s1">addr1 || coalesce(&#39; &#39; || addr2, &#39;&#39;) as &#39;Street address&#39;,</span>
+<span class="s1">coalesce(city, &#39; &#39;) as City,</span>
+<span class="s1">coalesce(state, &#39; &#39;) as State,</span>
+<span class="s1">coalesce(postal_code, &#39; &#39;)  as Zip</span>
 
-<span class="c1"># name of the input file:</span>
-<span class="n">input_address_file</span> <span class="o">=</span> <span class="s1">&#39;geocode_input_100000.csv&#39;</span>
+<span class="s1">FROM</span>
+<span class="s1">patron_address_data</span>
 
-<span class="c1"># name of the output file (the csv we get back from the endpoint):</span>
-<span class="n">output_file</span> <span class="o">=</span> <span class="s1">&#39;geocode_output_100000.csv&#39;</span>
+<span class="s1">ORDER BY</span>
+<span class="s1">id DESC</span>
 
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">NOTE: the column names for output are:</span>
-<span class="sd">id,</span>
-<span class="sd">address</span>
-<span class="sd">outcome,</span>
-<span class="sd">confidence,</span>
-<span class="sd">census_address,</span>
-<span class="sd">coord,</span>
-<span class="sd">tiger,</span>
-<span class="sd">side</span>
-<span class="sd">&#39;&#39;&#39;</span>
-
-
-<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-    <span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://geocoding.geo.census.gov/geocoder/locations/addressbatch&#39;</span><span class="p">,</span>
-    <span class="n">files</span><span class="o">=</span><span class="p">{</span>
-        <span class="s1">&#39;addressFile&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;input.txt&#39;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_address_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="s1">&#39;text/csv&#39;</span><span class="p">),</span>
-    <span class="p">},</span>
-    <span class="n">data</span><span class="o">=</span><span class="p">{</span>  
-        <span class="s1">&#39;benchmark&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
-        <span class="s1">&#39;layers&#39;</span><span class="p">:</span><span class="s1">&#39;all&#39;</span>
-    <span class="p">}</span>
-<span class="p">)</span>
+<span class="s1">LIMIT 100 OFFSET ?</span>
+<span class="s1">&#39;&#39;&#39;</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 128 ms, sys: 39.7 ms, total: 168 ms
-Wall time: 5min 39s
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -13233,40 +13331,61 @@ Wall time: 5min 39s
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># read the contents of the csv output from the response</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)),</span> 
-                 <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">names</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">,</span> <span class="s1">&#39;outcome&#39;</span><span class="p">,</span> <span class="s1">&#39;confidence&#39;</span><span class="p">,</span> <span class="s1">&#39;census_address&#39;</span><span class="p">,</span> <span class="s1">&#39;cord&#39;</span><span class="p">,</span> <span class="s1">&#39;tiger&#39;</span><span class="p">,</span> <span class="s1">&#39;side&#39;</span><span class="p">),</span>
-                 <span class="c1"># note we have to use the pandas integer data type, since there are possible null values</span>
-                 <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;tiger&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Int64Dtype</span><span class="p">()}</span>
-                <span class="p">)</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># DO IT TO IT!!!</span>
+<span class="c1"># if we want to just run a test of a shorter range ... say 1/100 the size of our full database</span>
+<span class="c1"># for i in range(0, int(num_rows / 100), 1000):</span>
+<span class="c1"># otherwise, just run through the whole list...</span>
+<span class="c1"># for i in range(0, int(num_rows), 1000):</span>
 
-    </div>
-</div>
-</div>
+<span class="c1"># TODO:</span>
+<span class="c1"># play around with the batch sizes ... just remember to adjust the sql AND the</span>
+<span class="c1"># stepping in the for loop below</span>
 
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># write the results to a csv file</span>
-<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
-</pre></div>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">),</span> <span class="mi">100</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">conn</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">)</span>
+        
+        <span class="c1"># read the data into a file buffer (in csv format)</span>
+        <span class="c1"># NOTE: this is how we really should be feeding the API, but it seems broken for some reason</span>
+        <span class="n">file_buffer</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
 
-    </div>
-</div>
-</div>
+        <span class="c1"># This is how we really should do it ... leaving it for now</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># file_buffer.getvalue().split(&#39;\n&#39;)</span>
 
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>wc -l <span class="s1">&#39;geocode_output_100000&#39;</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;temp.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># !wc -l temp.csv</span>
+        
+        <span class="c1"># feed the temp.csv file (should really be file_buffer csv) to the geocoder API...</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># produce some output so we know it&#39;s about do do the request</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://geocoding.geo.census.gov/geocoder/locations/addressbatch&#39;</span><span class="p">,</span>
+            <span class="n">files</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;addressFile&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;input.csv&#39;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;temp.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="s1">&#39;text/csv&#39;</span><span class="p">),</span>
+            <span class="p">},</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">{</span>  
+                <span class="s1">&#39;benchmark&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+                <span class="s1">&#39;layers&#39;</span><span class="p">:</span><span class="s1">&#39;all&#39;</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># create the dataframe for output from the response we received from the geocoder endpoint</span>
+        <span class="n">df_output</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)),</span>
+                                <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                <span class="n">names</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">,</span> <span class="s1">&#39;outcome&#39;</span><span class="p">,</span> <span class="s1">&#39;confidence&#39;</span><span class="p">,</span> <span class="s1">&#39;census_address&#39;</span><span class="p">,</span> <span class="s1">&#39;cord&#39;</span><span class="p">,</span> <span class="s1">&#39;tiger&#39;</span><span class="p">,</span> <span class="s1">&#39;side&#39;</span><span class="p">),</span>
+                                <span class="c1"># note we have to use the pandas integer data type, since there are possible null values</span>
+                                <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;tiger&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Int64Dtype</span><span class="p">()}</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># output the contents to a csv file</span>
+        <span class="n">df_output</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;./csv_output/geocoding_output_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+        
+        <span class="c1"># also write output back to sqlite database (should already be created, so append to it)</span>
+        <span class="c1"># NOTE: I don&#39;t know if we want to empty the table before doing this, just to make sure we only get fresh data</span>
+        <span class="c1"># https://github.com/pandas-dev/pandas/issues/15988</span>
+        <span class="n">df_output</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s1">&#39;geocoding_output&#39;</span><span class="p">,</span> <span class="n">conn</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">)</span>
+    
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13283,7 +13402,12 @@ Wall time: 5min 39s
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>10000 geocode_output_100000
+<pre>.0
+.100
+.200
+.300
+.400
+.500
 </pre>
 </div>
 </div>
