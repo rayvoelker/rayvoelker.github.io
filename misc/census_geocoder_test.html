@@ -13370,7 +13370,8 @@ div#notebook {
         <span class="p">)</span>
         
         <span class="c1"># create the dataframe for output from the response we received from the geocoder endpoint</span>
-        <span class="n">df_output</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)),</span>
+        <span class="c1"># the data seems to come back to us in iso-8859 format</span>
+        <span class="n">df_output</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;iso-8859-1&#39;</span><span class="p">)),</span>
                                 <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">names</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">,</span> <span class="s1">&#39;outcome&#39;</span><span class="p">,</span> <span class="s1">&#39;confidence&#39;</span><span class="p">,</span> <span class="s1">&#39;census_address&#39;</span><span class="p">,</span> <span class="s1">&#39;cord&#39;</span><span class="p">,</span> <span class="s1">&#39;tiger&#39;</span><span class="p">,</span> <span class="s1">&#39;side&#39;</span><span class="p">),</span>
                                 <span class="c1"># note we have to use the pandas integer data type, since there are possible null values</span>
@@ -13410,6 +13411,105 @@ div#notebook {
 .500
 </pre>
 </div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">r</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[6]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;Response [200]&gt;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">r</span><span class="o">.</span><span class="n">headers</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[7]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;Cache-Control&#39;: &#39;private, no-store&#39;, &#39;Date&#39;: &#39;Wed, 23 Sep 2020 16:27:21 GMT&#39;, &#39;Content-Length&#39;: &#39;13791&#39;, &#39;Content-Type&#39;: &#39;text/plain&#39;, &#39;Content-Disposition&#39;: &#39;attachment; filename=GeocodeResults.csv&#39;, &#39;Strict-Transport-Security&#39;: &#39;max-age=31536000&#39;, &#39;X-ORACLE-DMS-RID&#39;: &#39;0&#39;, &#39;X-Content-Type-Options&#39;: &#39;nosniff&#39;, &#39;Set-Cookie&#39;: &#39;JSESSIONID=ME-7ynLz1zu53xHEz47STA75hBof_DiSxu48F47myaM13nbU2jFO!-1923847688; path=/; secure; HttpOnly&#39;, &#39;X-ORACLE-DMS-ECID&#39;: &#39;68771dd0-ff6a-42e1-884d-f1cd15c6047c-03c5ca9b&#39;, &#39;X-XSS-Protection&#39;: &#39;1;mode=block&#39;, &#39;X-Frame-Options&#39;: &#39;Deny&#39;, &#39;Vary&#39;: &#39;Origin&#39;}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">r</span><span class="o">.</span><span class="n">encoding</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;ISO-8859-1&#39;</pre>
+</div>
+
 </div>
 
 </div>
