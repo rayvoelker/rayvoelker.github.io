@@ -8,7 +8,7 @@
   		<meta name="keywords" content="IUG, IUG 2021, Sierra, SQL">
   		<meta name="author" content="Ray Voelker">
 
-		<title>DRAFT HOWTO SQL: Sierra - Part 1</title>
+		<title>HOWTO SQL: Sierra - Part 1</title>
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
 		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
@@ -29,6 +29,39 @@
 							<!-- style="height: 200px; margin: 0 auto auto auto; background: transparent;" -->
 						</p>				
 				</section>
+				<section>
+					<h3>Links for this presentation:</h3>
+					<ul>
+						<li>
+							Slides:<br /> <a href="https://rayvoelker.github.io/iug2021/">https://rayvoelker.github.io/iug2021/</a>
+						</li>
+						<li>
+							PDF Slides:<br /><a href="https://rayvoelker.github.io/iug2021/slides.pdf">https://rayvoelker.github.io/iug2021/slides.pdf</a>
+						</li>
+						<li>
+							SQL Sandbox:<br /><a href="https://howtosql.cincy.pl/iug2021/">https://howtosql.cincy.pl/iug2021/</a>
+						</li>
+
+					</ul>
+				</section>
+				<section>
+					<h3>Meet Jeremy and Ray</h3>
+					<span class="fragment">
+						<div class="paragraph"><p>...and Rufus and Audrey</p></div>
+						<div class="paragraph">
+							<p >
+								<span class="image"><img src="img/rufus.png" alt="rufus" width="250"></span>
+								<span class="image"><img src="img/audrey.png" alt="audrey" width="250"></span>
+							</p>
+						</div>
+					</span>
+				</section>
+
+				<!-- <section>
+					<h3>Kinda reminds me of this meme</h3>
+					<img src="img/alt_audrey_rufus.png">
+
+				</section> -->
 				<section>
 					<h2>Overview of Relational Databases</h2> 
 					<p>
@@ -908,9 +941,21 @@ last_checkout_groups
 				data-background-iframe="https://howtosql.cincy.pl/iug2021/sierra_view?sql=SELECT%0D%0ACASE%0D%0AWHEN+i.last_checkout_gmt+%3E%3D+%272020-01-01%27+THEN+%271-recent+checkouts%27%0D%0AWHEN+i.last_checkout_gmt+%3E%3D+%272018-01-01%27+THEN+%272-kinda-recent+checkouts%27%0D%0AWHEN+i.last_checkout_gmt+%3C++%272018-01-01%27+THEN+%273-long-ago+checkouts%27%0D%0AWHEN+i.last_checkout_gmt+is+null+THEN+%274-NO+CHECKOUTS%21%27%0D%0AEND+as+%27last_checkout_groups%27%2C%0D%0Acount%28*%29+as+count_items%0D%0A%0D%0AFROM%0D%0Aitem_record+as+i%0D%0A%09%0D%0AWHERE%0D%0Ai.location_code+%3D+%271cj%27%0D%0A%0D%0AGROUP+BY%0D%0Alast_checkout_groups%0D%0A%0D%0AORDER+BY%0D%0Alast_checkout_groups"
 				data-background-interactive>
 			</section>
-			
 
-
+			<section>
+				<h1>THANK YOU!</h1>
+				<p>Other Useful Resources</p>
+				<ul>
+					<li>
+						IUG 2019 - Sierra SQL presentation material:<br />
+						<a href="https://iug2019-sql.github.io/">https://iug2019-sql.github.io/</a>
+					</li>
+					<li>
+						HOWTO SQL Sandbox (<a href="https://docs.datasette.io/">Datasette</a>):<br />
+						<a href="https://howtosql.cincy.pl/iug2021/">https://howtosql.cincy.pl/iug2021/</a>
+					</li>
+				</ul>
+			</section>
 <!-- 
 SELECT
 record_id, location_code, item_status_code,
@@ -948,6 +993,7 @@ limit 100
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
+			Reveal.configure({ pdfSeparateFragments: false });
 		</script>
 	</body>
 </html>
