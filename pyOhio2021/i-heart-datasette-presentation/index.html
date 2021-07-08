@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		
+		<meta name="description" content="I ❤️ Datasette">
+  		<meta name="keywords" content="Ray Voelker, PyOhio, PyOhio 2021, PyOhio2021, Datasette, Python, SQL">
+  		<meta name="author" content="Ray Voelker">
+
+		<title>Ray Voelker - PyOhio 2021 - I ❤️ Datasette</title>
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-background="white">
+					<img src='img/PyOhio-logo-rounded.png' style="height: 200px; margin: 0 auto auto auto; background: transparent;">
+					<h3 style="text-transform: none; ">I ❤️ Datasette</h3>
+						<p>
+							Ray Voelker<br/>
+							ray.voelker@gmail.com<br/>
+							ray.voelker@cincinnatilibrary.org<br />
+							<img class="r-stretch" style="margin: 0 auto auto auto; height: 250px;" src="img/chpl_logo.png">
+							<!-- style="height: 200px; margin: 0 auto auto auto; background: transparent;" -->
+						</p>
+				</section>
+				<section data-background="white">
+					<h2 style="text-transform: none; ">What is Datasette?</h2> 
+					<p>
+					<ul>
+						<li class="fragment">
+							Datasette is described by its creator, Simon Willison, as "a tool for exploring and publishing data".
+						</li> 
+						<li class="fragment">
+							“Datasette is aimed at 
+							<span style="color: firebrick">journalists</span>, 
+							<span style="color: firebrick">museum curators</span>,
+							<span style="color: firebrick">archivists</span>,
+							<span style="color: firebrick">local governments</span> and 
+							<span style="color: firebrick "><u>anyone else who has data</u> that they wish to share with the world</span>.”
+						</li>
+					</ul>
+					</p>
+				</section>
+				<section>
+					<h2>Simon's Datasette Presentations / Demos</h2>					
+					<ul>
+						<li>
+							“Introduction to Datasette and sqlite-utils”<br />
+							<a href="https://www.youtube.com/watch?v=7kDFBnXaw-c">https://www.youtube.com/watch?v=7kDFBnXaw-c</a>
+						</li>
+						<li>
+							“Simon Willison - Instant serverless APIs, powered by SQLite - PyCon 2019”<br />
+							<a href="https://www.youtube.com/watch?v=pTr1uLQTJNE">https://www.youtube.com/watch?v=pTr1uLQTJNE</a>
+						</li>
+						<li>
+							“Keynote: Simon Willson - Datasette and Dogsheep: Liberating your personal data”
+							<a href="https://www.youtube.com/watch?v=UFn82w-97kI">https://www.youtube.com/watch?v=UFn82w-97kI</a>
+						</li>							
+					</ul>
+				</section>
+
+				<section>
+					<h2 style="text-transform: none;">Things I ❤️ about Datasette</h2>
+					<ul>
+						<li class="fragment">Written in Python / Available via pip</li>
+						<li class="fragment">Easy and intuitive to use</li>
+						<li class="fragment">Well-documented</li>
+						<li class="fragment">Useful, Large, and growing plugin library</li>
+						<li class="fragment">Built-in API... <span class="fragment"> Using SQL!</span></li>
+						<li class="fragment">Open source + supportive developer</li>
+						<li class="fragment">Flexible deployment with scale-to-zero-cost / free hosting options in mind</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2 style="text-transform: none;">Cincinnati & Hamilton County Public Library: Collection Analysis</h2>
+					<a href="https://ilsweb.cincinnatilibrary.org/collection-analysis/">https://ilsweb.cincinnatilibrary.org/collection-analysis/</a>
+
+				</section>
+
+				<section
+					data-background="white"
+					data-background-iframe="https://ilsweb.cincinnatilibrary.org/collection-analysis/"
+					data-background-interactive>
+				</section>
+
+				<section data-background="white">
+					<h2>Question...</h2>
+					<ul>
+						<li>What types of item formats are there in the collection?</li>
+					</ul>
+				</section>
+
+				<section
+					data-background="white"
+					data-background-iframe="https://ilsweb.cincinnatilibrary.org/collection-analysis/current_collection-f70ece4?sql=select%0D%0A++distinct+item.item_format%0D%0Afrom%0D%0A++item"
+					data-background-interactive> 
+				</section>
+
+				<section>
+					<pre>
+						<code class="sql" data-trim>
+-- how many of each item type?
+select
+  distinct item.item_format,
+  count(item.item_record_num) as count_total_items
+from
+  item
+group by
+  item.item_format
+having
+  count(item.item_record_num) >= 1000
+order by
+  count_total_items DESC					
+						</code>
+					</pre>
+					
+				</section>
+
+				<section
+					data-background-iframe="https://ilsweb.cincinnatilibrary.org/collection-analysis/current_collection-3d4a4b7?sql=--+how+many+of+each+item+type%3F%0D%0Aselect%0D%0A++distinct+item.item_format%2C%0D%0A++count%28item.item_record_num%29+as+count_total_items%0D%0Afrom%0D%0A++item%0D%0Agroup+by%0D%0A++item.item_format%0D%0Ahaving%0D%0A++count%28item.item_record_num%29+%3E%3D+1000%0D%0Aorder+by%0D%0A++count_total_items+DESC"
+					data-background-interactive>
+				</section>
+
+				<section
+					<ul>
+						<li>
+							Datasette Plugin: 
+							<span style="color: firebrick">Vega</span> 
+							-- A Datasette plugin that provides tools for generating charts using Vega
+						</li>						
+					</ul>
+				</section>
+
+				<section
+					data-background="white"
+					data-background-iframe="https://ilsweb.cincinnatilibrary.org/collection-analysis/current_collection-3d4a4b7?sql=--+how+many+of+each+item+type%3F%0D%0Aselect%0D%0A++distinct+item.item_format%2C%0D%0A++count%28item.item_record_num%29+as+count_total_items%0D%0Afrom%0D%0A++item%0D%0Agroup+by%0D%0A++item.item_format%0D%0Ahaving%0D%0A++count%28item.item_record_num%29+%3E%3D+1000%0D%0Aorder+by%0D%0A++count_total_items+DESC"
+					data-background-interactive>
+				</section>
+
+				<section>
+					<p>
+						Named parameters: Datasette provides a nice interface when a named parameter is placed within a SQL query
+					</p>
+					
+				</section>
+
+				<section>
+					<pre>
+						<code class="sql" data-trim data-line-numbers="7">
+select
+  bib.*
+from
+  bib
+where
+  indexed_subjects like '%' 
+  || :subject 
+  || '%'
+						</code>
+					</pre>			
+				</section>
+
+				<section
+					data-background="white"
+					data-background-iframe="https://ilsweb.cincinnatilibrary.org/collection-analysis/current_collection-3d4a4b7?sql=select%0D%0A++bib.*%2C%0D%0A++%28%0D%0A++++select%0D%0A++++++sum%28checkout_total%29%0D%0A++++from%0D%0A++++++item%0D%0A++++where%0D%0A++++++item.bib_record_num+%3D+bib.bib_record_num%0D%0A++%29+as+total_checkouts%2C%0D%0A++%27https%3A%2F%2Fcincinnatilibrary.bibliocommons.com%2Fitem%2Fshow%2F%27+%7C%7C+bib.bib_record_num+%7C%7C+%27170%27+as+catalog_link%0D%0Afrom%0D%0A++bib%0D%0Awhere%0D%0A++indexed_subjects+like+%27%25%27+%0D%0A++%7C%7C+%3Asubject+%0D%0A++%7C%7C+%27%25%27%0D%0Aorder+by%0D%0A++total_checkouts+DESC&subject=dystopias"
+					data-background-interactive>
+				</section>
+				
+				<section>
+					<h3>Canned Queries</h3>
+					<ul>
+						<li>
+							Create something that looks more like a traditional REST API 
+						</li>
+					</ul>
+					<pre>
+						<code class="python" data-trim>
+# Datasette URI construction
+scheme = "https://"
+host = "ilsweb.cincinnatilibrary.org"
+# path contains the path of the Datasette instance,
+# and the name of the database
+path = "/collection-analysis/current_collection"
+canned_query_path = "/item_lookup_by_barcode"
+response_format = '' # '' or '.csv' or '.json'
+query_parameter = "?barcode="
+query_parameter_value = "A000036107985"
+
+full_request_uri = scheme + host \
+    + path + canned_query_path + response_format \
+    + query_parameter + query_parameter_value
+						</code>
+					</pre>
+					
+				</section>
+
+				<section
+					data-background-iframe="https://ilsweb.cincinnatilibrary.org/collection-analysis/current_collection/item_lookup_by_barcode?barcode=A000036107985"
+					data-background-interactive>
+				</section>
+				
+				<section data-background="white">
+					<img width="250" src='img/PyOhio-logo-rounded.png'>
+					<img width="250" src="img/chpl_logo.png">
+										
+						<p>
+							Thanks, and <u>please</u>, let me know if you come up with any cool queries or ❤️ Datasette as much as I do!
+						</p>
+
+						<p>
+							Ray Voelker<br/>
+							ray.voelker@gmail.com<br/>
+							ray.voelker@cincinnatilibrary.org<br />
+							
+							<!-- style="height: 200px; margin: 0 auto auto auto; background: transparent;" -->
+						</p>
+				</section>
+
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
