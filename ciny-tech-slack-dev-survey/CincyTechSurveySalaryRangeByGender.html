@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .error {
+        color: red;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.8.1"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "title": {"anchor": "middle"}}, "data": {"name": "data-3e914022f171243c5de09371486db12f"}, "mark": "bar", "encoding": {"color": {"type": "ordinal", "field": "salary_range"}, "facet": {"type": "ordinal", "columns": 1, "field": "results year"}, "tooltip": [{"type": "quantitative", "field": "results year"}, {"type": "nominal", "field": "gender"}, {"type": "nominal", "field": "salary_range"}, {"type": "quantitative", "field": "percent_total"}, {"type": "quantitative", "field": "count"}], "x": {"type": "quantitative", "field": "percent_total", "scale": {"domain": [0, 100]}, "sort": "-x"}, "y": {"type": "nominal", "field": "gender", "title": null}}, "title": "Cincy Tech Survey: Salary by Gender", "$schema": "https://vega.github.io/schema/vega-lite/v4.8.1.json", "datasets": {"data-3e914022f171243c5de09371486db12f": [{"gender": "  Female", "salary_range": "   <= $70,000", "results year": 2017, "count": 6, "percent_total": 50.0}, {"gender": "  Female", "salary_range": "  $70,000 to $90,000", "results year": 2017, "count": 5, "percent_total": 41.67}, {"gender": "  Female", "salary_range": "  $90,000 to $118,800", "results year": 2017, "count": 1, "percent_total": 8.33}, {"gender": " Male", "salary_range": "   <= $70,000", "results year": 2017, "count": 23, "percent_total": 33.82}, {"gender": " Male", "salary_range": "  $70,000 to $90,000", "results year": 2017, "count": 15, "percent_total": 22.06}, {"gender": " Male", "salary_range": "  $90,000 to $118,800", "results year": 2017, "count": 14, "percent_total": 20.59}, {"gender": " Male", "salary_range": "$118,800 to $135,000", "results year": 2017, "count": 12, "percent_total": 17.65}, {"gender": " Male", "salary_range": "> $135,000", "results year": 2017, "count": 4, "percent_total": 5.88}, {"gender": "  Female", "salary_range": "   <= $70,000", "results year": 2019, "count": 1, "percent_total": 14.29}, {"gender": "  Female", "salary_range": "  $70,000 to $90,000", "results year": 2019, "count": 5, "percent_total": 71.43}, {"gender": "  Female", "salary_range": "  $90,000 to $118,800", "results year": 2019, "count": 1, "percent_total": 14.29}, {"gender": " Male", "salary_range": "   <= $70,000", "results year": 2019, "count": 16, "percent_total": 22.22}, {"gender": " Male", "salary_range": "  $70,000 to $90,000", "results year": 2019, "count": 11, "percent_total": 15.28}, {"gender": " Male", "salary_range": "  $90,000 to $118,800", "results year": 2019, "count": 15, "percent_total": 20.83}, {"gender": " Male", "salary_range": "$118,800 to $135,000", "results year": 2019, "count": 19, "percent_total": 26.39}, {"gender": " Male", "salary_range": "> $135,000", "results year": 2019, "count": 11, "percent_total": 15.28}, {"gender": "NA / Other", "salary_range": "  $70,000 to $90,000", "results year": 2019, "count": 1, "percent_total": 100.0}, {"gender": "  Female", "salary_range": "   <= $70,000", "results year": 2021, "count": 6, "percent_total": 27.27}, {"gender": "  Female", "salary_range": "  $70,000 to $90,000", "results year": 2021, "count": 3, "percent_total": 13.64}, {"gender": "  Female", "salary_range": "  $90,000 to $118,800", "results year": 2021, "count": 5, "percent_total": 22.73}, {"gender": "  Female", "salary_range": "$118,800 to $135,000", "results year": 2021, "count": 5, "percent_total": 22.73}, {"gender": "  Female", "salary_range": "> $135,000", "results year": 2021, "count": 3, "percent_total": 13.64}, {"gender": " Male", "salary_range": "   <= $70,000", "results year": 2021, "count": 7, "percent_total": 7.22}, {"gender": " Male", "salary_range": "  $70,000 to $90,000", "results year": 2021, "count": 17, "percent_total": 17.53}, {"gender": " Male", "salary_range": "  $90,000 to $118,800", "results year": 2021, "count": 16, "percent_total": 16.49}, {"gender": " Male", "salary_range": "$118,800 to $135,000", "results year": 2021, "count": 22, "percent_total": 22.68}, {"gender": " Male", "salary_range": "> $135,000", "results year": 2021, "count": 35, "percent_total": 36.08}, {"gender": "NA / Other", "salary_range": "   <= $70,000", "results year": 2021, "count": 1, "percent_total": 33.33}, {"gender": "NA / Other", "salary_range": "$118,800 to $135,000", "results year": 2021, "count": 1, "percent_total": 33.33}, {"gender": "NA / Other", "salary_range": "> $135,000", "results year": 2021, "count": 1, "percent_total": 33.33}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div class="error" style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
