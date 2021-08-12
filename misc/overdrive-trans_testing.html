@@ -14285,20 +14285,20 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Requirement already satisfied: pip in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (21.2.3)
+<pre>Requirement already satisfied: pip in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (21.2.4)
 Requirement already satisfied: pandas in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (1.3.1)
-Requirement already satisfied: pytz&gt;=2017.3 in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from pandas) (2021.1)
 Requirement already satisfied: numpy&gt;=1.17.3 in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from pandas) (1.21.1)
+Requirement already satisfied: pytz&gt;=2017.3 in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from pandas) (2021.1)
 Requirement already satisfied: python-dateutil&gt;=2.7.3 in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from pandas) (2.8.2)
 Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from python-dateutil&gt;=2.7.3-&gt;pandas) (1.16.0)
 Requirement already satisfied: sqlalchemy in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (1.4.22)
 Requirement already satisfied: greenlet!=0.4.17 in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from sqlalchemy) (1.1.0)
 Requirement already satisfied: sqlite-utils in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (3.15.1)
 Requirement already satisfied: sqlite-fts4 in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from sqlite-utils) (1.0.1)
-Requirement already satisfied: click-default-group in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from sqlite-utils) (1.2.2)
-Requirement already satisfied: dateutils in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from sqlite-utils) (0.6.12)
-Requirement already satisfied: tabulate in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from sqlite-utils) (0.8.9)
 Requirement already satisfied: click in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from sqlite-utils) (8.0.1)
+Requirement already satisfied: tabulate in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from sqlite-utils) (0.8.9)
+Requirement already satisfied: dateutils in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from sqlite-utils) (0.6.12)
+Requirement already satisfied: click-default-group in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from sqlite-utils) (1.2.2)
 Requirement already satisfied: python-dateutil in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from dateutils-&gt;sqlite-utils) (2.8.2)
 Requirement already satisfied: pytz in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from dateutils-&gt;sqlite-utils) (2021.1)
 Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/lib/python3.9/site-packages (from python-dateutil-&gt;dateutils-&gt;sqlite-utils) (1.16.0)
@@ -14317,12 +14317,13 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">nan</span>
 <span class="kn">import</span> <span class="nn">sqlite_utils</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="c1"># sha1 might be very easily crackable ...</span>
 <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha1</span>
 <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">pbkdf2_hmac</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">urandom</span><span class="p">,</span> <span class="n">system</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
@@ -14340,10 +14341,34 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># grab the files for import ...</span>
+
+<span class="n">csv_dir</span> <span class="o">=</span> <span class="s2">&quot;./csv_data/&quot;</span>
+
+<span class="n">overdrive_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^plchc_OverDrive.*\.csv$&quot;</span><span class="p">)</span>
+
+<span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">csv_dir</span><span class="p">)</span> <span class="k">if</span> <span class="n">overdrive_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">file</span><span class="p">)]</span>
+<span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># print some files ...</span>
+<span class="c1"># files[:5]</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># note: we want to store and REUSE THIS to always generate the same patron hash across all our data</span>
 <span class="c1"># TODO: think about maybe use pickle and try to load the file if it exists .. or just generate </span>
 
-<span class="n">salt</span> <span class="o">=</span> <span class="n">urandom</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">salt</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">urandom</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span>
 
 <span class="n">iterations</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">sqlite_file_name</span> <span class="o">=</span> <span class="s1">&#39;overdrive_trans.db&#39;</span>
@@ -14359,7 +14384,7 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># -- make checkout_id a UNIQUE PRIMARY KEY</span>
@@ -14419,7 +14444,7 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># use these column names in place of what they send</span>
@@ -14431,14 +14456,30 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 <span class="sd">&#39;Checkout ID&#39;, &#39;Branch&#39;, &#39;Checked out&#39;, &#39;Lending period&#39;,</span>
 <span class="sd">&#39;Borrowed from&#39;, &#39;Renewal&#39;, &#39;Lucky Day&#39;, &#39;User ID&#39;, &#39;Zip&#39;, &#39;Extra2&#39;,</span>
 <span class="sd">&#39;Extra3&#39;, &#39;Extra4&#39;, &#39;Extra5&#39;]</span>
+
+<span class="sd">[&#39;TitleID&#39;, &#39;ReserveID&#39;, &#39;Title&#39;, &#39;Edition&#39;, &#39;Creator&#39;, &#39;ISBN&#39;,</span>
+<span class="sd">&#39;Language&#39;, &#39;Audience/Rating&#39;, &#39;Subject&#39;, &#39;Format&#39;, &#39;Publisher&#39;,</span>
+<span class="sd">&#39;Date Added to site&#39;, &#39;Own&#39;, &#39;Lic. purchased&#39;, &#39;Lic. left&#39;, &#39;Lic. used&#39;,</span>
+<span class="sd">&#39;Checkout ID&#39;, &#39;Branch&#39;, &#39;Checked out&#39;, &#39;Lending period&#39;,</span>
+<span class="sd">&#39;Borrowed from&#39;, &#39;Bought by&#39;, &#39;Renewal &#39;, &#39;User ID&#39;, &#39;Zip&#39;, &#39;Extra2&#39;,</span>
+<span class="sd">&#39;Extra3&#39;, &#39;Extra4&#39;, &#39;Extra5&#39;]</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="c1"># date_added not in all sources ...</span>
+<span class="c1"># </span>
 <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title_id&#39;</span><span class="p">,</span> <span class="s1">&#39;reserve_id&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;edition&#39;</span><span class="p">,</span> <span class="s1">&#39;creator&#39;</span><span class="p">,</span> <span class="s1">&#39;isbn&#39;</span><span class="p">,</span>
 <span class="s1">&#39;language&#39;</span><span class="p">,</span> <span class="s1">&#39;audience&#39;</span><span class="p">,</span> <span class="s1">&#39;subject&#39;</span><span class="p">,</span> <span class="s1">&#39;format&#39;</span><span class="p">,</span> <span class="s1">&#39;publisher&#39;</span><span class="p">,</span>
 <span class="s1">&#39;date_added&#39;</span><span class="p">,</span> <span class="s1">&#39;own&#39;</span><span class="p">,</span> <span class="s1">&#39;lic_purchased&#39;</span><span class="p">,</span> <span class="s1">&#39;lic_left&#39;</span><span class="p">,</span> <span class="s1">&#39;lic_used&#39;</span><span class="p">,</span>
 <span class="s1">&#39;checkout_id&#39;</span><span class="p">,</span> <span class="s1">&#39;branch&#39;</span><span class="p">,</span> <span class="s1">&#39;checked_out&#39;</span><span class="p">,</span> <span class="s1">&#39;lending_period&#39;</span><span class="p">,</span>
 <span class="s1">&#39;borrowed_from&#39;</span><span class="p">,</span> <span class="s1">&#39;renewal&#39;</span><span class="p">,</span> <span class="s1">&#39;lucky_day&#39;</span><span class="p">,</span> <span class="s1">&#39;user_id&#39;</span><span class="p">,</span> <span class="s1">&#39;zip&#39;</span><span class="p">,</span> <span class="s1">&#39;extra_2&#39;</span><span class="p">,</span>
 <span class="s1">&#39;extra_3&#39;</span><span class="p">,</span> <span class="s1">&#39;extra_4&#39;</span><span class="p">,</span> <span class="s1">&#39;extra_5&#39;</span><span class="p">]</span>
+
+<span class="c1"># columns = [&#39;title_id&#39;, &#39;reserve_id&#39;, &#39;title&#39;, &#39;edition&#39;, &#39;creator&#39;, &#39;isbn&#39;,</span>
+<span class="c1"># &#39;language&#39;, &#39;audience&#39;, &#39;subject&#39;, &#39;format&#39;, &#39;publisher&#39;,</span>
+<span class="c1"># &#39;own&#39;, &#39;lic_purchased&#39;, &#39;lic_left&#39;, &#39;lic_used&#39;,</span>
+<span class="c1"># &#39;checkout_id&#39;, &#39;branch&#39;, &#39;checked_out&#39;, &#39;lending_period&#39;,</span>
+<span class="c1"># &#39;borrowed_from&#39;, &#39;renewal&#39;, &#39;lucky_day&#39;, &#39;user_id&#39;, &#39;zip&#39;, &#39;extra_2&#39;,</span>
+<span class="c1"># &#39;extra_3&#39;, &#39;extra_4&#39;, &#39;extra_5&#39;]</span>
 </pre></div>
 
      </div>
@@ -14449,7 +14490,7 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># def hash_patron(patron):</span>
@@ -14475,7 +14516,7 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># maybe use this one instead</span>
@@ -14514,7 +14555,7 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>O55buihMqITXS1DTvzK5kklgunu/2t50WRHHbDQt1+Y=
+<pre>mvegJOtXc2pO1H6+JyTXy2BdoUaXMSTIPiiE7WTVEzY=
 </pre>
 </div>
 </div>
@@ -14526,20 +14567,17 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="s1">&#39;CheckoutsDetail2021-04.csv&#39;</span><span class="p">,</span>
-    <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Date added to site&#39;</span><span class="p">,</span> <span class="s1">&#39;Checked out&#39;</span><span class="p">],</span>
-    <span class="n">dtype</span><span class="o">=</span><span class="p">{</span>
-        <span class="c1"># isbn possibly contains a mix of numbers and characters</span>
-        <span class="s1">&#39;ISBN&#39;</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="p">}</span>
-<span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># to ensure that we&#39;re not inserting duplicate values do the following:</span>
+<span class="c1"># * insert data into a &quot;temp&quot; table (temp_overdrive_trans)</span>
+<span class="c1"># * use the data in &quot;temp&quot; table to perform an INSERT OR IGNORE INTO operation</span>
+<span class="c1"># * drop the temp table</span>
+<span class="c1"># * vacuum?</span>
 
-<span class="c1"># rename columns</span>
-<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
+
+    
 </pre></div>
 
      </div>
@@ -14547,10 +14585,212 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 </div>
 </div>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">csv_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; ...&#39;</span><span class="p">)</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+        <span class="n">file</span><span class="p">,</span>
+        <span class="c1"># parse_dates=[&#39;Date added to site&#39;, &#39;Checked out&#39;],</span>
+        <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Checked out&#39;</span><span class="p">],</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="p">{</span>
+            <span class="c1"># isbn possibly contains a mix of numbers and characters</span>
+            <span class="s1">&#39;ISBN&#39;</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="c1"># rename columns</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
+
+    <span class="c1"># for the .extract() method, there&#39;s an issue when there are NULL values, so convert these to empty string values (&#39;&#39;)</span>
+    <span class="n">bib_info_columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;title_id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;title&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;edition&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;creator&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;isbn&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;language&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;audience&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;subject&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;format&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;publisher&#39;</span>
+    <span class="p">]</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="n">bib_info_columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">bib_info_columns</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;temp_overdrive_trans&#39;</span><span class="p">,</span>
+        <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+        <span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">,</span> <span class="c1"># this table should exist with the proper structure, so we&#39;ll need to append</span>
+        <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="c1"># don&#39;t use the index column in the db    </span>
+        <span class="n">chunksize</span><span class="o">=</span><span class="mi">10000</span>
+    <span class="p">)</span>
+
+    <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    INSERT OR IGNORE INTO overdrive_trans (</span>
+<span class="s2">        title_id, </span>
+<span class="s2">        reserve_id, </span>
+<span class="s2">        title, </span>
+<span class="s2">        edition, </span>
+<span class="s2">        creator, </span>
+<span class="s2">        isbn, </span>
+<span class="s2">        language, </span>
+<span class="s2">        audience, </span>
+<span class="s2">        subject, </span>
+<span class="s2">        format, </span>
+<span class="s2">        publisher, </span>
+<span class="s2">        date_added, </span>
+<span class="s2">        own, </span>
+<span class="s2">        lic_purchased, </span>
+<span class="s2">        lic_left, </span>
+<span class="s2">        lic_used, </span>
+<span class="s2">        checkout_id,</span>
+<span class="s2">        branch, </span>
+<span class="s2">        checked_out, </span>
+<span class="s2">        lending_period, </span>
+<span class="s2">        borrowed_from, </span>
+<span class="s2">        renewal, </span>
+<span class="s2">        lucky_day, </span>
+<span class="s2">        user_id, </span>
+<span class="s2">        zip, </span>
+<span class="s2">        extra_2, </span>
+<span class="s2">        extra_3, </span>
+<span class="s2">        extra_4, </span>
+<span class="s2">        extra_5</span>
+<span class="s2">    ) </span>
+<span class="s2">    SELECT</span>
+<span class="s2">    *</span>
+<span class="s2">    FROM</span>
+<span class="s2">    temp_overdrive_trans</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="n">sql_drop_table</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">    DROP TABLE IF EXISTS </span><span class="si">{table_name}</span><span class="s2"></span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">con</span><span class="p">:</span>
+        <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+        <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_drop_table</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="s1">&#39;temp_overdrive_trans&#39;</span><span class="p">))</span>
+        <span class="c1"># cannot VACUUM from within a transaction, we&#39;ll have to do it with the standard sqlite module </span>
+
+    <span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">sqlite_file_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">con</span><span class="p">:</span>
+        <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;VACUUM&quot;</span><span class="p">)</span>
+        
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">done.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># break</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>./csv_data/plchc_OverDrive_01-02-2021.csv ...	done.
+./csv_data/plchc_OverDrive_01-09-2021.csv ...	done.
+./csv_data/plchc_OverDrive_01-16-2021.csv ...	done.
+./csv_data/plchc_OverDrive_01-23-2021.csv ...	done.
+./csv_data/plchc_OverDrive_01-30-2021.csv ...	done.
+./csv_data/plchc_OverDrive_02-06-2021.csv ...	done.
+./csv_data/plchc_OverDrive_02-13-2021.csv ...	done.
+./csv_data/plchc_OverDrive_02-20-2021.csv ...	done.
+./csv_data/plchc_OverDrive_02-27-2021.csv ...	done.
+./csv_data/plchc_OverDrive_03-06-2021.csv ...	done.
+./csv_data/plchc_OverDrive_03-13-2021.csv ...	done.
+./csv_data/plchc_OverDrive_03-20-2021.csv ...	done.
+./csv_data/plchc_OverDrive_03-27-2021.csv ...	done.
+./csv_data/plchc_OverDrive_04-03-2021.csv ...	done.
+./csv_data/plchc_OverDrive_04-10-2021.csv ...	done.
+./csv_data/plchc_OverDrive_04-17-2021.csv ...	done.
+./csv_data/plchc_OverDrive_04-24-2021.csv ...	done.
+./csv_data/plchc_OverDrive_05-01-2021.csv ...	done.
+./csv_data/plchc_OverDrive_05-08-2021.csv ...	done.
+./csv_data/plchc_OverDrive_05-15-2021.csv ...	done.
+./csv_data/plchc_OverDrive_05-22-2021.csv ...	done.
+./csv_data/plchc_OverDrive_05-29-2021.csv ...	done.
+./csv_data/plchc_OverDrive_06-05-2021.csv ...	done.
+./csv_data/plchc_OverDrive_06-12-2021.csv ...	done.
+./csv_data/plchc_OverDrive_06-19-2021.csv ...	done.
+./csv_data/plchc_OverDrive_06-26-2021.csv ...	done.
+./csv_data/plchc_OverDrive_07-03-2021.csv ...	done.
+./csv_data/plchc_OverDrive_07-10-2021.csv ...	done.
+./csv_data/plchc_OverDrive_07-17-2021.csv ...	done.
+./csv_data/plchc_OverDrive_07-24-2021.csv ...	done.
+./csv_data/plchc_OverDrive_07-31-2021.csv ...	done.
+./csv_data/plchc_OverDrive_08-07-2021.csv ...	done.
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>Index([&#39;title_id&#39;, &#39;reserve_id&#39;, &#39;title&#39;, &#39;edition&#39;, &#39;creator&#39;, &#39;isbn&#39;,
+       &#39;language&#39;, &#39;audience&#39;, &#39;subject&#39;, &#39;format&#39;, &#39;publisher&#39;, &#39;date_added&#39;,
+       &#39;own&#39;, &#39;lic_purchased&#39;, &#39;lic_left&#39;, &#39;lic_used&#39;, &#39;checkout_id&#39;, &#39;branch&#39;,
+       &#39;checked_out&#39;, &#39;lending_period&#39;, &#39;borrowed_from&#39;, &#39;renewal&#39;,
+       &#39;lucky_day&#39;, &#39;user_id&#39;, &#39;zip&#39;, &#39;extra_2&#39;, &#39;extra_3&#39;, &#39;extra_4&#39;,
+       &#39;extra_5&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># hash dem patrons</span>
@@ -14573,88 +14813,11 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># pd.set_option(&#39;display.max_columns&#39;, None)</span>
 <span class="c1"># df.head()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># to ensure that we&#39;re not inserting duplicate values do the following:</span>
-<span class="c1"># * insert data into a &quot;temp&quot; table (temp_overdrive_trans)</span>
-<span class="c1"># * use the data in &quot;temp&quot; table to perform an INSERT OR IGNORE INTO operation</span>
-<span class="c1"># * drop the temp table</span>
-<span class="c1"># * vacuum?</span>
-
-<span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;temp_overdrive_trans&#39;</span><span class="p">,</span>
-    <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
-    <span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">,</span> <span class="c1"># this table should exist with the proper structure, so we&#39;ll need to append</span>
-    <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="c1"># don&#39;t use the index column in the db    </span>
-    <span class="n">chunksize</span><span class="o">=</span><span class="mi">10000</span>
-<span class="p">)</span>
-
-<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">INSERT OR IGNORE INTO overdrive_trans (</span>
-<span class="s2">    title_id, </span>
-<span class="s2">    reserve_id, </span>
-<span class="s2">    title, </span>
-<span class="s2">    edition, </span>
-<span class="s2">    creator, </span>
-<span class="s2">    isbn, </span>
-<span class="s2">    language, </span>
-<span class="s2">    audience, </span>
-<span class="s2">    subject, </span>
-<span class="s2">    format, </span>
-<span class="s2">    publisher, </span>
-<span class="s2">    date_added, </span>
-<span class="s2">    own, </span>
-<span class="s2">    lic_purchased, </span>
-<span class="s2">    lic_left, </span>
-<span class="s2">    lic_used, </span>
-<span class="s2">    checkout_id,</span>
-<span class="s2">    branch, </span>
-<span class="s2">    checked_out, </span>
-<span class="s2">    lending_period, </span>
-<span class="s2">    borrowed_from, </span>
-<span class="s2">    renewal, </span>
-<span class="s2">    lucky_day, </span>
-<span class="s2">    user_id, </span>
-<span class="s2">    zip, </span>
-<span class="s2">    extra_2, </span>
-<span class="s2">    extra_3, </span>
-<span class="s2">    extra_4, </span>
-<span class="s2">    extra_5</span>
-<span class="s2">) </span>
-<span class="s2">SELECT</span>
-<span class="s2">*</span>
-<span class="s2">FROM</span>
-<span class="s2">temp_overdrive_trans</span>
-<span class="s2">&quot;&quot;&quot;</span>
-
-<span class="n">sql_drop_table</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
-<span class="s2">DROP TABLE IF EXISTS </span><span class="si">{table_name}</span><span class="s2"></span>
-<span class="s2">&quot;&quot;&quot;</span>
-
-<span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">con</span><span class="p">:</span>
-    <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
-    <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_drop_table</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="s1">&#39;temp_overdrive_trans&#39;</span><span class="p">))</span>
-    <span class="c1"># cannot VACUUM from within a transaction, we&#39;ll have to do it with the standard sqlite module </span>
-
-<span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">sqlite_file_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">con</span><span class="p">:</span>
-    <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;VACUUM&quot;</span><span class="p">)</span>
-    
 </pre></div>
 
      </div>
@@ -14672,7 +14835,7 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: I think I found an issue with the `extract` method in the sqlite-utils library </span>
@@ -14681,7 +14844,7 @@ Requirement already satisfied: six&gt;=1.5 in /home/ray/Documents/jupyter/venv/l
 
 <span class="c1"># don&#39;t know if there&#39;s a better way to do this--this feels like a hack</span>
 <span class="c1"># IMPORTANT: make sure that sqlite3 is installed on the system</span>
-<span class="n">system</span><span class="p">(</span><span class="s2">&quot;sqlite3 </span><span class="si">{}</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">.backup &#39;</span><span class="si">{}</span><span class="s2">&#39;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sqlite_file_name</span><span class="p">,</span> <span class="n">sqlite_export_file_name</span><span class="p">))</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;sqlite3 </span><span class="si">{}</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">.backup &#39;</span><span class="si">{}</span><span class="s2">&#39;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sqlite_file_name</span><span class="p">,</span> <span class="n">sqlite_export_file_name</span><span class="p">))</span>
 
 <span class="c1"># perform the rest of the tasks on the export db ..</span>
 
