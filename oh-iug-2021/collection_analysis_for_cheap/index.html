@@ -25,15 +25,18 @@
 		<div class="reveal">
 			<div class="slides">
 				<section data-background="white">
-					<img src='img/ohiug-logo.png' style="height: 200px; margin: 0 auto auto auto; background: transparent;">
+					<img src='img/ohiug-logo.png' style="height: 150px; margin: 0 auto auto auto; background: transparent;">
 					<div class="font-container" style="font-family: 'MADFONT'; font-weight: normal; font-style: normal;">
 						<p style="font-size: 45px;">Collection Analysis <br />for $5 a Month. <span style="color: #ea454b;">CHEAP</span></p>
 					</div>
+
+					<p>
+						<a style="font-size: 32px" href="https://rayvoelker.github.io/oh-iug-2021/collection_analysis_for_cheap/index.html">https://rayvoelker.github.io/oh-iug-2021/collection_analysis_for_cheap</a>
+					</p>
 					
 					<p style="font-size: 30px;">
 						Ray Voelker<br />
-						ray.voelker@gmail.com<br />
-						ray.voelker@cincinnatilibrary.org<br />
+						ray.voelker@gmail.com | ray.voelker@cincinnatilibrary.org<br />
 						<img class="r-stretch" style="margin: 0 auto auto auto; height: 250px;" src="img/chpl_logo.png">
 						<!-- style="height: 200px; margin: 0 auto auto auto; background: transparent;" -->
 					</p>
@@ -300,10 +303,11 @@ full_request_uri = scheme + host \
 			// - https://revealjs.com/config/
 			Reveal.initialize({
 				hash: true,
-
+				
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
+			Reveal.configure({ pdfSeparateFragments: false });
 		</script>
 	</body>
 </html>
