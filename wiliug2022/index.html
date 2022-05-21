@@ -24,14 +24,16 @@
 					<img src='img/wiliuglogo2015.png' style="height: 175px; margin: 0 auto auto auto; background: transparent;">
 					<img class="r-stretch" style="height: 300px; margin: 0 auto auto auto;" src="img/CHPL_Brandmark_Primary.png">
 					<h3>HOWTO SQL: SIERRA</h3>
-					<table>
+					<p>Slides: <a href="https://rayvoelker.github.io/wiliug2022/">https://rayvoelker.github.io/wiliug2022/</a></p>
+					<p>SQL Sandbox: <a href="https://wiliug2022.cincy.pl/">https://wiliug2022.cincy.pl</a></p>
+					<!-- <table>
 						<tr>
-							<td>Slides:</td><td><a href="https://rayvoelker.github.io/wiliug-2022/">https://rayvoelker.github.io/wiliug-2022/</a></td>
+							<td>Slides:</td><td><a href="https://rayvoelker.github.io/wiliug2022/">https://rayvoelker.github.io/wiliug2022/</a></td>
 						</tr>
 						<tr>
 							<td>SQL Sandbox:</td><td><a href="https://wiliug2022.cincy.pl/">https://wiliug2022.cincy.pl</a></td>
 						</tr>
-					</table>
+					</table> -->
 					
 					<p style="font-size: 30px;">
 						Ray Voelker<br />
@@ -40,6 +42,8 @@
 						<!-- style="height: 200px; margin: 0 auto auto auto; background: transparent;" -->
 					</p>
 				</section>
+
+
 				<section>
 					<h2>Overview of Relational Databases</h2> 
 					<p>
@@ -395,11 +399,11 @@ LIMIT
 					<ul>
 						<li>Suppose we have a short list of <span style="color: yellow;">bib record numbers</span>, 
 							and we wanted to generate a list of <span style="color: yellow;">attached item data</span> including the following attributes...  
-							<ul>
-								<li class="fragment"><span style="color: yellow;">item status code</span></li>
-								<li class="fragment"><span style="color: yellow;">location code</span></li>
-								<li class="fragment"><span style="color: yellow;">call number</span></li>
-								<li class="fragment"><span style="color: yellow;">barcode</span></li>
+							<ul class="fragment">
+								<li><span style="color: yellow;">item status code</span></li>
+								<li><span style="color: yellow;">location code</span></li>
+								<li><span style="color: yellow;">call number</span></li>
+								<li><span style="color: yellow;">barcode</span></li>
 							</ul>
 						</li>
 						<li class="fragment">The following query would get us started on that list...</li>
@@ -666,7 +670,7 @@ HAVING
 			
 			<section>
 				<p>SQL GROUP BY / HAVING and Aggregate Functions cont.</p>
-				<pre><code class="sql" data-trim data-line-numbers="4-14|7,8,11,12,15,16">
+				<pre><code class="sql" data-trim data-line-numbers="4-14|1-3,15-20">
 SELECT
   p.publish_year,
   count(*) as count_titles,
@@ -700,55 +704,55 @@ HAVING
 			<section>
 				<p>SQL Common Table Expression (CTE) WITH Clause</p>
 				<pre>
-					<code class="sql" data-trim data-line-numbers="1">
-WITH bib_item_data as (
-  SELECT
-    p.publish_year,
-    l.bib_record_id,
-    l.item_record_id,
-    i.item_status_code
-  FROM
-    bib_record_property as p
-    LEFT JOIN bib_record_item_record_link as l on l.bib_record_id = p.bib_record_id
-    LEFT JOIN item_record as i on i.record_id = l.item_record_id
-  WHERE
-    p.publish_year IN (
-      SELECT
-        p2.publish_year
-      FROM
-        bib_record_property as p2
-      GROUP BY
-        p2.publish_year
-      HAVING
-        count(p2.bib_record_id) > 300
-    )
-)
-SELECT
-  publish_year,
-  count(item_record_id),
-  count(
-    CASE
-      WHEN item_status_code IN ('-', 't') THEN 1
-      ELSE NULL
-    END
-  ),
-  count(
-    CASE
-      WHEN item_status_code NOT IN ('-', 't') THEN 1
-      ELSE NULL
-    END
-  )
-FROM
-  bib_item_data
-GROUP BY
-  publish_year
+					<code class="sql" data-trim data-line-numbers="1-24|25-42">
+						WITH target_bib_item_data AS (
+							-- first, gather the bib AND attached item data
+							--   that meet our filter requirements
+							SELECT
+							  p.publish_year,
+							  p.bib_record_id,
+							  i.record_id AS item_record_id,
+							  i.item_status_code
+							FROM
+							  bib_record_property as p
+							  LEFT JOIN bib_record_item_record_link as l on l.bib_record_id = p.bib_record_id
+							  LEFT JOIN item_record as i on i.record_id = l.item_record_id
+							WHERE
+							  p.publish_year IN (
+								SELECT
+								  p2.publish_year
+								FROM
+								  bib_record_property as p2
+								GROUP BY
+								  p2.publish_year
+								HAVING
+								  count(*) > 300
+							  )
+						  ) -- second, SELECT from the above CTE
+						  SELECT
+							t.publish_year,
+							count(DISTINCT t.bib_record_id) as count_titles,
+							(
+							  SELECT
+								count(t2.item_record_id)
+							  FROM
+								target_bib_item_data AS t2
+							  WHERE
+								t2.publish_year = t.publish_year
+								AND t2.item_status_code = '-'
+							) AS count_item_status_dash,
+							count(t.item_record_id)
+						  FROM
+							target_bib_item_data AS t
+						  GROUP BY
+							t.publish_year
 					</code>
 				</pre>
 			
 			</section>
 
 			<section 
-				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=WITH+bib_item_data+as+%28%0D%0A++SELECT%0D%0A++++p.publish_year%2C%0D%0A++++l.bib_record_id%2C%0D%0A++++l.item_record_id%2C%0D%0A++++i.item_status_code%0D%0A++FROM%0D%0A++++bib_record_property+as+p%0D%0A++++LEFT+JOIN+bib_record_item_record_link+as+l+on+l.bib_record_id+%3D+p.bib_record_id%0D%0A++++LEFT+JOIN+item_record+as+i+on+i.record_id+%3D+l.item_record_id%0D%0A++WHERE%0D%0A++++p.publish_year+IN+%28%0D%0A++++++SELECT%0D%0A++++++++p2.publish_year%0D%0A++++++FROM%0D%0A++++++++bib_record_property+as+p2%0D%0A++++++GROUP+BY%0D%0A++++++++p2.publish_year%0D%0A++++++HAVING%0D%0A++++++++count%28p2.bib_record_id%29+%3E+300%0D%0A++++%29%0D%0A%29%0D%0ASELECT%0D%0A++publish_year%2C%0D%0A++count%28item_record_id%29%2C%0D%0A++count%28%0D%0A++++CASE%0D%0A++++++WHEN+item_status_code+IN+%28%27-%27%2C+%27t%27%29+THEN+1%0D%0A++++++ELSE+NULL%0D%0A++++END%0D%0A++%29%2C%0D%0A++count%28%0D%0A++++CASE%0D%0A++++++WHEN+item_status_code+NOT+IN+%28%27-%27%2C+%27t%27%29+THEN+1%0D%0A++++++ELSE+NULL%0D%0A++++END%0D%0A++%29%0D%0AFROM%0D%0A++bib_item_data%0D%0AGROUP+BY%0D%0A++publish_year"
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=WITH+target_bib_item_data+AS+%28%0D%0A++--+first%2C+gather+the+bib+AND+attached+item+data%0D%0A++--+++that+meet+our+filter+requirements%0D%0A++SELECT%0D%0A++++p.publish_year%2C%0D%0A++++p.bib_record_id%2C%0D%0A++++i.record_id+AS+item_record_id%2C%0D%0A++++i.item_status_code%0D%0A++FROM%0D%0A++++bib_record_property+as+p%0D%0A++++LEFT+JOIN+bib_record_item_record_link+as+l+on+l.bib_record_id+%3D+p.bib_record_id%0D%0A++++LEFT+JOIN+item_record+as+i+on+i.record_id+%3D+l.item_record_id%0D%0A++WHERE%0D%0A++++p.publish_year+IN+%28%0D%0A++++++SELECT%0D%0A++++++++p2.publish_year%0D%0A++++++FROM%0D%0A++++++++bib_record_property+as+p2%0D%0A++++++GROUP+BY%0D%0A++++++++p2.publish_year%0D%0A++++++HAVING%0D%0A++++++++count%28*%29+%3E+300%0D%0A++++%29%0D%0A%29+--%0D%0A--+second%2C+SELECT+from+the+above+CTE%0D%0ASELECT%0D%0A++t.publish_year%2C%0D%0A++count%28DISTINCT+t.bib_record_id%29+as+count_titles%2C%0D%0A++%28%0D%0A++++SELECT%0D%0A++++++count%28t2.item_record_id%29%0D%0A++++FROM%0D%0A++++++target_bib_item_data+AS+t2%0D%0A++++WHERE%0D%0A++++++t2.publish_year+%3D+t.publish_year%0D%0A++++++AND+t2.item_status_code+%3D+%27-%27%0D%0A++%29+AS+count_item_status_dash%2C%0D%0A++count%28t.item_record_id%29%0D%0AFROM%0D%0A++target_bib_item_data+AS+t%0D%0AGROUP+BY%0D%0A++t.publish_year"
 				data-background-interactive>
 			</section>
 
@@ -781,78 +785,62 @@ GROUP BY
 
 			<section>
 				<p>Subquery cont.</p>
-				<pre><code class="sql" data-trim data-line-numbers="1-5|7-9|11-12|14-15">
-SELECT
-ir.record_id
-
+				<pre><code class="sql" data-trim data-line-numbers="5-6">SELECT
+  ir.record_id
 FROM
-item_record as ir
-
-JOIN varfield AS vf 
-  ON vf.record_id = ir.record_id
-  AND vf.varfield_type_code = 'b'
-
+  item_record as ir
+  JOIN varfield AS vf ON vf.record_id = ir.record_id 
+    AND vf.varfield_type_code = 'b'
 GROUP BY
-ir.record_id
-
+  ir.record_id
 HAVING
-count(*) > 1
+  count(*) > 1
 				</code></pre>
 			</section>
 
 			<section 
-				data-background-iframe="https://site-checker.cincy.pl/iug2021/sierra_view?sql=SELECT%0D%0Air.record_id%0D%0A%0D%0AFROM%0D%0Aitem_record+as+ir%0D%0A%0D%0AJOIN+varfield+AS+vf+%0D%0A++ON+vf.record_id+%3D+ir.record_id%0D%0A++AND+vf.varfield_type_code+%3D+%27b%27%0D%0A%0D%0AGROUP+BY%0D%0Air.record_id%0D%0A%0D%0AHAVING%0D%0Acount%28*%29+%3E+1"
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++ir.record_id%0D%0AFROM%0D%0A++item_record+as+ir%0D%0A++JOIN+varfield+AS+vf+ON+vf.record_id+%3D+ir.record_id%0D%0A++AND+vf.varfield_type_code+%3D+%27b%27%0D%0AGROUP+BY%0D%0A++ir.record_id%0D%0AHAVING%0D%0A++count(*)+%3E+1"
 				data-background-interactive>
 			</section>
 
 			<section>
 				<p>Subquery cont.</p>
-				<pre><code class="sql" data-trim data-line-numbers="21-31|19-20,32|8-9|11-17|1-6">
-SELECT
-i.record_id as item_record_id,
-r.record_num as item_record_num,
-i.location_code,
-v.field_content,
-v.occ_num
-
+				<pre><code class="sql" data-trim data-line-numbers="14-23|1-13,24-27">SELECT
+  i.record_id as item_record_id,
+  r.record_num as item_record_num,
+  i.location_code,
+  v.field_content,
+  v.occ_num
 FROM
-item_record as i
-
-JOIN
-record_metadata as r
-  ON r.id = i.record_id
-	
-JOIN varfield AS v 
-  ON v.record_id = i.record_id
+  item_record as i
+  JOIN record_metadata as r ON r.id = i.record_id
+  JOIN varfield AS v ON v.record_id = i.record_id
   AND v.varfield_type_code = 'b'
-
 WHERE
-i.record_id IN (
-  SELECT
-  ir.record_id
-  FROM
-  item_record as ir
-  JOIN varfield AS vf 
-  ON vf.record_id = ir.record_id
-  AND vf.varfield_type_code = 'b'
-  GROUP BY
-  ir.record_id
-  HAVING
-  count(*) > 1
-)
-
+  i.record_id IN (
+    SELECT
+      ir.record_id
+    FROM
+      item_record as ir
+      JOIN varfield AS vf ON vf.record_id = ir.record_id
+      AND vf.varfield_type_code = 'b'
+    GROUP BY
+      ir.record_id
+    HAVING
+      count(*) > 1
+  )
 ORDER BY
-i.record_id,
-v.occ_num
+  i.record_id,
+  v.occ_num
 				</code></pre>
 			</section>
 
 			<section 
-				data-background-iframe="https://site-checker.cincy.pl/iug2021/sierra_view?sql=SELECT%0D%0Ai.record_id+as+item_record_id%2C%0D%0Ar.record_num+as+item_record_num%2C%0D%0Ai.location_code%2C%0D%0Av.field_content%2C%0D%0Av.occ_num%0D%0A%0D%0AFROM%0D%0Aitem_record+as+i%0D%0A%0D%0AJOIN%0D%0Arecord_metadata+as+r%0D%0A++ON+r.id+%3D+i.record_id%0D%0A++%0D%0AJOIN+varfield+AS+v+%0D%0A++ON+v.record_id+%3D+i.record_id%0D%0A++AND+v.varfield_type_code+%3D+%27b%27%0D%0A%0D%0AWHERE%0D%0Ai.record_id+IN+%28%0D%0A++SELECT%0D%0A++ir.record_id%0D%0A++FROM%0D%0A++item_record+as+ir%0D%0A++JOIN+varfield+AS+vf+%0D%0A++++ON+vf.record_id+%3D+ir.record_id%0D%0A++++AND+vf.varfield_type_code+%3D+%27b%27%0D%0A++GROUP+BY%0D%0A++ir.record_id%0D%0A++HAVING%0D%0A++count%28*%29+%3E+1%0D%0A%29%0D%0A%0D%0AORDER+BY%0D%0Ai.record_id%2C%0D%0Av.occ_num"
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++i.record_id+as+item_record_id%2C%0D%0A++r.record_num+as+item_record_num%2C%0D%0A++i.location_code%2C%0D%0A++v.field_content%2C%0D%0A++v.occ_num%0D%0AFROM%0D%0A++item_record+as+i%0D%0A++JOIN+record_metadata+as+r+ON+r.id+%3D+i.record_id%0D%0A++JOIN+varfield+AS+v+ON+v.record_id+%3D+i.record_id%0D%0A++AND+v.varfield_type_code+%3D+%27b%27%0D%0AWHERE%0D%0A++i.record_id+IN+%28%0D%0A++++SELECT%0D%0A++++++ir.record_id%0D%0A++++FROM%0D%0A++++++item_record+as+ir%0D%0A++++++JOIN+varfield+AS+vf+ON+vf.record_id+%3D+ir.record_id%0D%0A++++++AND+vf.varfield_type_code+%3D+%27b%27%0D%0A++++GROUP+BY%0D%0A++++++ir.record_id%0D%0A++++HAVING%0D%0A++++++count%28*%29+%3E+1%0D%0A++%29%0D%0AORDER+BY%0D%0A++i.record_id%2C%0D%0A++v.occ_num"
 				data-background-interactive>
 			</section>
 
-			<section>
+			<!-- <section>
 				<p>Subquery cont.</p>
 				<pre><code class="sql" data-trim data-line-numbers="15-20|1-5">			
 SELECT
@@ -916,7 +904,7 @@ i.record_id IN (
 			<section 
 				data-background-iframe="https://site-checker.cincy.pl/iug2021/sierra_view?sql=SELECT%0D%0Ai.record_id%2C%0D%0Ai.item_status_code%2C%0D%0Ai.location_code%2C%0D%0A%28+%0D%0A++SELECT%0D%0A++v.field_content%0D%0A++FROM%0D%0A++varfield+as+v%0D%0A++where%0D%0A++v.record_id+%3D+i.record_id%0D%0A++AND+v.varfield_type_code+%3D+%27b%27%0D%0A++ORDER+BY%0D%0A++v.occ_num%0D%0A++LIMIT+1%0D%0A%29+AS+barcode%0D%0A++%0D%0AFROM%0D%0Aitem_record+AS+i%0D%0A%0D%0AWHERE%0D%0Ai.record_id+IN+%28%0D%0A++450977833432%2C+450978609205%0D%0A%29"
 				data-background-interactive>
-			</section>
+			</section> -->
 
 
 			<section>
@@ -925,7 +913,7 @@ i.record_id IN (
 					<li class="fragment">Returns a value when a condition is met</li>
 					<li class="fragment">Helpful for 
 						<ul>
-							<li class="fragment">formatting one value into another value</li>
+							<li >formatting one value into another value</li>
 							<li class="fragment">creating values to aggregate on</li>
 						</ul>
 					</li>
@@ -940,31 +928,26 @@ i.record_id IN (
 
 			<section>
 				<p>CASE Statement cont.</p>
-				<pre><code class="sql" data-trim data-line-numbers="3-7">
-SELECT
-r.record_num AS item_record_num, i.item_status_code,
-CASE
-WHEN item_status_code = '-' THEN 'AVAILABLE'
-WHEN item_status_code = 'o' THEN 'LIB USE ONLY'
-ELSE item_status_code
-END as our_item_status
-
+				<pre><code class="sql" data-trim data-line-numbers="4-8">SELECT
+  r.record_num AS item_record_num,
+  i.item_status_code,
+  CASE
+    WHEN item_status_code = '-' THEN 'AVAILABLE'
+    WHEN item_status_code = 'o' THEN 'LIB USE ONLY'
+    ELSE item_status_code
+  END as our_item_status
 FROM
-item_record as i
-
-JOIN
-record_metadata as r
-  ON r.id = i.record_id
-
+  item_record as i
+  JOIN record_metadata as r ON r.id = i.record_id
 ORDER BY
-r.creation_date_gmt ASC
-
-LIMIT 10
+  r.creation_date_gmt ASC
+LIMIT
+  10
 				</code></pre>
 			</section>
 
 			<section
-				data-background-iframe="https://howtosql.cincy.pl/iug2021/sierra_view?sql=SELECT%0D%0Ar.record_num+AS+item_record_num%2C+i.item_status_code%2C%0D%0ACASE%0D%0AWHEN+item_status_code+%3D+%27-%27+THEN+%27AVAILABLE%27%0D%0AWHEN+item_status_code+%3D+%27o%27+THEN+%27LIB+USE+ONLY%27%0D%0AELSE+item_status_code%0D%0AEND+as+our_item_status%0D%0A%0D%0AFROM%0D%0Aitem_record+as+i%0D%0A%0D%0AJOIN%0D%0Arecord_metadata+as+r%0D%0A++ON+r.id+%3D+i.record_id%0D%0A%0D%0AORDER+BY%0D%0Ar.creation_date_gmt+ASC%0D%0A%0D%0ALIMIT+10"
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++r.record_num+AS+item_record_num%2C%0D%0A++i.item_status_code%2C%0D%0A++CASE%0D%0A++++WHEN+item_status_code+%3D+%27-%27+THEN+%27AVAILABLE%27%0D%0A++++WHEN+item_status_code+%3D+%27o%27+THEN+%27LIB+USE+ONLY%27%0D%0A++++ELSE+item_status_code%0D%0A++END+as+our_item_status%0D%0AFROM%0D%0A++item_record+as+i%0D%0A++JOIN+record_metadata+as+r+ON+r.id+%3D+i.record_id%0D%0AORDER+BY%0D%0A++r.creation_date_gmt+ASC%0D%0ALIMIT%0D%0A++10"
 				data-background-interactive>
 			</section>
 
@@ -972,7 +955,7 @@ LIMIT 10
 				<p>CASE Statement cont.</p>
 				<ul>
 					<li>
-						From the location "Main Children's Library" (1cj), produce a count of items based on their last circulation dates
+						From the location "Main Science Stacks" (2sa), produce a count of items based on their last circulation dates
 						<ul>
 							<li class="fragment">
 								'1-recent checkouts' = 2020-01-01 to Present 
@@ -994,68 +977,55 @@ LIMIT 10
 
 			<section>
 				<p>CASE Statement cont.</p>
-				<pre><code class="sql" data-trim data-line-numbers="5-10">
-SELECT
-
-r.record_num as item_record_num,
-i.last_checkout_gmt,
-CASE
-WHEN i.last_checkout_gmt >= '2020-01-01' THEN '1-recent checkouts'
-WHEN i.last_checkout_gmt >= '2018-01-01' THEN '2-kinda-recent checkouts'
-WHEN i.last_checkout_gmt <  '2018-01-01' THEN '3-long-ago checkouts'
-WHEN i.last_checkout_gmt is null THEN '4-NO CHECKOUTS!'
-END as 'last_checkout_groups'
-
+				<pre><code class="sql" data-trim data-line-numbers="5-10">SELECT
+  r.record_num as item_record_num,
+  i.last_checkout_gmt,
+  CASE
+    WHEN i.last_checkout_gmt >= '2020-01-01' THEN '1-recent checkouts'
+    WHEN i.last_checkout_gmt >= '2018-01-01' THEN '2-kinda-recent checkouts'
+    WHEN i.last_checkout_gmt < '2018-01-01' THEN '3-long-ago checkouts'
+    WHEN i.last_checkout_gmt is null THEN '4-NO CHECKOUTS!'
+  END as 'last_checkout_groups'
 FROM
-item_record as i
-
-JOIN
-record_metadata as r
-ON
-  r.id = i.record_id
-	
+  item_record as i
+  JOIN record_metadata as r ON r.id = i.record_id
 WHERE
-i.location_code = '1cj'
-
-LIMIT 10
-
+  i.location_code = '2sa'
 				</code></pre>
 			</section>
 
 			<section
-				data-background-iframe="https://howtosql.cincy.pl/iug2021/sierra_view?sql=SELECT%0D%0A%0D%0Ar.record_num+as+item_record_num%2C%0D%0Ai.last_checkout_gmt%2C%0D%0ACASE%0D%0AWHEN+i.last_checkout_gmt+%3E%3D+%272020-01-01%27+THEN+%271-recent+checkouts%27%0D%0AWHEN+i.last_checkout_gmt+%3E%3D+%272018-01-01%27+THEN+%272-kinda-recent+checkouts%27%0D%0AWHEN+i.last_checkout_gmt+%3C++%272018-01-01%27+THEN+%273-long-ago+checkouts%27%0D%0AWHEN+i.last_checkout_gmt+is+null+THEN+%274-NO+CHECKOUTS%21%27%0D%0AEND+as+%27last_checkout_groups%27%0D%0A%0D%0AFROM%0D%0Aitem_record+as+i%0D%0A%0D%0AJOIN%0D%0Arecord_metadata+as+r%0D%0AON%0D%0A++r.id+%3D+i.record_id%0D%0A%09%0D%0AWHERE%0D%0Ai.location_code+%3D+%271cj%27%0D%0A%0D%0ALIMIT+10"
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++r.record_num+as+item_record_num%2C%0D%0A++i.last_checkout_gmt%2C%0D%0A++CASE%0D%0A++++WHEN+i.last_checkout_gmt+%3E%3D+%272020-01-01%27+THEN+%271-recent+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+%3E%3D+%272018-01-01%27+THEN+%272-kinda-recent+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+%3C+%272018-01-01%27+THEN+%273-long-ago+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+is+null+THEN+%274-NO+CHECKOUTS%21%27%0D%0A++END+as+%27last_checkout_groups%27%0D%0AFROM%0D%0A++item_record+as+i%0D%0A++JOIN+record_metadata+as+r+ON+r.id+%3D+i.record_id%0D%0AWHERE%0D%0A++i.location_code+%3D+%272sa%27"
 				data-background-interactive>
-			</section>
-
-			<section>
-				<p>CASE Statement cont.</p>
-				<pre><code class="sql" data-trim data-line-numbers="2-7|8|16-20">
-SELECT
-CASE
-WHEN i.last_checkout_gmt >= '2020-01-01' THEN '1-recent checkouts'
-WHEN i.last_checkout_gmt >= '2018-01-01' THEN '2-kinda-recent checkouts'
-WHEN i.last_checkout_gmt <  '2018-01-01' THEN '3-long-ago checkouts'
-WHEN i.last_checkout_gmt is null THEN '4-NO CHECKOUTS!'
-END as 'last_checkout_groups',
-count(*) as count_items
-
-FROM
-item_record as i
-	
-WHERE
-i.location_code = '1cj'
-
-GROUP BY
-last_checkout_groups
-
-ORDER BY
-last_checkout_groups
-				</code></pre>
 			</section>
 
 			<section
-				data-background-iframe="https://howtosql.cincy.pl/iug2021/sierra_view?sql=SELECT%0D%0ACASE%0D%0AWHEN+i.last_checkout_gmt+%3E%3D+%272020-01-01%27+THEN+%271-recent+checkouts%27%0D%0AWHEN+i.last_checkout_gmt+%3E%3D+%272018-01-01%27+THEN+%272-kinda-recent+checkouts%27%0D%0AWHEN+i.last_checkout_gmt+%3C++%272018-01-01%27+THEN+%273-long-ago+checkouts%27%0D%0AWHEN+i.last_checkout_gmt+is+null+THEN+%274-NO+CHECKOUTS%21%27%0D%0AEND+as+%27last_checkout_groups%27%2C%0D%0Acount%28*%29+as+count_items%0D%0A%0D%0AFROM%0D%0Aitem_record+as+i%0D%0A%09%0D%0AWHERE%0D%0Ai.location_code+%3D+%271cj%27%0D%0A%0D%0AGROUP+BY%0D%0Alast_checkout_groups%0D%0A%0D%0AORDER+BY%0D%0Alast_checkout_groups"
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++--+r.record_num+as+item_record_num%2C%0D%0A++--+i.last_checkout_gmt%2C%0D%0A++CASE%0D%0A++++WHEN+i.last_checkout_gmt+%3E%3D+%272020-01-01%27+THEN+%271-recent+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+%3E%3D+%272018-01-01%27+THEN+%272-kinda-recent+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+%3C+%272018-01-01%27+THEN+%273-long-ago+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+is+null+THEN+%274-NO+CHECKOUTS%21%27%0D%0A++END+AS+last_checkout_groups%2C%0D%0A++count%28*%29+as+count_items%0D%0AFROM%0D%0A++item_record+as+i%0D%0A++JOIN+record_metadata+as+r+ON+r.id+%3D+i.record_id%0D%0AWHERE%0D%0A++i.location_code+%3D+%272sa%27%0D%0AGROUP+BY%0D%0A++last_checkout_groups"
 				data-background-interactive>
+			</section>
+
+			<section data-background="white">
+				<img src='img/wiliuglogo2015.png' style="height: 175px; margin: 0 auto auto auto; background: transparent;">
+				<img class="r-stretch" style="height: 300px; margin: 0 auto auto auto;" src="img/CHPL_Brandmark_Primary.png">
+				<h3>HOWTO SQL: SIERRA</h3>
+				<h3>THANK YOU!</h3>
+				<p>Slides: <a href="https://rayvoelker.github.io/wiliug2022/">https://rayvoelker.github.io/wiliug2022/</a></p>
+				<p>SQL Sandbox: <a href="https://wiliug2022.cincy.pl/">https://wiliug2022.cincy.pl</a></p>
+				<!-- <table>
+					<tr>
+						<td>Slides:</td><td><a href="https://rayvoelker.github.io/wiliug2022/">https://rayvoelker.github.io/wiliug2022/</a></td>
+					</tr>
+					<tr>
+						<td>SQL Sandbox:</td><td><a href="https://wiliug2022.cincy.pl/">https://wiliug2022.cincy.pl</a></td>
+					</tr>
+				</table> -->
+				
+				<p style="font-size: 30px;">
+					Ray Voelker<br />
+					ray.voelker@gmail.com | ray.voelker@cincinnatilibrary.org<br />
+					
+					<!-- style="height: 200px; margin: 0 auto auto auto; background: transparent;" -->
+				</p>
 			</section>
 			
 
