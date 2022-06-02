@@ -193,11 +193,18 @@
 					<img src="./img/LEFT_JOIN.png" style="border: 0; box-shadow: 0 0 0;">
 				</section>
 
+				<section>
+					<p>Relational Databases: Relationships (JOINS) cont.</p>
+					A good explanation in "Simple English" of SQL JOIN operations can be found on this Wikipedia page <br />
+					<a href="https://simple.wikipedia.org/wiki/Join_(SQL)">https://simple.wikipedia.org/wiki/Join_(SQL)</a>
+				</section>
+
 				<section data-state="showlogo">
 					<h2>SQL Overview</h2>
 					<ul>
 						<li class="fragment">Structured Query Language</li>
-						<li class="fragment">Standardized language that allows a user to interface with a relational database</li>						
+						<li class="fragment">Standardized language that allows a user to interface with a relational database</li>
+						<li class="fragment">("Oral history interview with Donald D. Chamberlin" <a href="https://conservancy.umn.edu/handle/11299/107215">https://conservancy.umn.edu/handle/11299/107215</a>)</li>					
 					</ul>				
 				</section>
 				
@@ -705,54 +712,47 @@ HAVING
 				<p>SQL Common Table Expression (CTE) WITH Clause</p>
 				<pre>
 					<code class="sql" data-trim data-line-numbers="1-24|25-42">
-						WITH target_bib_item_data AS (
-							-- first, gather the bib AND attached item data
-							--   that meet our filter requirements
-							SELECT
-							  p.publish_year,
-							  p.bib_record_id,
-							  i.record_id AS item_record_id,
-							  i.item_status_code
-							FROM
-							  bib_record_property as p
-							  LEFT JOIN bib_record_item_record_link as l on l.bib_record_id = p.bib_record_id
-							  LEFT JOIN item_record as i on i.record_id = l.item_record_id
-							WHERE
-							  p.publish_year IN (
-								SELECT
-								  p2.publish_year
-								FROM
-								  bib_record_property as p2
-								GROUP BY
-								  p2.publish_year
-								HAVING
-								  count(*) > 300
-							  )
-						  ) -- second, SELECT from the above CTE
-						  SELECT
-							t.publish_year,
-							count(DISTINCT t.bib_record_id) as count_titles,
-							(
-							  SELECT
-								count(t2.item_record_id)
-							  FROM
-								target_bib_item_data AS t2
-							  WHERE
-								t2.publish_year = t.publish_year
-								AND t2.item_status_code = '-'
-							) AS count_item_status_dash,
-							count(t.item_record_id)
-						  FROM
-							target_bib_item_data AS t
-						  GROUP BY
-							t.publish_year
+WITH target_bib_item_data AS (
+	-- first, gather the bib AND attached item data
+	--   that meet our filter requirements
+	SELECT
+		p.publish_year,
+		p.bib_record_id,
+		i.record_id AS item_record_id,
+		i.item_status_code
+	FROM
+		bib_record_property as p
+		LEFT JOIN bib_record_item_record_link as l on l.bib_record_id = p.bib_record_id
+		LEFT JOIN item_record as i on i.record_id = l.item_record_id
+	WHERE
+		p.publish_year IN (
+		SELECT
+			p2.publish_year
+		FROM
+			bib_record_property as p2
+		GROUP BY
+			p2.publish_year
+		HAVING
+			count(*) > 300
+		)
+	) --
+	-- second, SELECT from the above CTE
+SELECT
+	t.publish_year,
+	count(DISTINCT t.bib_record_id) as count_titles,
+	count(t.item_record_id) FILTER (WHERE t.item_status_code = '-') AS 'count_item_status_dash',
+	count(t.item_record_id) AS count_total_items 
+FROM
+	target_bib_item_data AS t
+	GROUP BY
+	t.publish_year
 					</code>
 				</pre>
 			
 			</section>
 
 			<section 
-				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=WITH+target_bib_item_data+AS+%28%0D%0A++--+first%2C+gather+the+bib+AND+attached+item+data%0D%0A++--+++that+meet+our+filter+requirements%0D%0A++SELECT%0D%0A++++p.publish_year%2C%0D%0A++++p.bib_record_id%2C%0D%0A++++i.record_id+AS+item_record_id%2C%0D%0A++++i.item_status_code%0D%0A++FROM%0D%0A++++bib_record_property+as+p%0D%0A++++LEFT+JOIN+bib_record_item_record_link+as+l+on+l.bib_record_id+%3D+p.bib_record_id%0D%0A++++LEFT+JOIN+item_record+as+i+on+i.record_id+%3D+l.item_record_id%0D%0A++WHERE%0D%0A++++p.publish_year+IN+%28%0D%0A++++++SELECT%0D%0A++++++++p2.publish_year%0D%0A++++++FROM%0D%0A++++++++bib_record_property+as+p2%0D%0A++++++GROUP+BY%0D%0A++++++++p2.publish_year%0D%0A++++++HAVING%0D%0A++++++++count%28*%29+%3E+300%0D%0A++++%29%0D%0A%29+--%0D%0A--+second%2C+SELECT+from+the+above+CTE%0D%0ASELECT%0D%0A++t.publish_year%2C%0D%0A++count%28DISTINCT+t.bib_record_id%29+as+count_titles%2C%0D%0A++%28%0D%0A++++SELECT%0D%0A++++++count%28t2.item_record_id%29%0D%0A++++FROM%0D%0A++++++target_bib_item_data+AS+t2%0D%0A++++WHERE%0D%0A++++++t2.publish_year+%3D+t.publish_year%0D%0A++++++AND+t2.item_status_code+%3D+%27-%27%0D%0A++%29+AS+count_item_status_dash%2C%0D%0A++count%28t.item_record_id%29%0D%0AFROM%0D%0A++target_bib_item_data+AS+t%0D%0AGROUP+BY%0D%0A++t.publish_year"
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=WITH+target_bib_item_data+AS+%28%0D%0A++--+first%2C+gather+the+bib+AND+attached+item+data%0D%0A++--+++that+meet+our+filter+requirements%0D%0A++SELECT%0D%0A++++p.publish_year%2C%0D%0A++++p.bib_record_id%2C%0D%0A++++i.record_id+AS+item_record_id%2C%0D%0A++++i.item_status_code%0D%0A++FROM%0D%0A++++bib_record_property+as+p%0D%0A++++LEFT+JOIN+bib_record_item_record_link+as+l+on+l.bib_record_id+%3D+p.bib_record_id%0D%0A++++LEFT+JOIN+item_record+as+i+on+i.record_id+%3D+l.item_record_id%0D%0A++WHERE%0D%0A++++p.publish_year+IN+%28%0D%0A++++++SELECT%0D%0A++++++++p2.publish_year%0D%0A++++++FROM%0D%0A++++++++bib_record_property+as+p2%0D%0A++++++GROUP+BY%0D%0A++++++++p2.publish_year%0D%0A++++++HAVING%0D%0A++++++++count%28*%29+%3E+300%0D%0A++++%29%0D%0A%29+--%0D%0A--+second%2C+SELECT+from+the+above+CTE%0D%0ASELECT%0D%0A++t.publish_year%2C%0D%0A++count%28DISTINCT+t.bib_record_id%29+as+count_titles%2C%0D%0A++count%28t.item_record_id%29+FILTER+%28WHERE+t.item_status_code+%3D+%27-%27%29+AS+%27count_item_status_dash%27%2C%0D%0A++count%28t.item_record_id%29+AS+count_total_items+%0D%0AFROM%0D%0A++target_bib_item_data+AS+t%0D%0AGROUP+BY%0D%0A++t.publish_year"
 				data-background-interactive>
 			</section>
 
