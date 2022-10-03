@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Unknown </title></head><body>
+<p><img alt="The Public Library of Cincinnati and Hamilton County" src="https://raw.githubusercontent.com/plch/brand-and-logos/master/PLCH_Logo_Horizontal_Red.png" /></p>
+<h1 id="plch-filled-holds-data-set">PLCH Filled Holds Data Set</h1>
+<p>This data set consists of two .csv files:
+1. <code>filled_holds.csv</code> : <a href="./filled_holds.zip">filled_holds.zip</a>
+2. <code>branch_location_codes.csv</code>: <a href="./branch_location_codes.zip">branch_location_codes.zip</a></p>
+<p>The first file, <code>filled_holds.csv</code> contains columns that describe a "filled hold"--meaning an item has been placed on a hold shelf at a branch location at the request of a patron who placed a hold on that title (the catalog system software automatically matches an item from the list of items records attached to a title record). Columns in this file are described below:
+<em> <strong>hold_id</strong> : unique id for the hold placed
+</em> <strong>item_record_id</strong> : matched item record selected to fill the hold
+<em> <strong>patron_record_id</strong> : unique id for the patron placing the hold
+</em> <strong>hold_placed_datetime</strong> : the timestamp the hold was placed in the catalog system
+<em> <strong>hold_filled_datetime</strong> : the timestamp the item was placed on the hold shelf at the location requested by the patron
+</em> <strong>source_location_code</strong> : the coded location of the origin where the item came from
+* <strong>pickup_location_code</strong> : the coded location's hold shelf where the patron will pickup the item</p>
+<p>The second file, <code>branch_location_codes.csv</code> contains some metadata about the branch codes referenced from the <code>filled_holds.csv</code> file.  Columns in this file are described below:
+<em> <strong>location_code</strong> : coded location
+</em> <strong>branch_code_num</strong> : branch coded location
+<em> <strong>is_public</strong> : boolean value indicating if the location is available to the public
+</em> <strong>branch_name</strong> : branch name
+<em> <strong>branch_street</strong>: street address
+</em> <strong>branch_city_state</strong> City, State ZIP for the branch location</p>
+<p>Some possible things to do with this data set:
+<em> Can you identify trends in where items tend to come from in relationship to where they are sourced from?
+</em> If you were to plan a delivery route based off of this data, what might it look like? What other types of data sources might you want to look at?
+* Can you identify any trends around the time frames that holds are placed and filled?</p>
+</body></html>
