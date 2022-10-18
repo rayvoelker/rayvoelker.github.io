@@ -1,0 +1,1074 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		
+		<meta name="description" content="HOWTO SQL: Sierra">
+  		<meta name="keywords" content="Sierra, SQL">
+  		<meta name="author" content="Ray Voelker">
+
+		<title>HOWTO SQL: Sierra</title>
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-background="white">
+					<!-- <img src='img/wiliuglogo2015.png' style="height: 175px; margin: 0 auto auto auto; background: transparent;"> -->
+					<img class="r-stretch" style="height: 300px; margin: 0 auto auto auto;" src="img/CHPL_Brandmark_Primary.png">
+					<h3>HOWTO SQL: SIERRA</h3>
+					<p>Slides: <a href="https://rayvoelker.github.io/wiliug2022/">https://rayvoelker.github.io/chpl-howtosql-2022/</a></p>
+					<p>SQL Sandbox: <a href="https://wiliug2022.cincy.pl/">https://wiliug2022.cincy.pl</a></p>
+					
+					<p style="font-size: 30px;">
+						Ray Voelker<br />
+						ray.voelker@chpl.org<br />
+						
+						<!-- style="height: 200px; margin: 0 auto auto auto; background: transparent;" -->
+					</p>
+				</section>
+
+
+				<section>
+					<h2>Overview of Relational Databases</h2> 
+					<p>
+					<ul>
+						<li class="fragment"> Data in these types of databases are 
+						stored in collections, or <b>tables</b> 
+						</li> 
+						<li class="fragment">Tables have a number of rows and 
+						columns
+						</li> 
+						<li class="fragment">Each row is (often) 
+						represented with a <b>unique key</b>.
+						</li>
+					</ul>
+					</p>
+				</section>
+				<section>
+					<h2>Overview of Relational Databases: Keys</h2> 
+					<p class="fragment" style="text-align: left;">
+						Keys (typically called ID’s in the Sierra Database) come in two varieties, and they define the relationship between tables.
+					</p>	
+						
+					<ul>
+						<li class="fragment">
+							Primary Key
+						</li>
+						
+						<li class="fragment">
+							Foreign Key
+						</li>
+						
+					</ul>
+				</section>
+
+				<!-- relational database key example -->
+				<section data-background="white" data-transition="none" data-background-image="./img/table_key_example_01.png" data-background-size="contain"></section>
+				<section data-background="white" data-transition="none" data-background-image="./img/table_key_example_02.png" data-background-size="contain"></section>
+				<section data-background="white" data-transition="none" data-background-image="./img/table_key_example_03.png" data-background-size="contain"></section>
+				<section data-background="white" data-transition="none" data-background-image="./img/table_key_example_04.png" data-background-size="contain"></section>
+				<section data-background="white" data-transition="none" data-background-image="./img/table_key_example_05.png" data-background-size="contain"></section>
+				<section data-background="white" data-transition="none" data-background-image="./img/table_key_example_06.png" data-background-size="contain"></section>
+				<section data-background="white" data-transition="none" data-background-image="./img/table_key_example_07.png" data-background-size="contain"></section>
+				<section data-background="white" data-transition="none" data-background-image="./img/table_key_example_08.png" data-background-size="contain"></section>
+				<section data-background="white" data-transition="none" data-background-image="./img/table_key_example_09.png" data-background-size="contain"></section>
+
+				<section data-state="showlogo">
+					<h2>Overview of Database Entity-Relationship Model</h2>
+					<h2>(ERM View)</h2>
+					<ul>
+						<li>Defines the types of relationships that can exist between entities (tables)
+							<ul>
+								<li class="fragment">One-to-One</li>
+								<li class="fragment">One-to-Many <span class="fragment fade-up">(most common relationship)</span></li> 
+								<li class="fragment">Many-to-Many</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section data-state="showlogo">
+					<h2>Database Entity-Relationship Model</h2>
+					<h3>One-to-One</h3>
+					<ul>
+					<li class="fragment">A Country can have one (and only one) Capital City</li>
+					<li class="fragment">A Capital City can have one (and only one) Country</li>
+					</ul>
+					
+				</section>
+
+				<section data-background="white">
+					<h2>Database Entity-Relationship Model</h2>	
+					<h3>One-to-One</h3>
+				
+					<img src="./img/one-to-one.png" width="150%" style="border: 0; box-shadow: 0 0 0;">
+				
+				</section>
+
+				<section data-state="showlogo">
+					<h2>Database Entity-Relationship Model</h2>
+					<h3>One-to-Many</h3>
+					
+					<ul>
+					<li class="fragment">A Mother may have many Children</li>
+					<li class="fragment">A Child has only one (biological) Mother</li>
+					</ul>
+					
+				</section>
+
+				<section data-background="white">
+					<h2>Database Entity-Relationship Model</h2>
+					<h3>One-to-Many</h3>
+					<img src="./img/one-to-many.png" width="150%" style="border: 0; box-shadow: 0 0 0;">
+
+				</section>
+
+				<section data-state="showlogo">
+					<h2>Database Entity-Relationship Model</h2>
+					<h3>Many-to-Many</h3>
+					
+					<ul>
+					<li class="fragment">Authors can write several Books</li>
+					<li class="fragment">Books can be written by several Authors</li>
+					</ul>
+					
+				</section>
+
+				<section data-background="white" data-state="showlogo">
+					<h2>Database Entity-Relationship Model</h2>
+					<h3>Many-to-Many</h3>
+					<img src="./img/many-to-many.png" width="150%" style="border: 0; box-shadow: 0 0 0;">
+
+				</section>
+
+				<section data-state="showlogo">
+					<p>Relational Databases: Relationships (JOINS)</p>
+					<ul>
+						<li class="fragment">Sets of data can be derived from Relational Operators from traditional math sets.</li> 
+						<li class="fragment">We'll cover two of the more common JOIN operations
+							<ul>
+								<li class="fragment">JOIN (or INNER JOIN)</li>
+								<li class="fragment">LEFT JOIN (or LEFT OUTER JOIN)</li>
+							
+							</ul>
+						</li>
+						
+					</ul>
+				</section>
+
+				<section data-background="white">
+					<p>Relational Databases: Relationships (JOINS) cont.</p>
+					<h3>JOIN (or INNER JOIN)</h3>
+					<ul>
+						<li class="fragment">Most common type of join that there is</li>
+						<li class="fragment">Given two sets, A (left) and B (right), performing this join will return a set containing all elements of A that also belong to B.</li>
+					</ul>
+					
+					<img src="./img/INNER_JOIN.png" style="border: 0; box-shadow: 0 0 0;">
+				</section>
+
+				<section data-background="white">
+					<p>Relational Databases: Relationships (JOINS) cont.</p>
+					<h3>LEFT JOIN (or LEFT OUTER JOIN)</h3>
+					<ul>
+						<li class="fragment">Given two sets, A (left) and B (right) performing this join will return a set containing all elements of table A, as well as the elements of A that also belong to B</li>
+					</ul>
+				
+					<img src="./img/LEFT_JOIN.png" style="border: 0; box-shadow: 0 0 0;">
+				</section>
+
+				<section>
+					<p>Relational Databases: Relationships (JOINS) cont.</p>
+					A good explanation in "Simple English" of SQL JOIN operations can be found on this Wikipedia page <br />
+					<a href="https://simple.wikipedia.org/wiki/Join_(SQL)">https://simple.wikipedia.org/wiki/Join_(SQL)</a>
+				</section>
+
+				<section data-state="showlogo">
+					<h2>SQL Overview</h2>
+					<ul>
+						<li class="fragment">Structured Query Language</li>
+						<li class="fragment">Standardized language that allows a user to interface with a relational database</li>
+						<li class="fragment">("Oral history interview with Donald D. Chamberlin" <a href="https://conservancy.umn.edu/handle/11299/107215">https://conservancy.umn.edu/handle/11299/107215</a>)</li>					
+					</ul>				
+				</section>
+				
+				<section data-state="showlogo">
+					<p>SQL Overview cont.</p>
+					<ul>
+						<li>SQL statements are groups of clauses or other statements that define the operation on the database</li>
+						<li class="fragment">Some of the more common statements include the following... (SQL is picky about the order in which these statements appear in so they're presented in the order that they can appear in the statement.)</li> 
+					</ul>
+				
+				</section>
+
+				<section data-state="showlogo">
+					<p>SQL Overview cont.</p>
+					<ul>
+						<li>
+							<div style="color:#0099ff">SELECT</div> 
+					
+							<ul>
+								<li class="fragment">Retrieves data from tables</li>
+								<li class="fragment">Most commonly used statement</li>
+							</ul>
+						</li>
+						
+						<li class="fragment">
+							UPDATE and SET
+							<ul>
+								<li class="fragment">Modifies a set of existing table rows</li>
+							</ul>						
+						</li>
+						
+						<li class="fragment">
+							DELETE
+							<ul>
+								<li class="fragment">Remove set of existing rows from the table</li>
+							</ul>
+						</li>
+
+					</ul>
+				</section>
+
+				<section data-state="showlogo">
+					<p>SQL Overview cont.</p>
+					<ul>
+						<li>
+							CREATE <span class="fragment">(TEMPORARY TABLE)</span>
+							<ul>
+								<li class="fragment">
+									Typically used to create a table in the database								
+								</li>
+								<li class="fragment">
+									Can be used to create TEMPORARY table for use in subsequent queries<br /> <span class="fragment">(exists for the duration of a database session, and is dropped when the connection or session ends)</span>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<p>SQL Overview cont.</p>
+					<ul>
+						<li>
+							<span style="color:#0099ff">JOIN</span> / <span style="color:#0099ff">LEFT JOIN</span> / etc
+							<ul>
+								<li class="fragment">Performing a join will combine the data with that of another table</li>
+							</ul>
+						</li>
+						
+						<li class="fragment">
+							<span style="color:#0099ff">FROM</span>
+							<ul>
+								<li class="fragment">Indicates which table to retrieve data from</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section data-state="showlogo">
+					<p>SQL Overview cont.</p>
+					<ul>
+						<li>
+							<span style="color:#0099ff">WHERE</span> / <span style="color:#0099ff">WHERE IN</span>
+							<ul>
+								<li class="fragment">
+									Include or exclude data based on comparisons
+								</li>
+							</ul>
+						</li>
+						
+						<li class="fragment">
+							<span style="color:#0099ff">GROUP BY</span>
+							<ul>
+								<li class="fragment">
+									Reduces sets into common values
+								</li>
+							</ul>
+						</li>
+						
+						<li class="fragment">
+							<span style="color:#0099ff">HAVING</span>
+							<ul>
+								<li class="fragment">
+									Allows for filtering of the GROUP BY statement
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+                <section>
+                    <p>SQL Overview cont.</p>
+					<ul>
+                        <li>
+                            <span style="color:#0099ff">ORDER BY</span>
+                            <ul>
+                                <li class="fragment">
+                                    Sort the set<br /> <span class="fragment">in ascending order (ASC) <br /></span><span class="fragment">or descending order (DESC) </span> 
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="fragment">
+                            <span style="color:#0099ff">LIMIT</span> / <span style="color:#0099ff">OFFSET</span>
+                            <ul>
+                                <li class="fragment">
+                                    Returns specific numbers of rows from given starting point
+                                </li>
+								<li class="fragment">
+                                    Usually used in conjunction with the ORDER BY clause to ensure the set is always presented in the same order
+                                </li>
+                            </ul>
+                        
+                        </li>
+                </section>
+
+
+				<section data-state="showlogo">
+					<p>SQL Overview cont.</p>
+					<ul>
+						<li>
+							<span style="color:#0099ff">WITH</span>
+							<ul>
+								<li class="fragment">
+									the `WITH` clause allows you to form a special type of subquery usually called a "Common Table Expression," or CTE for short
+								</li>
+								<li class="fragment">
+									This is especially handy for improving the readability of a query. More examples later!
+								</li>
+								<li class="fragment">
+									Using a CTE can be very powerful, and has the ability to reduce the complexity of your query!
+								</li>
+							</ul>
+						</li>
+						
+					</ul>
+				</section>
+
+				<section data-state="showlogo">
+					<h2>SQL SELECT Statements</h2>
+					<ul>
+						<li class="fragment">FINALLY SOME EXAMPLES!</li>
+						<li class="fragment">Let us say we wanted a list ... 
+							<ul>
+								<li class="fragment"><span style="color: yellow;">Bib Record info</span></li>
+								<li class="fragment"><span style="color: yellow;">10 Oldest (earliest dates created)</span></li>
+							</ul>
+						</li>
+						<li class="fragment">The following query would give us a very basic view of those records:</li>
+					</ul>				
+				</section>
+								
+				<section data-state="showlogo">
+					<pre><code class="sql" data-trim data-noescape contenteditable data-line-numbers="1|1-4|5|5-6|7|7-8|9|9-10|11-12|1-12">SELECT
+  r.id, r.record_type_code, 
+  r.record_num, r.creation_date_gmt, 
+  r.deletion_date_gmt, r.num_revisions
+FROM
+  sierra_view.record_metadata AS r
+WHERE
+  r.record_type_code = 'b'
+ORDER BY
+  r.creation_date_gmt ASC
+LIMIT 
+  10
+					</code></pre>
+				</section>
+
+				
+				<section
+					data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++r.id%2C%0D%0A++r.record_type_code%2C%0D%0A++r.record_num%2C%0D%0A++r.creation_date_gmt%2C%0D%0A++r.deletion_date_gmt%2C%0D%0A++r.num_revisions%0D%0AFROM%0D%0A++record_metadata+AS+r%0D%0AWHERE%0D%0A++r.record_type_code+%3D+%27b%27%0D%0AORDER+BY%0D%0A++r.creation_date_gmt+ASC%0D%0ALIMIT%0D%0A++10"
+					data-background-interactive>
+				</section>
+
+				<section
+					data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++r.id%2C%0D%0A++r.record_type_code%2C%0D%0A++r.record_num%2C%0D%0A++r.creation_date_gmt%2C%0D%0A++r.deletion_date_gmt%2C%0D%0A++r.num_revisions%0D%0AFROM%0D%0A++record_metadata+AS+r%0D%0AWHERE%0D%0A++r.record_type_code+%3D+%27b%27+%0D%0A++--+filter+out+records+that+have+been+deleted%0D%0A++and+deletion_date_gmt+is+null%0D%0AORDER+BY%0D%0A++r.creation_date_gmt+ASC%0D%0ALIMIT%0D%0A++10"
+					data-background-interactive>					
+				</section>
+
+				<section data-state="showlogo">
+					<h2>Quick Note</h2>
+					How do we know what data is where and in what tables in the Sierra DB, and also <i>what?!</i>
+
+					<div class="fragment">
+						<a href="https://techdocs.iii.com/sierradna/Content/introduction.htm">Sierra DNA</a>
+						<blockquote style="font-size:22px">The Sierra Services Platform incorporates a PostgreSQL relational database that captures the library's material, circulation, patron, financial, and operational data. A collection of database views provides direct access to the library's bibliographic and transactional data. Each view is constructed from one or more tables and can be queried as a single table. Views are read-only.</blockquote>
+					</div>
+				</section>
+
+				<section data-state="showlogo">
+					<h2>SQL SELECT Statements cont.</h2>
+					<ul>
+						<li>Suppose we have a short list of <span style="color: yellow;">bib record numbers</span>, 
+							and we wanted to generate a list of <span style="color: yellow;">attached item data</span> including the following attributes...  
+							<ul class="fragment">
+								<li><span style="color: yellow;">item status code</span></li>
+								<li><span style="color: yellow;">location code</span></li>
+								<li><span style="color: yellow;">call number</span></li>
+								<li><span style="color: yellow;">barcode</span></li>
+							</ul>
+						</li>
+						<li class="fragment">The following query would get us started on that list...</li>
+					</ul>				
+				</section>
+
+
+				<section data-state="showlogo">
+					<h2>SQL SELECT Statements cont.</h2>
+					<p>Filter by specific bib numbers ...</p>
+					<pre><code class="sql" data-trim data-line-numbers="10-16">SELECT
+r.id as bib_record_id,
+r.record_num,
+r.creation_date_gmt
+FROM
+record_metadata AS r
+WHERE
+r.record_type_code = 'b'
+AND r.record_num IN (
+	1000408,
+	1171546,
+	2536827,
+	2588448,
+	3255849,
+	3282825,
+	1012434
+)
+						</code></pre>
+				</section>
+
+				<section 
+					data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++r.id+as+bib_record_id%2C%0D%0A++r.record_num%2C%0D%0A++r.creation_date_gmt%2C%0D%0A++i.item_status_code%2C%0D%0A++i.location_code%2C%0D%0A++p.call_number_norm+AS+call_number%2C%0D%0A++p.barcode%0D%0AFROM%0D%0A++record_metadata+AS+r%0D%0A++join+bib_record_item_record_link+as+l+on+l.bib_record_id+%3D+r.id%0D%0A++join+item_record+as+i+on+i.record_id+%3D+l.item_record_id%0D%0A++join+item_record_property+as+p+on+p.item_record_id+%3D+l.item_record_id%0D%0AWHERE%0D%0A++r.record_type_code+%3D+%27b%27%0D%0A++AND+r.record_num+IN+%28%0D%0A++++1000408%2C%0D%0A++++1171546%2C%0D%0A++++2536827%2C%0D%0A++++2588448%2C%0D%0A++++3255849%2C%0D%0A++++3282825%2C%0D%0A++++1012434%0D%0A++%29%0D%0AORDER+BY%0D%0A++record_num"
+					data-background-interactive>
+				</section>
+
+				<section data-state="showlogo">
+					<p>SQL SELECT Statement cont.</p>
+					<ul>
+						<li>This is a good start ... but how do we get to the <span style="color: yellow;">item data</span> from the <span style="color: yellow;">bib record</span>?</li>
+						<li class="fragment">We'll use a <span style="color: yellow;">JOIN!</span></li>
+						<li class="fragment">Looks like table <a href="https://techdocs.iii.com/sierradna/Content/Entities/Item.htm?Highlight=bib_record_item_record_link" target="_blank">"bib_record_item_record_link"</a> has what we need</li>
+						<li class="fragment">...there are two additional tables, <a href="https://techdocs.iii.com/sierradna/Content/Entities/Item.htm?Highlight=item_record`item_record`" target="_blank">"item_record"</a> and <a href="https://techdocs.iii.com/sierradna/Content/Entities/Item.htm?Highlight=item_record`item_record_property`" target="_blank">"item_record_property"</a> that have the data we need, so we'll just JOIN them as well!</li>
+					</ul>
+				</section>
+
+				<section 
+					data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++r.id+as+bib_record_id%2C%0D%0A++r.record_num%2C%0D%0A++r.creation_date_gmt%2C%0D%0A++i.item_status_code%2C%0D%0A++i.location_code%2C%0D%0A++p.call_number_norm+AS+call_number%2C%0D%0A++p.barcode%0D%0AFROM%0D%0A++record_metadata+AS+r%0D%0A++join+bib_record_item_record_link+as+l+on+l.bib_record_id+%3D+r.id%0D%0A++join+item_record+as+i+on+i.record_id+%3D+l.item_record_id%0D%0A++join+item_record_property+as+p+on+p.item_record_id+%3D+l.item_record_id%0D%0AWHERE%0D%0A++r.record_type_code+%3D+%27b%27%0D%0A++AND+r.record_num+IN+%28%0D%0A++++1000408%2C%0D%0A++++1171546%2C%0D%0A++++2536827%2C%0D%0A++++2588448%2C%0D%0A++++3255849%2C%0D%0A++++3282825%2C%0D%0A++++1012434%0D%0A++%29"
+					data-background-interactive>
+				</section>
+
+
+				<section data-state="showlogo">
+					<h2>SQL SELECT Statements cont.</h2>
+					<ul>
+						<li>
+							You (probably) didn't notice, but the previous query output of our list of <span style="color: yellow;">bib record numbers</span> only contained 6--it should have had 7 
+						</li>
+					</ul>
+				</section>
+
+
+				<section 
+					data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++--+r.id+as+bib_record_id%0D%0A++DISTINCT+r.record_num+%0D%0A++--+%2C+r.creation_date_gmt%2C%0D%0A++--+i.item_status_code%2C%0D%0A++--+i.location_code%2C%0D%0A++--+p.call_number_norm+AS+call_number%2C%0D%0A++--+p.barcode%0D%0AFROM%0D%0A++record_metadata+AS+r%0D%0A++join+bib_record_item_record_link+as+l+on+l.bib_record_id+%3D+r.id%0D%0A++join+item_record+as+i+on+i.record_id+%3D+l.item_record_id%0D%0A++join+item_record_property+as+p+on+p.item_record_id+%3D+l.item_record_id%0D%0AWHERE%0D%0A++r.record_type_code+%3D+%27b%27%0D%0A++AND+r.record_num+IN+%28%0D%0A++++1000408%2C%0D%0A++++1171546%2C%0D%0A++++2536827%2C%0D%0A++++2588448%2C%0D%0A++++3255849%2C%0D%0A++++3282825%2C%0D%0A++++1012434%0D%0A++%29"
+					data-background-interactive>
+				</section>
+
+
+				<section 
+					data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++--+r.id+as+bib_record_id%2C%0D%0A++DISTINCT+r.record_num%0D%0A++--+%2C+r.creation_date_gmt%2C%0D%0A++--+i.item_status_code%2C%0D%0A++--+i.location_code%2C%0D%0A++--+p.call_number_norm+AS+call_number%2C%0D%0A++--+p.barcode%0D%0AFROM%0D%0A++record_metadata+AS+r+%0D%0A++--+NOTE%2C+here+we+add+a+LEFT+JOIN+instead+of+a+JOIN+HERE%0D%0A++LEFT+JOIN+bib_record_item_record_link+as+l+on+l.bib_record_id+%3D+r.id%0D%0A++LEFT+JOIN+item_record+as+i+on+i.record_id+%3D+l.item_record_id%0D%0A++LEFT+JOIN+item_record_property+as+p+on+p.item_record_id+%3D+l.item_record_id%0D%0AWHERE%0D%0A++r.record_type_code+%3D+%27b%27%0D%0A++AND+r.record_num+IN+%28%0D%0A++++1000408%2C%0D%0A++++1171546%2C%0D%0A++++2536827%2C%0D%0A++++2588448%2C%0D%0A++++3255849%2C%0D%0A++++3282825%2C%0D%0A++++1012434%0D%0A++%29"
+					data-background-interactive>
+				</section>
+
+
+				<section data-background="white">
+					<h3>LEFT JOIN (or LEFT OUTER JOIN)</h3>
+					<ul>
+						<li>Given two sets, A (left) and B (right) performing this join will return a set containing all elements of table A, as well as the elements of A that also belong to B</li>
+					</ul>
+				
+					<img src="./img/LEFT_JOIN.png" style="border: 0; box-shadow: 0 0 0;">
+				</section>
+				
+				
+
+				<!-- <section data-background="white">
+					<img src="img/bib_record_property_dna.png">
+				</section> -->
+
+				<!-- <section data-state="showlogo">
+					<p>JOIN table <span style="color: yellow;">bib_record_item_record_link</span> ...</p>
+					<pre><code class="sql" data-trim data-line-numbers="1|5|10-11">
+SELECT
+r.id, r.record_type_code, 
+r.record_num, r.creation_date_gmt, 
+r.deletion_date_gmt, r.num_revisions,
+p.best_title
+
+FROM
+record_metadata AS r
+
+JOIN bib_record_property AS p 
+  ON p.bib_record_id = r.id
+
+WHERE
+r.record_type_code = 'b'
+AND r.record_num IN ( 
+  1000001, 1000032, 1000041, 1000045, 1000056, 
+  1000139, 1000303, 1000345, 1000410, 1000426
+)
+
+ORDER BY
+r.creation_date_gmt ASC
+					</code></pre>
+				</section>
+
+				<section 
+				data-background-iframe="https://howtosql.cincy.pl/iug2021/sierra_view?sql=SELECT%0D%0Ar.id%2C+r.record_type_code%2C+%0D%0Ar.record_num%2C+r.creation_date_gmt%2C+%0D%0Ar.deletion_date_gmt%2C+r.num_revisions%2C%0D%0Ap.best_title%0D%0A%0D%0AFROM%0D%0Arecord_metadata+AS+r%0D%0A%0D%0AJOIN+bib_record_property+as+p+%0D%0A+++++ON+p.bib_record_id+%3D+r.id%0D%0A%0D%0AWHERE%0D%0Ar.record_type_code+%3D+%27b%27%0D%0AAND+r.record_num+in+%28+%0D%0A++1000001%2C+1000032%2C+1000041%2C+1000045%2C+1000056%2C+%0D%0A++1000139%2C+1000303%2C+1000345%2C+1000410%2C+1000426%0D%0A%29%0D%0A%0D%0AORDER+BY%0D%0Ar.creation_date_gmt+asc"
+				data-background-interactive>
+			</section>
+
+			<section data-background=white data-state="showlogo">
+				<p>SQL SELECT Statement cont.</p>
+				<ul>
+					<li>Table, "<span style="background-color: black; color: yellow;">bib_record_property</span>", has no foreign key for the deleted record and therefore won’t be joined in our results</li>
+					<li class="fragment">We can fix this!</li>
+					<li class="fragment">... with a LEFT JOIN (or LEFT OUTER JOIN)!</li>
+				</ul>
+				<img class="fragment" src="./img/LEFT_JOIN.png" style="border: 0; box-shadow: 0 0 0;">
+				
+			</section>
+
+			<section>
+				<p><s>JOIN</s> LEFT OUTER JOIN table <span style="color: yellow;">bib_record_property</span> ...</p>
+				<pre><code class="sql" data-trim data-line-numbers="1|10-12">
+SELECT
+r.id, r.record_type_code, 
+r.record_num, r.creation_date_gmt, 
+r.deletion_date_gmt, r.num_revisions,
+p.best_title
+
+FROM
+record_metadata AS r
+
+--         JOIN bib_record_property as p
+LEFT OUTER JOIN bib_record_property as p
+  ON p.bib_record_id = r.id
+
+WHERE
+r.record_type_code = 'b'
+AND r.record_num IN ( 
+	1000001, 1000032, 1000041, 1000045, 1000056, 
+	1000139, 1000303, 1000345, 1000410, 1000426
+)
+
+ORDER BY
+r.creation_date_gmt ASC
+</code></pre>
+			</section>
+
+			<section 
+				data-background-iframe="https://howtosql.cincy.pl/iug2021/sierra_view?sql=SELECT%0D%0Ar.id%2C+r.record_type_code%2C+%0D%0Ar.record_num%2C+r.creation_date_gmt%2C+%0D%0Ar.deletion_date_gmt%2C+r.num_revisions%2C%0D%0Ap.best_title%0D%0A%0D%0AFROM%0D%0Arecord_metadata+AS+r%0D%0A%0D%0A--+JOIN+bib_record_property+as+p%0D%0ALEFT+OUTER+JOIN+bib_record_property+as+p%0D%0A++ON+p.bib_record_id+%3D+r.id%0D%0A%0D%0AWHERE%0D%0Ar.record_type_code+%3D+%27b%27%0D%0AAND+r.record_num+IN+%28+%0D%0A++1000001%2C+1000032%2C+1000041%2C+1000045%2C+1000056%2C+%0D%0A++1000139%2C+1000303%2C+1000345%2C+1000410%2C+1000426%0D%0A%29%0D%0A%0D%0AORDER+BY%0D%0Ar.creation_date_gmt+ASC"
+				data-background-interactive>
+			</section> -->
+
+			<section data-state="showlogo">
+				<h2>SQL GROUP BY / HAVING and Aggregate Functions</h2>
+				<ul>
+					<li><span style="color: yellow;">GROUP BY</span> 
+						<ul>
+							<li class="fragment">Reduces sets into common values, or groups results of one or more column together</li>
+							<li class="fragment">Often used along with aggregate functions
+								<ul>
+									<li class="fragment">COUNT()</li>
+									<li class="fragment">SUM()</li>
+									<li class="fragment">MAX()</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+
+			<section data-state="showlogo">
+				<p>SQL GROUP BY / HAVING and Aggregate Functions cont.</p>
+
+				<ul><li>How many Titles are there in our database that have
+					<ul>
+						<li><span style="color: yellow;">publish_year</span> of <span style="color: yellow;">1977</span>?</li>
+					</ul>
+					</li></ul>
+			</section>
+
+			<section>
+				<p>SQL GROUP BY / HAVING and Aggregate Functions cont.</p>
+				<pre><code class="sql" data-trim data-line-numbers="6-7|1,3|1-2,8-9|1-9">SELECT
+  p.publish_year,
+  count(*) as count_titles
+FROM
+  bib_record_property as p
+WHERE
+  p.publish_year = 1977
+GROUP BY
+  p.publish_year
+				</code></pre>
+			</section>
+
+			<section 
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++p.publish_year%2C%0D%0A++count%28*%29+as+count_titles%0D%0AFROM%0D%0A++bib_record_property+as+p%0D%0AWHERE%0D%0A++p.publish_year+%3D+1977%0D%0AGROUP+BY%0D%0A++p.publish_year"
+				data-background-interactive>
+			</section>
+
+			<section>
+				<p>SQL GROUP BY / HAVING and Aggregate Functions cont.</p>
+
+				<ul><li>When grouped by <span style="color: yellow;">publish_year</span> How many <span style="color: yellow;">publish_year</span> values are there having a count of <span style="color: yellow;">300 or more titles</span>?</li></ul>
+
+			</section>
+
+			<section>
+				<p>SQL GROUP BY / HAVING and Aggregate Functions cont.</p>
+				<pre><code class="sql" data-trim data-line-numbers="2,6-9">
+SELECT
+  p.publish_year,
+  count(*) as count_titles
+FROM
+  bib_record_property as p
+GROUP BY
+  p.publish_year
+HAVING
+  count(*) > 300
+				</code></pre>
+			</section>
+
+			<section 
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++p.publish_year%2C%0D%0A++count%28*%29+as+count_titles%0D%0AFROM%0D%0A++bib_record_property+as+p%0D%0AGROUP+BY%0D%0A++p.publish_year%0D%0AHAVING%0D%0A++count%28*%29+%3E+300"
+				data-background-interactive>
+			</section>
+
+			<section>
+				<p>SQL GROUP BY / HAVING and Aggregate Functions cont.</p>
+				<ul>
+					<li>
+						Of the titles <span style="color: yellow;">grouped by their publish_year</span> having a count of 300 or more titles, 
+						<span style="color: yellow;">how many attached items have a status of "CHECK SHELVES" (`-`)</span>?
+					</li>
+				</ul>
+			</section>
+
+			<section>
+				<p>SQL GROUP BY / HAVING and Aggregate Functions cont.</p>
+				<pre><code class="sql" data-trim data-line-numbers="2,6-7">
+SELECT
+  p.publish_year,
+  count(*) as count_titles
+FROM
+  bib_record_property as p
+GROUP BY
+  p.publish_year
+HAVING
+  count(*) > 300
+				</code></pre>
+			</section>			
+			
+			
+			<section>
+				<p>SQL GROUP BY / HAVING and Aggregate Functions cont.</p>
+				<pre><code class="sql" data-trim data-line-numbers="4-14|1-3,15-20">
+SELECT
+  p.publish_year,
+  count(*) as count_titles,
+  (
+    SELECT
+      count(*)
+    FROM
+      bib_record_property as p2
+      LEFT join bib_record_item_record_link as l2 on l2.bib_record_id = p2.bib_record_id
+      LEFT join item_record as i2 on i2.record_id = l2.item_record_id
+    WHERE
+      p2.publish_year = p.publish_year
+      AND i2.item_status_code = '-'
+  ) as count_available_items
+FROM
+  bib_record_property as p
+GROUP BY
+  p.publish_year
+HAVING
+  count(p.bib_record_id) > 300
+				</code></pre>
+			</section>
+
+
+			<section 
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++p.publish_year%2C%0D%0A++count%28*%29+as+count_titles%2C%0D%0A++%28%0D%0A++++SELECT%0D%0A++++++count%28*%29%0D%0A++++FROM%0D%0A++++++bib_record_property+as+p2%0D%0A++++++LEFT+join+bib_record_item_record_link+as+l2+on+l2.bib_record_id+%3D+p2.bib_record_id%0D%0A++++++LEFT+join+item_record+as+i2+on+i2.record_id+%3D+l2.item_record_id%0D%0A++++WHERE%0D%0A++++++p2.publish_year+%3D+p.publish_year%0D%0A++++++AND+i2.item_status_code+%3D+%27-%27%0D%0A++%29+as+count_available_items%0D%0AFROM%0D%0A++bib_record_property+as+p%0D%0AGROUP+BY%0D%0A++p.publish_year%0D%0AHAVING%0D%0A++count%28p.bib_record_id%29+%3E+300"
+				data-background-interactive>
+			</section>
+
+
+			<section>
+				<p>SQL Common Table Expression (CTE) WITH Clause</p>
+				<pre>
+					<code class="sql" data-trim data-line-numbers="1-24|25-42">
+WITH target_bib_item_data AS (
+	-- first, gather the bib AND attached item data
+	--   that meet our filter requirements
+	SELECT
+		p.publish_year,
+		p.bib_record_id,
+		i.record_id AS item_record_id,
+		i.item_status_code
+	FROM
+		bib_record_property as p
+		LEFT JOIN bib_record_item_record_link as l on l.bib_record_id = p.bib_record_id
+		LEFT JOIN item_record as i on i.record_id = l.item_record_id
+	WHERE
+		p.publish_year IN (
+		SELECT
+			p2.publish_year
+		FROM
+			bib_record_property as p2
+		GROUP BY
+			p2.publish_year
+		HAVING
+			count(*) > 300
+		)
+	) --
+	-- second, SELECT from the above CTE
+SELECT
+	t.publish_year,
+	count(DISTINCT t.bib_record_id) as count_titles,
+	count(t.item_record_id) FILTER (WHERE t.item_status_code = '-') AS 'count_item_status_dash',
+	count(t.item_record_id) AS count_total_items 
+FROM
+	target_bib_item_data AS t
+	GROUP BY
+	t.publish_year
+					</code>
+				</pre>
+			
+			</section>
+
+			<section 
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=WITH+target_bib_item_data+AS+%28%0D%0A++--+first%2C+gather+the+bib+AND+attached+item+data%0D%0A++--+++that+meet+our+filter+requirements%0D%0A++SELECT%0D%0A++++p.publish_year%2C%0D%0A++++p.bib_record_id%2C%0D%0A++++i.record_id+AS+item_record_id%2C%0D%0A++++i.item_status_code%0D%0A++FROM%0D%0A++++bib_record_property+as+p%0D%0A++++LEFT+JOIN+bib_record_item_record_link+as+l+on+l.bib_record_id+%3D+p.bib_record_id%0D%0A++++LEFT+JOIN+item_record+as+i+on+i.record_id+%3D+l.item_record_id%0D%0A++WHERE%0D%0A++++p.publish_year+IN+%28%0D%0A++++++SELECT%0D%0A++++++++p2.publish_year%0D%0A++++++FROM%0D%0A++++++++bib_record_property+as+p2%0D%0A++++++GROUP+BY%0D%0A++++++++p2.publish_year%0D%0A++++++HAVING%0D%0A++++++++count%28*%29+%3E+300%0D%0A++++%29%0D%0A%29+--%0D%0A--+second%2C+SELECT+from+the+above+CTE%0D%0ASELECT%0D%0A++t.publish_year%2C%0D%0A++count%28DISTINCT+t.bib_record_id%29+as+count_titles%2C%0D%0A++count%28t.item_record_id%29+FILTER+%28WHERE+t.item_status_code+%3D+%27-%27%29+AS+%27count_item_status_dash%27%2C%0D%0A++count%28t.item_record_id%29+AS+count_total_items+%0D%0AFROM%0D%0A++target_bib_item_data+AS+t%0D%0AGROUP+BY%0D%0A++t.publish_year"
+				data-background-interactive>
+			</section>
+
+			
+
+			<section>
+				<p>Subquery</p>
+				<ul>
+					<li class="fragment">Subqueries are simply nested queries</li>
+					<li class="fragment">Can occur in the SELECT, FROM, or WHERE clauses</li>
+					<li class="fragment">Useful to use to use as a filter in the WHERE clause, <span class="fragment">or limiting to a single value in the SELECT clause (unexpected one-to-many situations)</span></li>
+				</ul>
+				
+			</section>
+
+			<section>
+				<p>Subquery cont.</p>
+				<ul>
+					<li>Are there multiple barcodes associated with single item records?
+						<ul>
+							<li class="fragment">
+								Start by getting a set of item record ID values where the item_record_id appears multiple times when joining to the barcode varfield value
+							</li>
+						</ul>
+					</li>
+					
+				</ul>
+				
+			</section>
+
+			<section>
+				<p>Subquery cont.</p>
+				<pre><code class="sql" data-trim data-line-numbers="5-6">SELECT
+  ir.record_id
+FROM
+  item_record as ir
+  JOIN varfield AS vf ON vf.record_id = ir.record_id 
+    AND vf.varfield_type_code = 'b'
+GROUP BY
+  ir.record_id
+HAVING
+  count(*) > 1
+				</code></pre>
+			</section>
+
+			<section 
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++ir.record_id%0D%0AFROM%0D%0A++item_record+as+ir%0D%0A++JOIN+varfield+AS+vf+ON+vf.record_id+%3D+ir.record_id%0D%0A++AND+vf.varfield_type_code+%3D+%27b%27%0D%0AGROUP+BY%0D%0A++ir.record_id%0D%0AHAVING%0D%0A++count(*)+%3E+1"
+				data-background-interactive>
+			</section>
+
+			<section>
+				<p>Subquery cont.</p>
+				<pre><code class="sql" data-trim data-line-numbers="14-23|1-13,24-27">SELECT
+  i.record_id as item_record_id,
+  r.record_num as item_record_num,
+  i.location_code,
+  v.field_content,
+  v.occ_num
+FROM
+  item_record as i
+  JOIN record_metadata as r ON r.id = i.record_id
+  JOIN varfield AS v ON v.record_id = i.record_id
+  AND v.varfield_type_code = 'b'
+WHERE
+  i.record_id IN (
+    SELECT
+      ir.record_id
+    FROM
+      item_record as ir
+      JOIN varfield AS vf ON vf.record_id = ir.record_id
+      AND vf.varfield_type_code = 'b'
+    GROUP BY
+      ir.record_id
+    HAVING
+      count(*) > 1
+  )
+ORDER BY
+  i.record_id,
+  v.occ_num
+				</code></pre>
+			</section>
+
+			<section 
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++i.record_id+as+item_record_id%2C%0D%0A++r.record_num+as+item_record_num%2C%0D%0A++i.location_code%2C%0D%0A++v.field_content%2C%0D%0A++v.occ_num%0D%0AFROM%0D%0A++item_record+as+i%0D%0A++JOIN+record_metadata+as+r+ON+r.id+%3D+i.record_id%0D%0A++JOIN+varfield+AS+v+ON+v.record_id+%3D+i.record_id%0D%0A++AND+v.varfield_type_code+%3D+%27b%27%0D%0AWHERE%0D%0A++i.record_id+IN+%28%0D%0A++++SELECT%0D%0A++++++ir.record_id%0D%0A++++FROM%0D%0A++++++item_record+as+ir%0D%0A++++++JOIN+varfield+AS+vf+ON+vf.record_id+%3D+ir.record_id%0D%0A++++++AND+vf.varfield_type_code+%3D+%27b%27%0D%0A++++GROUP+BY%0D%0A++++++ir.record_id%0D%0A++++HAVING%0D%0A++++++count%28*%29+%3E+1%0D%0A++%29%0D%0AORDER+BY%0D%0A++i.record_id%2C%0D%0A++v.occ_num"
+				data-background-interactive>
+			</section>
+
+			<!-- <section>
+				<p>Subquery cont.</p>
+				<pre><code class="sql" data-trim data-line-numbers="15-20|1-5">			
+SELECT
+i.record_id,
+i.item_status_code,
+i.location_code,
+v.field_content
+	
+FROM
+item_record AS i
+
+JOIN
+varfield AS v 
+  ON v.record_id = i.record_id
+  AND v.varfield_type_code = 'b'
+
+-- say we were targeting these two item records.
+-- we may only expect two rows in our results ...
+WHERE
+i.record_id IN (
+	450977833432, 450978609205
+)
+				</code></pre>
+			</section>
+
+			<section 
+				data-background-iframe="https://howtosql.cincy.pl/iug2021/sierra_view?sql=--+WRONG%21%0D%0ASELECT%0D%0Ai.record_id%2C%0D%0Ai.item_status_code%2C%0D%0Ai.location_code%2C%0D%0Av.field_content%0D%0A%09%0D%0AFROM%0D%0Aitem_record+AS+i%0D%0A%0D%0AJOIN%0D%0Avarfield+AS+v+%0D%0A++ON+v.record_id+%3D+i.record_id%0D%0A++AND+v.varfield_type_code+%3D+%27b%27%0D%0A%0D%0A--+say+we+were+targeting+these+two+item+records.%0D%0A--+we+may+only+expect+two+rows+in+our+results+...%0D%0AWHERE%0D%0Ai.record_id+IN+%28%0D%0A%09450977833432%2C+450978609205%0D%0A%29"
+				data-background-interactive>
+			</section>
+
+			<section>
+				<p>Subquery cont.</p>
+				<pre><code class="sql" data-trim data-line-numbers="5-16">	
+SELECT
+i.record_id,
+i.item_status_code,
+i.location_code,
+( 
+	SELECT
+	v.field_content
+	FROM
+	varfield as v
+	WHERE
+	v.record_id = i.record_id
+	AND v.varfield_type_code = 'b'
+	ORDER BY
+	v.occ_num
+	LIMIT 1
+) AS barcode
+	
+FROM
+item_record AS i
+
+WHERE
+i.record_id IN (
+	450977833432, 450978609205
+)
+				</code></pre>
+			</section>
+
+			<section 
+				data-background-iframe="https://site-checker.cincy.pl/iug2021/sierra_view?sql=SELECT%0D%0Ai.record_id%2C%0D%0Ai.item_status_code%2C%0D%0Ai.location_code%2C%0D%0A%28+%0D%0A++SELECT%0D%0A++v.field_content%0D%0A++FROM%0D%0A++varfield+as+v%0D%0A++where%0D%0A++v.record_id+%3D+i.record_id%0D%0A++AND+v.varfield_type_code+%3D+%27b%27%0D%0A++ORDER+BY%0D%0A++v.occ_num%0D%0A++LIMIT+1%0D%0A%29+AS+barcode%0D%0A++%0D%0AFROM%0D%0Aitem_record+AS+i%0D%0A%0D%0AWHERE%0D%0Ai.record_id+IN+%28%0D%0A++450977833432%2C+450978609205%0D%0A%29"
+				data-background-interactive>
+			</section> -->
+
+
+			<section>
+				<p>CASE Statement</p>
+				<ul>
+					<li class="fragment">Returns a value when a condition is met</li>
+					<li class="fragment">Helpful for 
+						<ul>
+							<li >formatting one value into another value</li>
+							<li class="fragment">creating values to aggregate on</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+
+
+			<section>
+				<p>CASE Statement cont.</p>
+				<ul><li>Produce a list of item record numbers and give a nicer name for the 'item_status_code' value</li></ul>
+			</section>
+
+			<section>
+				<p>CASE Statement cont.</p>
+				<pre><code class="sql" data-trim data-line-numbers="4-8">SELECT
+  r.record_num AS item_record_num,
+  i.item_status_code,
+  CASE
+    WHEN item_status_code = '-' THEN 'AVAILABLE'
+    WHEN item_status_code = 'o' THEN 'LIB USE ONLY'
+    ELSE item_status_code
+  END as our_item_status
+FROM
+  item_record as i
+  JOIN record_metadata as r ON r.id = i.record_id
+ORDER BY
+  r.creation_date_gmt ASC
+LIMIT
+  10
+				</code></pre>
+			</section>
+
+			<section
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++r.record_num+AS+item_record_num%2C%0D%0A++i.item_status_code%2C%0D%0A++CASE%0D%0A++++WHEN+item_status_code+%3D+%27-%27+THEN+%27AVAILABLE%27%0D%0A++++WHEN+item_status_code+%3D+%27o%27+THEN+%27LIB+USE+ONLY%27%0D%0A++++ELSE+item_status_code%0D%0A++END+as+our_item_status%0D%0AFROM%0D%0A++item_record+as+i%0D%0A++JOIN+record_metadata+as+r+ON+r.id+%3D+i.record_id%0D%0AORDER+BY%0D%0A++r.creation_date_gmt+ASC%0D%0ALIMIT%0D%0A++10"
+				data-background-interactive>
+			</section>
+
+			<section>
+				<p>CASE Statement cont.</p>
+				<ul>
+					<li>
+						From the location "Main Science Stacks" (2sa), produce a count of items based on their last circulation dates
+						<ul>
+							<li class="fragment">
+								'1-recent checkouts' = 2020-01-01 to Present 
+							</li>
+							<li class="fragment">
+								'2-kinda-recent checkouts' = 2018-01-01 to 2020-01-01  
+							</li>
+							<li class="fragment">
+								'3-long-ago checkouts' = OLDER THAN '2018-01-01' 
+							</li>
+							<li class="fragment">
+								'4-NO CHECKOUTS!' = no last checkout value
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+
+
+			<section>
+				<p>CASE Statement cont.</p>
+				<pre><code class="sql" data-trim data-line-numbers="5-10">SELECT
+  r.record_num as item_record_num,
+  i.last_checkout_gmt,
+  CASE
+    WHEN i.last_checkout_gmt >= '2020-01-01' THEN '1-recent checkouts'
+    WHEN i.last_checkout_gmt >= '2018-01-01' THEN '2-kinda-recent checkouts'
+    WHEN i.last_checkout_gmt < '2018-01-01' THEN '3-long-ago checkouts'
+    WHEN i.last_checkout_gmt is null THEN '4-NO CHECKOUTS!'
+  END as 'last_checkout_groups'
+FROM
+  item_record as i
+  JOIN record_metadata as r ON r.id = i.record_id
+WHERE
+  i.location_code = '2sa'
+				</code></pre>
+			</section>
+
+			<section
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++r.record_num+as+item_record_num%2C%0D%0A++i.last_checkout_gmt%2C%0D%0A++CASE%0D%0A++++WHEN+i.last_checkout_gmt+%3E%3D+%272020-01-01%27+THEN+%271-recent+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+%3E%3D+%272018-01-01%27+THEN+%272-kinda-recent+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+%3C+%272018-01-01%27+THEN+%273-long-ago+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+is+null+THEN+%274-NO+CHECKOUTS%21%27%0D%0A++END+as+%27last_checkout_groups%27%0D%0AFROM%0D%0A++item_record+as+i%0D%0A++JOIN+record_metadata+as+r+ON+r.id+%3D+i.record_id%0D%0AWHERE%0D%0A++i.location_code+%3D+%272sa%27"
+				data-background-interactive>
+			</section>
+
+			<section
+				data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++--+r.record_num+as+item_record_num%2C%0D%0A++--+i.last_checkout_gmt%2C%0D%0A++CASE%0D%0A++++WHEN+i.last_checkout_gmt+%3E%3D+%272020-01-01%27+THEN+%271-recent+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+%3E%3D+%272018-01-01%27+THEN+%272-kinda-recent+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+%3C+%272018-01-01%27+THEN+%273-long-ago+checkouts%27%0D%0A++++WHEN+i.last_checkout_gmt+is+null+THEN+%274-NO+CHECKOUTS%21%27%0D%0A++END+AS+last_checkout_groups%2C%0D%0A++count%28*%29+as+count_items%0D%0AFROM%0D%0A++item_record+as+i%0D%0A++JOIN+record_metadata+as+r+ON+r.id+%3D+i.record_id%0D%0AWHERE%0D%0A++i.location_code+%3D+%272sa%27%0D%0AGROUP+BY%0D%0A++last_checkout_groups"
+				data-background-interactive>
+			</section>
+
+			<section data-background="white">
+				<img src='img/wiliuglogo2015.png' style="height: 175px; margin: 0 auto auto auto; background: transparent;">
+				<img class="r-stretch" style="height: 300px; margin: 0 auto auto auto;" src="img/CHPL_Brandmark_Primary.png">
+				<h3>HOWTO SQL: SIERRA</h3>
+				<h3>THANK YOU!</h3>
+				<p>Slides: <a href="https://rayvoelker.github.io/wiliug2022/">https://rayvoelker.github.io/wiliug2022/</a></p>
+				<p>SQL Sandbox: <a href="https://wiliug2022.cincy.pl/">https://wiliug2022.cincy.pl</a></p>
+				<!-- <table>
+					<tr>
+						<td>Slides:</td><td><a href="https://rayvoelker.github.io/wiliug2022/">https://rayvoelker.github.io/wiliug2022/</a></td>
+					</tr>
+					<tr>
+						<td>SQL Sandbox:</td><td><a href="https://wiliug2022.cincy.pl/">https://wiliug2022.cincy.pl</a></td>
+					</tr>
+				</table> -->
+				
+				<p style="font-size: 30px;">
+					Ray Voelker<br />
+					ray.voelker@gmail.com | ray.voelker@cincinnatilibrary.org<br />
+					
+					<!-- style="height: 200px; margin: 0 auto auto auto; background: transparent;" -->
+				</p>
+			</section>
+			
+
+
+<!-- 
+SELECT
+record_id, location_code, item_status_code,
+-- - 	AVAILABLE
+-- t 	IN TRANSIT
+-- ! 	ON HOLDSHELF
+CASE
+WHEN item_status_code in ('-', 't', '!') THEN 'status OK'
+ELSE 'status not-OK'
+END as custom_status
+from
+item_record
+where
+location_code = '2ra'
+limit 100
+
+
+
+
+ -->
+
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
