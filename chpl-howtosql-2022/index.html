@@ -444,7 +444,7 @@ AND r.record_num IN (
 				</section>
 
 				<section 
-					data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++r.id+as+bib_record_id%2C%0D%0A++r.record_num%2C%0D%0A++r.creation_date_gmt%2C%0D%0A++i.item_status_code%2C%0D%0A++i.location_code%2C%0D%0A++p.call_number_norm+AS+call_number%2C%0D%0A++p.barcode%0D%0AFROM%0D%0A++record_metadata+AS+r%0D%0A++join+bib_record_item_record_link+as+l+on+l.bib_record_id+%3D+r.id%0D%0A++join+item_record+as+i+on+i.record_id+%3D+l.item_record_id%0D%0A++join+item_record_property+as+p+on+p.item_record_id+%3D+l.item_record_id%0D%0AWHERE%0D%0A++r.record_type_code+%3D+%27b%27%0D%0A++AND+r.record_num+IN+%28%0D%0A++++1000408%2C%0D%0A++++1171546%2C%0D%0A++++2536827%2C%0D%0A++++2588448%2C%0D%0A++++3255849%2C%0D%0A++++3282825%2C%0D%0A++++1012434%0D%0A++%29%0D%0AORDER+BY%0D%0A++record_num"
+					data-background-iframe="https://wiliug2022.cincy.pl/sierra_view?sql=SELECT%0D%0A++r.id+as+bib_record_id%2C%0D%0A++r.record_num%2C%0D%0A++r.creation_date_gmt%0D%0AFROM%0D%0A++record_metadata+AS+r%0D%0AWHERE%0D%0A++r.record_type_code+%3D+%27b%27%0D%0A++AND+r.record_num+IN+%28%0D%0A++++1000408%2C%0D%0A++++1171546%2C%0D%0A++++2536827%2C%0D%0A++++2588448%2C%0D%0A++++3255849%2C%0D%0A++++3282825%2C%0D%0A++++1012434%0D%0A++%29%0D%0AORDER+BY%0D%0A++record_num"
 					data-background-interactive>
 				</section>
 
