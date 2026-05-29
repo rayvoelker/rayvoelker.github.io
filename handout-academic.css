@@ -1,0 +1,308 @@
+/*
+ * Handout — Academic Modern (light, print-friendly)
+ * ==================================================
+ * Sibling to research-report.css (dark research aesthetic). This is the
+ * light/printable counterpart for meeting handouts and worked-examples
+ * documents that need to be readable on paper or screen, in any room.
+ *
+ * Single warm-slate accent (#2c5e8f). Inter body, JetBrains Mono code.
+ * Designed for self-contained pandoc output with `--self-contained`.
+ */
+
+/* ── Reset ──────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Tokens ─────────────────────────────────────────────── */
+
+:root {
+  --bg-page:       #fbfaf6;        /* warm off-white, easy on screens */
+  --bg-paper:      #ffffff;        /* pure white for print */
+  --bg-code:       #f3efe6;        /* parchment-tinted code background */
+  --bg-pre:        #f7f3e9;        /* slightly lighter for pre blocks */
+  --bg-callout:    #f8eed8;        /* muted ochre for the FICTIONAL banner */
+  --bg-thead:      #f0ece1;        /* subtle table header */
+
+  --fg-body:       #1d1c1a;        /* near-black, slight warmth */
+  --fg-muted:      #5b574f;        /* warm gray for secondary */
+  --fg-faint:      #8a857a;        /* tertiary / footnote-like */
+
+  --rule:          #d8d2c2;        /* paper-warm rule */
+  --rule-strong:   #a89f87;
+
+  --accent:        #2c5e8f;        /* warm slate-blue, the only color */
+  --accent-soft:   #5b88b5;
+  --accent-bg:     #e8efd7;        /* faint olive-tinted accent backdrop (used sparingly) */
+
+  --warn:          #8a4a1c;        /* burnt sienna for the FICTIONAL banner text */
+
+  --font-body:     "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display:  "Inter", system-ui, sans-serif;
+  --font-serif:    "Source Serif 4", "Source Serif Pro", "Iowan Old Style", "Charter", Georgia, "Times New Roman", serif;
+  --font-mono:     "JetBrains Mono", "IBM Plex Mono", "Cascadia Code", "Fira Code", Consolas, monospace;
+
+  --measure:       68ch;
+  --leading:       1.6;
+  --leading-tight: 1.3;
+}
+
+/* ── Page ───────────────────────────────────────────────── */
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--fg-body);
+  font-family: var(--font-body);
+  font-feature-settings: "kern", "liga", "calt", "ss01";
+  line-height: var(--leading);
+  max-width: var(--measure);
+  margin: 3rem auto 4rem;
+  padding: 0 1.5rem;
+}
+
+/* ── Pandoc title block ─────────────────────────────────── */
+
+header#title-block-header,
+.title,
+h1.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--fg-body);
+  margin: 0 0 0.25rem 0;
+}
+
+.subtitle {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05rem;
+  color: var(--fg-muted);
+  margin: 0.25rem 0 0;
+}
+
+.date,
+.author {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--fg-faint);
+  letter-spacing: 0.02em;
+}
+
+header#title-block-header {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* ── Headings ───────────────────────────────────────────── */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: var(--fg-body);
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.005em;
+}
+
+h1 {
+  font-size: 1.65rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--accent);
+}
+
+h2 {
+  font-size: 1.25rem;
+  color: var(--accent);
+}
+
+h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--fg-body);
+  margin-top: 1.75rem;
+}
+
+h4, h5, h6 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fg-muted);
+}
+
+/* ── Body text ──────────────────────────────────────────── */
+
+p {
+  margin: 0 0 1rem;
+  hyphens: auto;
+}
+
+p + p { margin-top: 0; }
+
+strong { font-weight: 600; color: var(--fg-body); }
+em { font-style: italic; }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  transition: border-color 120ms ease, color 120ms ease;
+}
+a:hover {
+  color: var(--accent-soft);
+  border-bottom-color: var(--accent-soft);
+}
+
+/* ── Lists ──────────────────────────────────────────────── */
+
+ul, ol {
+  margin: 0 0 1rem 1.5rem;
+  padding: 0;
+}
+li { margin-bottom: 0.35rem; }
+li > p { margin-bottom: 0.35rem; }
+
+/* ── Blockquote (used for the FICTIONAL banner near the top) ── */
+
+blockquote {
+  position: relative;
+  background: var(--bg-callout);
+  border-left: 3px solid var(--warn);
+  padding: 0.85rem 1.1rem;
+  margin: 1.5rem 0;
+  color: var(--warn);
+  font-family: var(--font-serif);
+  font-style: italic;
+  border-radius: 2px;
+}
+blockquote p { margin: 0; }
+blockquote strong { color: var(--warn); }
+
+/* ── Code ───────────────────────────────────────────────── */
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--bg-code);
+  color: var(--fg-body);
+  padding: 0.08em 0.35em;
+  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--rule) 60%, transparent);
+}
+
+pre {
+  background: var(--bg-pre);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 0.9rem 1rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--fg-body);
+}
+pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  border-radius: 0;
+}
+
+/* ── Tables ─────────────────────────────────────────────── */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.92rem;
+  font-variant-numeric: tabular-nums;
+}
+thead th {
+  background: var(--bg-thead);
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 2px solid var(--rule-strong);
+  color: var(--fg-body);
+}
+tbody td {
+  padding: 0.45rem 0.7rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+
+/* ── Horizontal rule ────────────────────────────────────── */
+
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 2rem 0;
+}
+
+/* ── Footer-like trailing italic note ───────────────────── */
+
+p:last-of-type em,
+p > em:only-child {
+  color: var(--fg-muted);
+}
+
+/* ── Print ──────────────────────────────────────────────── */
+
+@page {
+  margin: 0.85in 0.9in;
+}
+
+@media print {
+  html, body {
+    background: var(--bg-paper);
+    color: #000;
+    font-size: 11pt;
+  }
+  body {
+    margin: 0 auto;
+    max-width: none;
+    padding: 0;
+  }
+  a {
+    color: var(--accent);
+    border-bottom: none;
+  }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: var(--fg-faint);
+  }
+  pre, blockquote, table { page-break-inside: avoid; }
+  h1, h2, h3 { page-break-after: avoid; }
+  /* Force the `\newpage` Pandoc directive to honor a page break */
+  div.newpage,
+  .pagebreak,
+  hr.pagebreak {
+    page-break-before: always;
+    border: none;
+    height: 0;
+    margin: 0;
+  }
+}
