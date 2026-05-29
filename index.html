@@ -7,6 +7,11 @@
 <link rel="stylesheet" href="handout-academic.css">
 <style>
   .intro{color:var(--fg-muted);max-width:60ch}
+  .masthead{display:flex;align-items:center;gap:1.5rem;justify-content:space-between;flex-wrap:wrap;margin-bottom:.5rem}
+  .masthead-text{flex:1 1 280px}
+  .masthead h1{margin-bottom:.25rem}
+  .mascot{flex:0 0 auto;width:144px;height:144px;image-rendering:pixelated}
+  @media(max-width:480px){.mascot{width:96px;height:96px}}
   .featured{display:grid;gap:1.25rem;grid-template-columns:1fr;margin:1.5rem 0 2.5rem}
   @media(min-width:640px){.featured{grid-template-columns:1fr 1fr}}
   .card{border:1px solid var(--rule);border-radius:8px;padding:1rem 1.15rem;background:var(--bg-paper)}
@@ -21,8 +26,13 @@
 </style>
 </head>
 <body>
-<h1>Ray Voelker</h1>
-<p class="intro">Library data, Sierra SQL, and Python. Talks, tools, and worked examples from the Cincinnati &amp; Hamilton County Public Library and beyond.</p>
+<header class="masthead">
+  <div class="masthead-text">
+    <h1>Ray Voelker</h1>
+    <p class="intro">Library data, Sierra SQL, and Python. Talks, tools, and worked examples from the Cincinnati &amp; Hamilton County Public Library and beyond.</p>
+  </div>
+  <img class="mascot" src="chimpy.svg" alt="Chimpy — a pixel-art mascot" width="144" height="144">
+</header>
 
 <h2>Featured</h2>
 <div class="featured">
