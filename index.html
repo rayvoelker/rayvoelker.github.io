@@ -1,69 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-	<title>rayvoelker.github.io</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ray Voelker</title>
+<link rel="stylesheet" href="handout-academic.css">
+<style>
+  .intro{color:var(--fg-muted);max-width:60ch}
+  .masthead{display:flex;align-items:center;gap:1.5rem;justify-content:space-between;flex-wrap:wrap;margin-bottom:.5rem}
+  .masthead-text{flex:1 1 280px}
+  .masthead h1{margin-bottom:.25rem}
+  .mascot{flex:0 0 auto;width:144px;height:144px;image-rendering:pixelated}
+  @media(max-width:480px){.mascot{width:96px;height:96px}}
+  .featured{display:grid;gap:1.25rem;grid-template-columns:1fr;margin:1.5rem 0 2.5rem}
+  @media(min-width:640px){.featured{grid-template-columns:1fr 1fr}}
+  .card{border:1px solid var(--rule);border-radius:8px;padding:1rem 1.15rem;background:var(--bg-paper)}
+  .card h3{margin:0 0 .35rem;font-size:1.05rem}
+  .card h3 a{text-decoration:none}
+  .card p{margin:0;color:var(--fg-muted);font-size:.95rem}
+  .card .ext{font-size:.78rem;color:var(--fg-faint);font-variant:small-caps;letter-spacing:.03em}
+  .archive h3{margin:1.5rem 0 .4rem;font-size:.95rem;font-variant:small-caps;letter-spacing:.03em;color:var(--fg-muted)}
+  .archive ul{margin:0;padding-left:1.1rem}
+  .archive li{margin:.25rem 0}
+  footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);font-size:.9rem;color:var(--fg-muted)}
+</style>
 </head>
-
 <body>
-	
-	<div class="container-fluid">
-	<div class="row">
-	<div class="col">
-		<h1>rayvoelker.github.io</h1>
-		<hr />
-		
-		<ul>
-			<li>
-				<p class="lead">
-					(2020-01-09) CincyPy Presentation: The Python Standard Library >> Data Persistence >> SQLite3
-					<a class="btn btn-primary" href="https://rayvoelker.github.io/2020-01-09 SQLite3.html">html (Jupyter Notebook)</a>
-				</p>
-			</li>
-		</ul>
-		
-		<ul>
-			<li>
-				<p class="lead">
-					2019-06-13 CincyPy presentation: Python Data visualization Demo
-					<a class="btn btn-primary" href="https://rayvoelker.github.io/2019-06-13-cincypy_python_pyviz_demo.pdf">pdf</a>
-				</p>
-			</li>
-		</ul>
-		
-		<ul>
-			<li>
-				<p class="lead">
-					iug-2019 presentation: cache and release: capturing and using sierra's temporary sql data
-					<a class="btn btn-primary" href="https://rayvoelker.github.io/2019-iug">html</a>
-					<a class="btn btn-primary" href="https://rayvoelker.github.io/2019-iug/iug-2019-rvoelker.pdf">pdf</a>
-				</p>
-			</li>
-		</ul>
+<header class="masthead">
+  <div class="masthead-text">
+    <h1>Ray Voelker</h1>
+    <p class="intro">Library data, Sierra SQL, and Python. Talks, tools, and worked examples from the Cincinnati &amp; Hamilton County Public Library and beyond.</p>
+  </div>
+  <img class="mascot" src="chimpy.svg" alt="Chimpy — a pixel-art mascot" width="144" height="144">
+</header>
 
-		<ul>
-			<li>
-				<p class="lead">
-					oh-iug-2017 presentation: into to sql
-					<a class="btn btn-primary" href="/intro_sql_now_what_presentation/index.html">html</a> 
-					<a class="btn btn-primary" href="/intro_to_sql.pdf">pdf</a>
-				</p>
-			</li>
-		</ul>	
-	</div>
-	</div>
-	</div>
+<h2>Featured</h2>
+<div class="featured">
+  <div class="card">
+    <h3><a href="2026-05/">Talks &amp; Zines — May 2026</a></h3>
+    <p>Two recent talks, each with a printable zine: Suggest a Purchase …And More! and Our Data, Our Lake.</p>
+  </div>
+  <div class="card">
+    <h3><a href="iug2026-shared/">IUG 2026 Conference Notes</a></h3>
+    <p>A community knowledge base from IUG 2026 — session notes across five tracks plus technical guides.</p>
+  </div>
+  <div class="card">
+    <h3><a href="iug2026/talk-combined-datasette-at-the-library.html">Datasette at the Library</a></h3>
+    <p>Collection analysis and the Newsdex project — turning ILS data into a $5/month analysis platform (IUG 2026).</p>
+  </div>
+  <div class="card">
+    <h3><a href="iug2026/talk-datalake-building-a-data-lake.html">Building a Data Lake</a></h3>
+    <p>Early experiments at CHPL with library-owned data infrastructure (IUG 2026).</p>
+  </div>
+  <div class="card">
+    <h3><a href="https://pypi.org/project/sierra-ils-utils/">sierra-ils-utils</a> <span class="ext">PyPI</span></h3>
+    <p>A Python wrapper around httpx for working with the Sierra ILS REST API.</p>
+  </div>
+  <div class="card">
+    <h3><a href="http://indie500.space">indie500.space</a> <span class="ext">external</span></h3>
+    <p>Thirty-six years of Cincinnati independent radio, one database — a community data and art project.</p>
+  </div>
+  <div class="card">
+    <h3><a href="https://0xdead.space/">0xdead.space</a> <span class="ext">external</span></h3>
+    <p>An open cryptographic succession protocol on the AT Protocol — making mortality machine-readable.</p>
+  </div>
+</div>
 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-<section id="talks-zines-2026-05" style="max-width:42rem;margin:2rem auto;padding:1rem 0;border-top:1px solid #ddd">
-  <h2>Talks &amp; Zines — May 2026</h2>
-  <p>Two recent talks, each with a printable zine:
-     <a href="2026-05/">Suggest a Purchase …And More! · Our Data, Our Lake →</a></p>
-</section>
+<h2>Archive</h2>
+<div class="archive">
+  <h3>Talks &amp; presentations</h3>
+  <ul>
+    <li><a href="iug2026/">IUG 2026 — all presentations</a></li>
+    <li><a href="iug2023/">IUG 2023</a></li>
+    <li><a href="iug2022/">IUG 2022</a></li>
+    <li><a href="wiliug2022/">WILIUG 2022</a></li>
+    <li><a href="iug2021/">IUG 2021</a></li>
+    <li><a href="oh-iug-2021/collection_analysis_for_cheap/">OH-IUG 2021 — Collection Analysis for Cheap</a></li>
+    <li><a href="intro_sql_now_what_presentation/index.html">OH-IUG 2017 — Intro to SQL… Now What?</a></li>
+    <li><a href="2019-iug/">2019-IUG — Cache and Release</a> (<a href="2019-iug/iug-2019-rvoelker.pdf">PDF</a>)</li>
+  </ul>
+  <h3>SQL how-tos</h3>
+  <ul>
+    <li><a href="chpl-howtosql-2022/">CHPL HowToSQL (2022)</a></li>
+    <li><a href="intro_to_sql.pdf">Intro to SQL (PDF)</a></li>
+  </ul>
+  <h3>Python community</h3>
+  <ul>
+    <li><a href="pyOhio2021/i-heart-datasette-presentation/">pyOhio 2021 — I Heart Datasette</a></li>
+    <li><a href="2020-01-09%20SQLite3.html">CincyPy 2020 — SQLite3</a></li>
+    <li><a href="2019-06-13-cincypy_python_pyviz_demo.pdf">CincyPy 2019 — Python data-viz demo (PDF)</a></li>
+  </ul>
+  <h3>Older projects</h3>
+  <ul>
+    <li><a href="https://github.com/rayvoelker/every-title-cincy">every-title-cincy — Twitter bot for the CHPL catalog</a></li>
+    <li><a href="https://github.com/rayvoelker">More on GitHub →</a></li>
+  </ul>
+</div>
+
+<footer>
+  <a href="https://github.com/rayvoelker">github.com/rayvoelker</a>
+</footer>
 </body>
 </html>
