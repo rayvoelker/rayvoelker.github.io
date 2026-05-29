@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<meta name="description" content="Building a Data Lake for Your Library: Early Experiments at Cincinnati & Hamilton County Public Library - IUG 2026">
+		<meta name="keywords" content="Ray Voelker, Cincinnati & Hamilton County Public Library, IUG, IUG 2026, Data Lake, DuckDB, DuckLake, Parquet, Sierra, MARC, ETL, Python">
+		<meta name="author" content="Ray Voelker">
+
+		<title>Building a Data Lake for Your Library - IUG 2026 - Ray Voelker</title>
+
+		<link rel="stylesheet" href="revealjs/reset.css">
+		<link rel="stylesheet" href="revealjs/reveal.css">
+		<link rel="stylesheet" href="revealjs/theme/white.css" id="theme">
+		<link rel="stylesheet" href="css/iug2026.css">
+
+		<!-- Syntax highlighting -->
+		<link rel="stylesheet" href="revealjs/plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<!-- Logo panel for title/closing slides — OUTSIDE .reveal so CSS transforms don't affect it -->
+		<div class="title-logo-panel" style="display: none;">
+			<img src="assets/iug2026-logo.jpg" alt="IUG 2026 Chicago">
+		</div>
+
+		<div class="reveal">
+			<!-- Persistent footer bar matching template (beige bar + logos) -->
+			<div class="footer-bar">
+				<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library" class="footer-chpl-logo">
+				<img src="assets/iug2026-logo.jpg" alt="IUG 2026 Chicago">
+			</div>
+
+			<div class="slides">
+
+
+
+				<!-- TITLE SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1 style="font-size: 1.3em;">Building a Data Lake for Your Library</h1>
+						<h2>Early Experiments at CHPL</h2>
+						<p>
+							Ray Voelker<br>
+							Cincinnati &amp; Hamilton County Public Library<br>
+							<a href="mailto:ray.voelker@chpl.org">ray.voelker@chpl.org</a>
+						</p>
+						<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library" class="chpl-logo">
+					</div>
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Previously ...</h2>
+
+
+
+					<ul>
+
+						<li>Datasette + SQLite = great for <em>browsing</em> a single dataset</li>
+
+						<li>Collection analysis, Newsdex &mdash; each a standalone tool</li>
+
+						<li>But what if you want to ask questions across <em>all</em> your data?</li>
+
+
+
+					</ul>
+
+
+
+
+
+
+
+
+					<aside class="notes">
+						Quick callback to the Datasette talks. Set up the problem:
+each dataset lives in its own silo.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The Real Problem: Data Never Sits Still</h2>
+
+
+
+					<ul>
+
+						<li>Your ILS isn't a static database &mdash; it's constantly churning</li>
+
+						<li>Items are added, weeded, checked out, status codes change &mdash; every day</li>
+
+						<li>Digital platforms (OverDrive) have their own moving data</li>
+
+						<li>To analyze any of this properly, you need <span class="accent">structured snapshots at regular intervals</span></li>
+
+
+
+					</ul>
+
+
+
+
+
+
+
+
+					<aside class="notes">
+						Reframe: the problem isn't just that data is in different
+systems. It's that everything is changing all the time and
+you can't analyze a moving target.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>What's Missing Today</h2>
+
+
+
+					<ul>
+
+						<li>Pulling a report today? Great. Comparing it to last month? Hard.</li>
+
+						<li>No consistent snapshots &mdash; just ad-hoc exports when someone asks</li>
+
+						<li>No metadata about <em>when</em> or <em>how</em> the data was captured</li>
+
+						<li>Changes vanish &mdash; once a record is updated, the old version is gone</li>
+
+
+
+					</ul>
+
+
+
+
+
+
+
+
+					<aside class="notes">
+						This is the pain point. Libraries have data, but no
+structured way to capture it over time. Every report
+is a one-off snapshot with no history.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>What's a Data Lake?</h2>
+
+
+
+					<ul>
+
+						<li>A central repository for structured data from many sources</li>
+
+						<li>Snapshot at regular intervals with <em>proper metadata</em></li>
+
+						<li><span class="accent">Open formats</span> (Parquet, not proprietary exports)</li>
+
+						<li>Not a data warehouse &mdash; lighter, cheaper, more flexible</li>
+
+						<li>Built-in history &mdash; every snapshot is preserved</li>
+
+
+
+					</ul>
+
+
+
+
+
+
+
+
+					<aside class="notes">
+						Key idea: a data lake isn't just storage. It's structured,
+versioned storage with metadata. You can always go back
+and see what the data looked like at any point in time.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Data Sovereignty</h2>
+
+
+
+					<ul>
+
+						<li><span class="accent">Your data belongs to you &mdash; not a vendor</span></li>
+
+						<li>Library vendors control how you access your own data</li>
+
+						<li>Proprietary formats, limited exports, API restrictions</li>
+
+						<li>A data lake puts <em>you</em> in control &mdash; open formats, your infrastructure</li>
+
+						<li>If you switch vendors, your data lake stays</li>
+
+
+
+					</ul>
+
+
+
+
+
+
+
+
+					<aside class="notes">
+						This is the slide that should resonate. Libraries pay
+for systems that hold their data hostage. A data lake
+is an assertion of ownership over your own data.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<div style="display: flex; align-items: center; gap: 0.6em; font-size: 0.55em; margin-top: 0.5em;">
+  <!-- Sources column -->
+  <div style="display: flex; flex-direction: column; gap: 0.6em; flex: 0 0 auto;">
+    <div style="background: #0C2340; color: #fff; padding: 0.5em 0.8em; border-radius: 6px; text-align: center; font-weight: 600;">
+      Sierra ILS
+    </div>
+    <div style="background: #0C2340; color: #fff; padding: 0.5em 0.8em; border-radius: 6px; text-align: center; font-weight: 600;">
+      OverDrive API
+    </div>
+    <div style="background: #808285; color: #fff; padding: 0.5em 0.8em; border-radius: 6px; text-align: center; font-style: italic;">
+      Future sources
+    </div>
+  </div>
+  <!-- Arrow 1 -->
+  <div style="font-size: 2em; color: #467886;">&#10132;</div>
+  <!-- ETL column -->
+  <div style="display: flex; flex-direction: column; gap: 0.6em; flex: 0 0 auto;">
+    <div style="background: #156082; color: #fff; padding: 0.5em 0.8em; border-radius: 6px; text-align: center;">
+      MARC Records
+    </div>
+    <div style="background: #156082; color: #fff; padding: 0.5em 0.8em; border-radius: 6px; text-align: center;">
+      Checkouts
+    </div>
+    <div style="background: #808285; color: #fff; padding: 0.5em 0.8em; border-radius: 6px; text-align: center; font-style: italic;">
+      &hellip;
+    </div>
+  </div>
+  <!-- Arrow 2 -->
+  <div style="font-size: 2em; color: #467886;">&#10132;</div>
+  <!-- Data Lake -->
+  <div style="background: #F3E4C5; border: 3px solid #E97132; padding: 1em 1.2em; border-radius: 10px; text-align: center; flex: 0 0 auto;">
+    <div style="font-size: 1.3em; font-weight: 700; color: #0C2340;">Data Lake</div>
+    <div style="font-size: 0.85em; color: #53575A; margin-top: 0.3em;">Parquet + DuckDB<br>DuckLake snapshots</div>
+  </div>
+  <!-- Arrow 3 -->
+  <div style="font-size: 2em; color: #467886;">&#10132;</div>
+  <!-- Output -->
+  <div style="display: flex; flex-direction: column; gap: 0.6em; flex: 0 0 auto;">
+    <div style="background: #467886; color: #fff; padding: 0.5em 0.8em; border-radius: 6px; text-align: center;">
+      SQL Queries
+    </div>
+    <div style="background: #467886; color: #fff; padding: 0.5em 0.8em; border-radius: 6px; text-align: center;">
+      Dashboards
+    </div>
+    <div style="background: #467886; color: #fff; padding: 0.5em 0.8em; border-radius: 6px; text-align: center;">
+      CSV Exports
+    </div>
+  </div>
+</div>
+
+
+
+					<aside class="notes">
+						Simple diagram. Multiple sources flowing into one lake.
+Emphasize that this is the pattern, not a finished product.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The Stack</h2>
+
+
+
+					<ul>
+
+						<li><strong>Python</strong> &mdash; extraction scripts, MARC parsing (pymarc)</li>
+
+						<li><strong>Parquet</strong> &mdash; open columnar format, compressed with zstd</li>
+
+						<li><strong>DuckDB</strong> &mdash; fast analytical queries, no server needed</li>
+
+						<li><strong>DuckLake</strong> &mdash; versioned storage with snapshots</li>
+
+
+
+					</ul>
+
+
+
+
+
+
+
+
+					<aside class="notes">
+						All free, all open source. A laptop can query millions
+of records. No heavy infrastructure needed.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Harvesting the ILS: sierra-marc-harvest</h2>
+
+
+
+					<ul>
+
+						<li>Open source Python CLI for Sierra ILS</li>
+
+						<li>Extracts MARC records via the Sierra REST API</li>
+
+						<li>Incremental updates &mdash; only fetches what changed</li>
+
+						<li>Declarative YAML profiles &mdash; institution-agnostic</li>
+
+						<li>Stores everything in compressed Parquet files</li>
+
+
+
+					</ul>
+
+
+
+
+
+					<p style="margin-top: 0.8em; font-size: 0.6em;">
+						<a href="https://github.com/chimpy-me/ils-lake" target="_top">github.com/chimpy-me/ils-lake</a>
+					</p>
+
+
+
+
+					<aside class="notes">
+						This is the piece that's furthest along. Real code,
+real tests, real data flowing through it.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<div style="display: flex; gap: 2em; font-size: 0.65em;">
+  <div style="flex: 1;">
+    <h3 style="color: #0C2340;">Bibs (19 fields)</h3>
+    <ul>
+      <li>Title, author, publisher</li>
+      <li>Call number, ISBN, OCLC#</li>
+      <li>Subject headings, genres</li>
+      <li>Material type, bib level</li>
+      <li>Pub year, cataloging date</li>
+      <li>Complete MARC as JSON</li>
+    </ul>
+  </div>
+  <div style="flex: 1;">
+    <h3 style="color: #0C2340;">Items (17 fields)</h3>
+    <ul>
+      <li>Barcode, location, item type</li>
+      <li>Status, call number</li>
+      <li>Checkout &amp; renewal totals</li>
+      <li>Last checkout / checkin dates</li>
+      <li>Price, copy number, volume</li>
+    </ul>
+  </div>
+</div>
+
+
+
+					<aside class="notes">
+						The extraction profile is YAML — each library can
+define exactly which MARC fields to pull. CHPL's
+default profile extracts 36 fields across bibs and items.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+				<section>
+
+
+				<section>
+
+
+					<h2>The Extraction Profile</h2>
+
+
+					<p style="font-size: 0.7em;">Declarative YAML &mdash; no code changes needed</p>
+
+
+
+
+					<pre><code data-trim class="yaml">
+tables:
+  bibs:
+    fields:
+      title:
+        source: 245$a$b
+      author:
+        source: [100$a, 110$a, 111$a]
+        transform: first_available
+      pub_year:
+        source: 008[7:11]
+        type: int16
+      language:
+        source: 008[35:38]
+					</code></pre>
+
+
+
+
+
+
+					<aside class="notes">
+						This is the real profile format. Any Sierra library
+can write their own profile to match their local fields.
+Press ↓ for more detail on transforms.
+
+					</aside>
+
+				</section>
+
+
+
+
+				<section>
+
+					<h2>Profile Deep Dive: Selectors</h2>
+
+
+					<p style="font-size: 0.7em;">Backup slide &mdash; for Q&amp;A</p>
+
+
+					<div style="font-size: 0.55em;">
+  <p>MARC addressing grammar &mdash; point at the data you want:</p>
+  <table style="width: 100%;">
+    <thead>
+      <tr>
+        <th>Syntax</th>
+        <th>Meaning</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>245$a$b</code></td>
+        <td>Subfields, concatenated</td>
+        <td>Title + subtitle</td>
+      </tr>
+      <tr>
+        <td><code>008[7:11]</code></td>
+        <td>Control field slice</td>
+        <td>Publication year</td>
+      </tr>
+      <tr>
+        <td><code>[100$a, 110$a, 111$a]</code></td>
+        <td>First available source</td>
+        <td>Author (personal, corporate, or meeting)</td>
+      </tr>
+      <tr>
+        <td><code>6XX$a</code></td>
+        <td>Wildcard &mdash; all matching fields</td>
+        <td>All subject headings (650, 651, etc.)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+
+					<aside class="notes">
+						The selector grammar lets you address any part of a
+MARC record. Wildcards like 6XX match all fields in
+that range.
+
+					</aside>
+
+				</section>
+
+				<section>
+
+					<h2>Profile Deep Dive: Transforms</h2>
+
+
+					<p style="font-size: 0.7em;">Backup slide &mdash; for Q&amp;A</p>
+
+
+					<div style="font-size: 0.5em;">
+  <p>Transforms are <strong>plain Python functions</strong> registered by name.
+  Chainable: <code>transform: [first_available, rstrip]</code></p>
+  <div style="display: flex; gap: 2em;">
+    <div style="flex: 1;">
+      <h3 style="color: #0C2340;">Value Transforms</h3>
+      <ul>
+        <li><code>sierra_id</code> &mdash; parse <code>.b12345678x</code> to numeric ID</li>
+        <li><code>sierra_date</code> &mdash; <code>MM-DD-YY</code> &rarr; ISO 8601</li>
+        <li><code>sierra_datetime</code> &mdash; with time component</li>
+        <li><code>price_cents</code> &mdash; <code>$11.16</code> &rarr; <code>1116</code></li>
+        <li><code>rstrip</code>, <code>strip</code>, <code>normalize_text</code></li>
+        <li><code>s/pattern/replacement/</code> &mdash; inline regex</li>
+      </ul>
+    </div>
+    <div style="flex: 1;">
+      <h3 style="color: #0C2340;">List Transforms</h3>
+      <ul>
+        <li><code>first_available</code> &mdash; pick first non-empty value from multiple sources</li>
+        <li><code>collect_piped</code> &mdash; gather repeating fields into <code>Floods|Floods (1937)|Floods (1913)</code></li>
+      </ul>
+      <h3 style="color: #0C2340; margin-top: 0.8em;">Customization</h3>
+      <ul>
+        <li>Add a Python function to <code>transforms.py</code></li>
+        <li>Register it in the <code>TRANSFORMS</code> dict</li>
+        <li>Reference by name in your YAML profile</li>
+        <li>Validated at profile load time</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+					<aside class="notes">
+						10 built-in transforms in the registry, plus
+inline regex. Each is a plain Python function
+taking (value, args). Adding a custom one is:
+write the function, register it, use by name in
+YAML. Validated at load time so typos fail fast.
+
+					</aside>
+
+				</section>
+
+				</section>
+
+
+
+
+				<section>
+
+
+					<h2>Why Parquet + DuckDB?</h2>
+
+
+
+					<ul>
+
+						<li><span class="accent">Parquet</span>: columnar, compressed &mdash; a fraction of the size of raw exports</li>
+
+						<li><span class="accent">DuckDB</span>: analytical SQL engine, runs on a laptop</li>
+
+						<li>No heavy infrastructure &mdash; DuckDB is embedded, catalog can be SQLite</li>
+
+						<li>Same ecosystem as data science and journalism</li>
+
+						<li>Query across tables, across sources &mdash; just SQL</li>
+
+
+
+					</ul>
+
+
+
+
+
+
+
+
+					<aside class="notes">
+						The Datasette talk was about SQLite. This is the next
+step: Parquet for storage, DuckDB for queries. Same
+idea — files, not servers — but built for analytics.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>DuckLake: Version Your Data</h2>
+
+
+
+					<ul>
+
+						<li><a href="https://ducklake.select/">DuckLake</a> &mdash; an open data lake format from the DuckDB Foundation</li>
+
+						<li>Every harvest creates a lightweight snapshot with metadata</li>
+
+						<li>Query your collection <em>as it was</em> on any date</li>
+
+						<li>Track changes over time &mdash; what was added, modified, deleted</li>
+
+						<li>Built-in retention policies &mdash; expire old snapshots, reclaim storage</li>
+
+
+
+					</ul>
+
+
+
+
+
+					<p style="margin-top: 0.8em; font-size: 0.6em;">
+						<a href="https://ducklake.select/" target="_top">ducklake.select</a>
+					</p>
+
+
+
+
+					<aside class="notes">
+						This is the piece that ties it together. DuckLake gives
+you the structured snapshots with proper metadata that
+make a data lake actually useful over time.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Beyond the ILS: OverDrive Checkouts</h2>
+
+
+
+					<ul>
+
+						<li>Separate ETL pulls digital checkout data from OverDrive API</li>
+
+						<li>Currently stores raw API responses &mdash; next step is Parquet</li>
+
+						<li>The goal: join ILS + OverDrive data in the same lake</li>
+
+						<li><span class="accent">One query</span> to compare physical and digital circulation</li>
+
+
+
+					</ul>
+
+
+
+
+
+					<p style="margin-top: 0.8em; font-size: 0.6em;">
+						<a href="https://github.com/cincinnatilibrary/chpl-etl-overdrive-checkouts" target="_top">github.com/cincinnatilibrary/chpl-etl-overdrive-checkouts</a>
+					</p>
+
+
+
+
+					<aside class="notes">
+						This is lighter-weight than the ILS harvest. The point
+is: once you have the pattern, adding sources is easy.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Where We Are (Honestly)</h2>
+
+
+
+					<ul>
+
+						<li>Sierra ILS harvest: working, tested &mdash; extracting real data into a test data lake</li>
+
+						<li>OverDrive ETL: working prototype &mdash; storing snapshots in Python pickle data on disk</li>
+
+						<li>Connecting the pieces into a unified lake: in progress</li>
+
+						<li>This is early &mdash; sharing the concept, not a finished product</li>
+
+
+
+					</ul>
+
+
+
+
+
+
+
+
+					<aside class="notes">
+						Be honest about the state. The harvest tool is solid.
+The lake concept is the vision we're building toward.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>What's Next</h2>
+
+
+
+					<ul>
+
+						<li>More data sources &mdash; holds, circ history, patron demographics</li>
+
+						<li>Pre-built queries and dashboards (Datasette or similar)</li>
+
+						<li>Scheduled harvests via systemd timers or cron</li>
+
+						<li>Documentation + packaging for other Sierra libraries</li>
+
+
+
+					</ul>
+
+
+
+
+
+
+
+
+					<aside class="notes">
+						Keep this brief. The roadmap is aspirational — this
+talk is about the idea and the early work, not promises.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The Takeaway</h2>
+
+
+
+					<ul>
+
+						<li>Your library data doesn't have to live in silos</li>
+
+						<li>Open formats + free tools = a real data lake on a budget</li>
+
+						<li>Start small &mdash; one pipeline, one data source</li>
+
+						<li>The pattern scales: add sources as you go</li>
+
+
+
+					</ul>
+
+
+
+
+
+
+
+
+					<aside class="notes">
+						Circle back to the Datasette theme. This is the next
+step on the same journey.
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Resources</h2>
+
+
+
+
+
+
+					<ul style="font-size: 0.7em;">
+
+						<li><a href="https://github.com/chimpy-me/ils-lake" target="_top">github.com/chimpy-me/ils-lake &mdash; sierra-marc-harvest</a></li>
+
+						<li><a href="https://github.com/cincinnatilibrary/chpl-etl-overdrive-checkouts" target="_top">github.com/cincinnatilibrary/chpl-etl-overdrive-checkouts &mdash; OverDrive ETL</a></li>
+
+						<li><a href="https://duckdb.org/" target="_top">duckdb.org &mdash; DuckDB</a></li>
+
+						<li><a href="https://ducklake.select/" target="_top">ducklake.select &mdash; DuckLake (open data lake format)</a></li>
+
+						<li><a href="https://parquet.apache.org/" target="_top">parquet.apache.org &mdash; Apache Parquet</a></li>
+
+					</ul>
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<!-- CLOSING SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1 style="font-size: 1.4em;">Thanks!</h1>
+						<p style="font-size: 0.65em; margin-bottom: 1em;">
+							Questions? Ideas? Other data sources you'd want in your lake?
+<br><br>
+This is early-stage work &mdash; feedback welcome!
+
+						</p>
+						<p>
+							Ray Voelker<br>
+							<a href="mailto:ray.voelker@gmail.com">ray.voelker@gmail.com</a> |
+							<a href="mailto:ray.voelker@chpl.org">ray.voelker@chpl.org</a><br>
+							<a href="https://github.com/rayvoelker">github.com/rayvoelker</a>
+						</p>
+						<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library" class="chpl-logo">
+					</div>
+				</section>
+
+
+
+
+			</div>
+		</div>
+
+		<script src="revealjs/reveal.js"></script>
+		<script src="revealjs/plugin/notes/notes.js"></script>
+		<script src="revealjs/plugin/markdown/markdown.js"></script>
+		<script src="revealjs/plugin/highlight/highlight.js"></script>
+		<script src="plugin/elapsed-time-bar/elapsed-time-bar.js"></script>
+		<script>
+			Reveal.initialize({
+				hash: true,
+				slideNumber: 'c/t',
+				minScale: 0.2,
+				maxScale: 1.5,
+				margin: 0.04,
+				allottedTime: 15 * 60 * 1000, // 15 minutes
+				progressBarHeight: 4,
+				barColor: '#0C2340',
+				pausedBarColor: 'rgba(12,35,64,0.4)',
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, ElapsedTimeBar ]
+			});
+
+			// Toggle footer bar and logo panel based on slide type
+			function updateChrome(slide) {
+				const footer = document.querySelector('.footer-bar');
+				const logoPanel = document.querySelector('.title-logo-panel');
+				const isTitle = slide.classList.contains('title-slide');
+				const hasDarkBg = slide.dataset.backgroundColor === '#00223D' ||
+				                  slide.dataset.backgroundColor === '#0E2841';
+				footer.style.display = (isTitle || hasDarkBg) ? 'none' : 'flex';
+				logoPanel.style.display = isTitle ? 'flex' : 'none';
+			}
+			Reveal.on('slidechanged', event => updateChrome(event.currentSlide));
+			Reveal.on('ready', event => updateChrome(event.currentSlide));
+		</script>
+	</body>
+</html>
