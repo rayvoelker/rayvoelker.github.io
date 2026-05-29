@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<meta name="description" content="Suggest a Purchase ...And More! — a new in-house capability at CHPL, demonstrated by Suggest-a-Purchase — CHPL Senior Leadership, 2026-05-29">
+		<meta name="keywords" content="Ray Voelker, Cincinnati & Hamilton County Public Library, agentic coding, Suggest-a-Purchase, Sierra, Datasette, Open Library">
+		<meta name="author" content="Ray Voelker">
+
+		<title>Suggest a Purchase ...And More! - Ray Voelker</title>
+
+		<link rel="stylesheet" href="revealjs/reset.css">
+		<link rel="stylesheet" href="revealjs/reveal.css">
+		<link rel="stylesheet" href="revealjs/theme/white.css" id="theme">
+		<link rel="stylesheet" href="css/iug2026.css">
+
+		<!-- Syntax highlighting -->
+		<link rel="stylesheet" href="revealjs/plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<!-- Logo panel for title/closing slides — OUTSIDE .reveal so CSS transforms don't affect it -->
+		<div class="title-logo-panel" style="display: none;">
+			<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library">
+		</div>
+
+		<div class="reveal">
+			<!-- Persistent footer bar (beige bar + CHPL logo) -->
+			<div class="footer-bar">
+				<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library" class="footer-chpl-logo">
+			</div>
+
+			<div class="slides">
+
+
+
+				<!-- TITLE SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1 style="font-size: 1.4em;">Suggest a Purchase ...And More!</h1>
+						<h2>A new in-house capability — demonstrated by Suggest-a-Purchase</h2>
+						<p>
+							Ray Voelker<br>
+							Cincinnati &amp; Hamilton County Public Library<br>
+							<a href="mailto:ray.voelker@chpl.org">ray.voelker@chpl.org</a>
+						</p>
+					</div>
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The opportunity</h2>
+
+
+
+
+					<ul>
+
+						<li>A whole class of software is specific to <em>how CHPL works</em> &mdash; our workflows, our systems, our customers.</li>
+
+						<li>Too specific for an outside product to build for us; too big a lift for our in-house capacity to take on.</li>
+
+						<li><span class="accent">That math just changed.</span> Agentic coding makes production-quality, CHPL-specific software practical for one staff person to build &mdash; fast.</li>
+
+					</ul>
+
+
+
+
+
+
+
+					<aside class="notes">
+						This is the whole "why leadership should care" setup — no vendor naming.
+That math just changed. PAUSE here — this is the strategic spine.
+The rest of the talk makes it concrete. (~1 min)
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Suggest-a-Purchase</h2>
+
+
+					<p style="font-size: 0.7em;">A customer recommends something for the collection.</p>
+
+
+					<img src="../diagrams/architecture-slide3.png" alt="Patron to web app to bot to staff flow" class="screenshot" style="max-height: 46vh;">
+
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						Built entirely on tools CHPL already owns &mdash; Sierra, existing servers, public APIs.
+					</p>
+
+
+
+					<aside class="notes">
+						Architecture in one sentence: a customer logs in with their library card,
+submits a request, an automated "suggest-a-bot" enriches it from Sierra
+and Open Library, and staff review through a Datasette table they know.
+Transition: "Easier to show you than to describe — let me bring it up." (~1 min)
+
+					</aside>
+
+				</section>
+
+
+
+
+
+				<section>
+
+
+				<section data-background-color="#0C2340">
+
+
+					<h2>Live demo</h2>
+
+
+					<p style="font-size: 0.7em;">The live app &mdash; &darr; to walk the flow if needed.</p>
+
+
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						Live app &middot; 2-minute recording embedded as the safety net
+					</p>
+
+
+
+					<aside class="notes">
+						LIVE DEMO — not narration. Beats (protect 4–5 min):
+A — Customer login + submit live (0:45). B — My Requests, seeded rows (0:30).
+C — Staff Datasette view: Yellowface, TheWomen, Amazon URL (2:00). D — Status + audit (0:45).
+If long: drop beat D first, then truncate C. Safety net: the 2-min recording.
+The ↓ subslides are the screenshot fallback if the live app won't cooperate.
+
+					</aside>
+
+				</section>
+
+
+
+
+				<section>
+
+					<h2>Sign in</h2>
+
+
+						<img src="../screenshots/01-patron-login.png" alt="Customer login with library card" class="screenshot" style="max-height: 38vh;">
+
+
+					<p style="font-size: 0.7em;">library card login</p>
+
+
+
+
+				</section>
+
+				<section>
+
+					<h2>Suggest</h2>
+
+
+						<img src="../screenshots/02-patron-submit.png" alt="Submit a purchase suggestion" class="screenshot" style="max-height: 38vh;">
+
+
+					<p style="font-size: 0.7em;">plain-language request — no forms</p>
+
+
+
+
+				</section>
+
+				<section>
+
+					<h2>Track</h2>
+
+
+						<img src="../screenshots/03-patron-my-requests.png" alt="My Requests with status" class="screenshot" style="max-height: 38vh;">
+
+
+					<p style="font-size: 0.7em;">your suggestions + status</p>
+
+
+
+
+				</section>
+
+				<section>
+
+					<h2>Staff review</h2>
+
+
+						<img src="../screenshots/04-staff-table.png" alt="Bot-enriched staff queue in Datasette" class="screenshot" style="max-height: 38vh;">
+
+
+					<p style="font-size: 0.7em;">a bot-enriched queue in Datasette</p>
+
+
+
+
+				</section>
+
+				<section>
+
+					<h2>Auto-enriched</h2>
+
+
+						<img src="../screenshots/05-staff-detail.png" alt="Request enriched from Open Library" class="screenshot" style="max-height: 38vh;">
+
+
+					<p style="font-size: 0.7em;">matched &amp; enriched from Open Library</p>
+
+
+
+
+				</section>
+
+				</section>
+
+
+
+
+				<section>
+
+
+					<h2>How it got built</h2>
+
+
+					<p style="font-size: 0.7em;">Built in-house, in weeks &mdash; and built to last:</p>
+
+
+
+					<ul>
+
+						<li>Open-source, non-proprietary tools &mdash; no vendor lock-in.</li>
+
+						<li>Fully documented &mdash; design-doc first.</li>
+
+						<li>Rigorously tested &mdash; <span class="accent">340 automated tests.</span></li>
+
+						<li>Built to be picked up and extended by whoever comes next.</li>
+
+					</ul>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						<strong>The capability is the story &mdash; not just this one app.</strong>
+					</p>
+
+
+
+					<aside class="notes">
+						Say the number out loud: 340 automated tests. Design-doc first, built incrementally.
+Meta-point: produced in-house, in weeks, by someone who already understands
+CHPL's workflows. That capacity is the thing worth talking about. (~1 min)
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The capability compounds</h2>
+
+
+					<p style="font-size: 0.7em;">The real goal: less friction between a customer and the item they want.</p>
+
+
+
+					<ul>
+
+						<li>Suggest-a-Purchase: we don&rsquo;t own it &rarr; the customer asks &rarr; we can act.</li>
+
+						<li>The same tool <em>could</em> surface more &mdash; e.g. subscribe to a favorite author, and a match becomes a one-click hold.</li>
+
+						<li><span class="accent">Never auto-placed &mdash; the customer stays in control.</span></li>
+
+					</ul>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						Same Sierra integration. Same Datasette pattern. Same audit trail.
+					</p>
+
+
+
+					<aside class="notes">
+						The core idea is reducing friction between a customer and the item they want.
+Suggest-a-Purchase is the proven instance. The author-subscription idea is ONE
+possible direction — mention it lightly, it's politically sensitive. Do NOT
+over-commit. We never auto-place — the customer stays in control. (~1 min)
+
+					</aside>
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Where this goes next</h2>
+
+
+
+
+					<ul>
+
+						<li>Partner with <strong>MSA (Materials Selection &amp; Acquisition)</strong> to dog-food it internally first.</li>
+
+						<li>Smooth the workflow, work out the bugs &mdash; <em>then</em> put it in front of customers.</li>
+
+						<li>Reusable patterns &mdash; each next tool of this shape goes faster.</li>
+
+					</ul>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						The capability compounds. That&rsquo;s the story.
+					</p>
+
+
+
+					<aside class="notes">
+						Dog-food it with MSA first — smooth the workflow internally, then customers.
+End on the capability note — no ask. (~1 min)
+
+					</aside>
+
+				</section>
+
+
+
+
+
+				<section>
+
+
+				<section>
+
+
+					<h2>Resources</h2>
+
+
+					<p style="font-size: 0.7em;">Built with &mdash; open tools, public data:</p>
+
+
+
+
+
+					<ul style="font-size: 0.7em;">
+
+						<li><a href="https://datasette.io" target="_top">Datasette — datasette.io</a></li>
+
+						<li><a href="https://openlibrary.org/developers/api" target="_top">Open Library API — openlibrary.org/developers/api</a></li>
+
+						<li><a href="https://claude.com/claude-code" target="_top">Claude Code — claude.com/claude-code</a></li>
+
+						<li><a href="https://techdocs.iii.com/sierraapi/" target="_top">Sierra REST API — techdocs.iii.com/sierraapi</a></li>
+
+					</ul>
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						&darr; data sources &amp; directions explored
+					</p>
+
+
+
+					<aside class="notes">
+						The stack is all open / already-owned. ↓ for the data sources and
+consortial-borrowing directions this work touched or could touch.
+
+					</aside>
+
+				</section>
+
+
+
+
+				<section>
+
+					<h2>Data &amp; directions explored</h2>
+
+
+
+
+
+					<ul>
+
+						<li><a href="https://www.wikidata.org/" target="_top">Wikidata</a> &mdash; open structured data for enrichment</li>
+
+						<li><a href="https://searchohio.org/" target="_top">SearchOhio</a> &mdash; statewide public-library borrowing</li>
+
+						<li><a href="https://www.ohiolink.edu/" target="_top">OhioLINK</a> &mdash; statewide academic-library borrowing</li>
+
+						<li><a href="https://chpl.org/services/searchohio-ohiolink/" target="_top">CHPL: SearchOhio / OhioLINK</a></li>
+
+					</ul>
+
+
+					<aside class="notes">
+						These are directions the capability could reach — enrichment (Wikidata,
+Open Library) and consortial borrowing (SearchOhio / OhioLINK). Mention
+only if asked; keep it light.
+
+					</aside>
+
+				</section>
+
+				</section>
+
+
+
+				<section>
+
+
+				<section>
+
+
+					<h2>Appendix</h2>
+
+
+					<p style="font-size: 0.7em;">Q&amp;A backup &mdash; &darr; for screenshots.</p>
+
+
+					<img src="../diagrams/architecture-slide8-appendix.png" alt="Full architecture" class="screenshot" style="max-height: 46vh;">
+
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						Full architecture &middot; &darr; My Requests &middot; staff queue &middot; enrichment
+					</p>
+
+
+
+					<aside class="notes">
+						Backup only — pull up on demand. Q&A: BiblioCommons (brief, respectful, only if asked);
+PII (patron_record_id only, no email/barcode, rate-limited, audit trail);
+succession (open-source deps, 340 tests, design-docs-first); time-spent (have a real number).
+
+					</aside>
+
+				</section>
+
+
+
+
+				<section>
+
+					<h2>My Requests</h2>
+
+
+						<img src="../screenshots/03-patron-my-requests.png" alt="Customer — My Requests" class="screenshot" style="max-height: 38vh;">
+
+
+					<p style="font-size: 0.7em;">what the customer sees after submitting</p>
+
+
+
+
+				</section>
+
+				<section>
+
+					<h2>Staff queue</h2>
+
+
+						<img src="../screenshots/04-staff-table.png" alt="Staff — completed queue" class="screenshot" style="max-height: 38vh;">
+
+
+					<p style="font-size: 0.7em;">completed &amp; bot-enriched, in Datasette</p>
+
+
+
+
+				</section>
+
+				<section>
+
+					<h2>Open Library enrichment</h2>
+
+
+						<img src="../screenshots/05-staff-detail.png" alt="Open Library enrichment detail" class="screenshot" style="max-height: 34vh;">
+
+
+					<p style="font-size: 0.7em;">matched edition + metadata (JSON)</p>
+
+
+
+
+				</section>
+
+				</section>
+
+
+
+
+				<!-- CLOSING SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1 style="font-size: 1.4em;">Thank you</h1>
+						<p style="font-size: 0.65em; margin-bottom: 1em;">
+							Questions, ideas, or CHPL-specific tools you'd want built next?
+
+						</p>
+						<p>
+							Ray Voelker<br>
+							<a href="mailto:ray.voelker@chpl.org">ray.voelker@chpl.org</a>
+						</p>
+					</div>
+				</section>
+
+
+
+
+			</div>
+		</div>
+
+		<script src="revealjs/reveal.js"></script>
+		<script src="revealjs/plugin/notes/notes.js"></script>
+		<script src="revealjs/plugin/markdown/markdown.js"></script>
+		<script src="revealjs/plugin/highlight/highlight.js"></script>
+		<script src="plugin/elapsed-time-bar/elapsed-time-bar.js"></script>
+		<script>
+			Reveal.initialize({
+				hash: true,
+				slideNumber: 'c/t',
+				minScale: 0.2,
+				maxScale: 1.5,
+				margin: 0.04,
+				allottedTime: 15 * 60 * 1000, // 15 minutes
+				progressBarHeight: 4,
+				barColor: '#0C2340',
+				pausedBarColor: 'rgba(12,35,64,0.4)',
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, ElapsedTimeBar ]
+			});
+
+			// Toggle footer bar and logo panel based on slide type / dark backgrounds
+			function updateChrome(slide) {
+				const footer = document.querySelector('.footer-bar');
+				const logoPanel = document.querySelector('.title-logo-panel');
+				const isTitle = slide.classList.contains('title-slide');
+				const dark = ['#0C2340', '#00223D', '#0E2841'];
+				const hasDarkBg = dark.includes((slide.dataset.backgroundColor || '').toUpperCase());
+				footer.style.display = (isTitle || hasDarkBg) ? 'none' : 'flex';
+				logoPanel.style.display = isTitle ? 'flex' : 'none';
+			}
+			Reveal.on('slidechanged', event => updateChrome(event.currentSlide));
+			Reveal.on('ready', event => updateChrome(event.currentSlide));
+		</script>
+	</body>
+</html>

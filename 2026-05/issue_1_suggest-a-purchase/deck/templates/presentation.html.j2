@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<meta name="description" content="{{ meta.description }}">
+		<meta name="keywords" content="{{ meta.keywords }}">
+		<meta name="author" content="{{ meta.author }}">
+
+		<title>{{ meta.title }} - {{ meta.author }}</title>
+
+		<link rel="stylesheet" href="revealjs/reset.css">
+		<link rel="stylesheet" href="revealjs/reveal.css">
+		<link rel="stylesheet" href="revealjs/theme/white.css" id="theme">
+		<link rel="stylesheet" href="css/iug2026.css">
+
+		<!-- Syntax highlighting -->
+		<link rel="stylesheet" href="revealjs/plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<!-- Logo panel for title/closing slides — OUTSIDE .reveal so CSS transforms don't affect it -->
+		<div class="title-logo-panel" style="display: none;">
+			<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library">
+		</div>
+
+		<div class="reveal">
+			<!-- Persistent footer bar (beige bar + CHPL logo) -->
+			<div class="footer-bar">
+				<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library" class="footer-chpl-logo">
+			</div>
+
+			<div class="slides">
+{% for slide in slides %}
+{% if slide.subslides %}
+				<section>
+{% endif %}
+{% if slide.type == 'title' %}
+				<!-- TITLE SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1{% if slide.title_style %} style="{{ slide.title_style }}"{% endif %}>{{ slide.title }}</h1>
+						<h2>{{ slide.subtitle }}</h2>
+						<p>
+							{{ meta.author }}<br>
+							{{ meta.institution }}<br>
+							<a href="mailto:{{ meta.email }}">{{ meta.email }}</a>
+						</p>
+					</div>
+				</section>
+
+{% elif slide.type == 'closing' %}
+				<!-- CLOSING SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1 style="font-size: 1.4em;">{{ slide.title }}</h1>
+						<p style="font-size: 0.65em; margin-bottom: 1em;">
+							{{ slide.body }}
+						</p>
+						<p>
+							{{ meta.author }}<br>
+							<a href="mailto:{{ meta.email }}">{{ meta.email }}</a>
+						</p>
+					</div>
+				</section>
+
+{% elif slide.type == 'content' %}
+				<section{% if slide.background %} data-background-color="{{ slide.background }}"{% endif %}>
+{% if slide.custom_html %}
+					{{ slide.custom_html }}
+{% else %}
+{% if slide.title %}
+					<h2>{{ slide.title }}</h2>
+{% endif %}
+{% if slide.subtitle %}
+					<p style="font-size: 0.7em;">{{ slide.subtitle }}</p>
+{% endif %}
+{% if slide.image %}
+					<img src="{{ slide.image.src }}" alt="{{ slide.image.alt | default('') }}" class="screenshot"{% if slide.image.style %} style="{{ slide.image.style }}"{% endif %}>
+{% endif %}
+{% if slide.bullets %}
+					<ul>
+{% for bullet in slide.bullets %}
+						<li>{{ bullet }}</li>
+{% endfor %}
+					</ul>
+{% endif %}
+{% if slide.code %}
+					<pre><code data-trim class="{{ slide.code.language }}">
+{{ slide.code.body }}					</code></pre>
+{% endif %}
+{% if slide.links_list %}
+					<ul style="font-size: 0.7em;">
+{% for link in slide.links_list %}
+						<li><a href="{{ link.url }}" target="_top">{{ link.text }}</a></li>
+{% endfor %}
+					</ul>
+{% endif %}
+{% if slide.link %}
+					<p style="margin-top: 0.8em; font-size: 0.6em;">
+						<a href="{{ slide.link.url }}" target="_top">{{ slide.link.text }}</a>
+					</p>
+{% endif %}
+{% if slide.footer_text %}
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						{{ slide.footer_text }}
+					</p>
+{% endif %}
+{% endif %}
+{% if slide.notes %}
+					<aside class="notes">
+						{{ slide.notes }}
+					</aside>
+{% endif %}
+				</section>
+
+{% elif slide.type == 'iframe' %}
+				<section data-background="white">
+					<h2>{{ slide.title }}</h2>
+					<iframe src="{{ slide.url }}"
+						style="width: 100%; height: 550px; border: 2px solid #E8E8E8; border-radius: 8px;">
+					</iframe>
+{% if slide.notes %}
+					<aside class="notes">
+						{{ slide.notes }}
+					</aside>
+{% endif %}
+				</section>
+
+{% endif %}
+{% if slide.subslides %}
+{% for sub in slide.subslides %}
+				<section{% if sub.background %} data-background-color="{{ sub.background }}"{% endif %}>
+{% if sub.title %}
+					<h2>{{ sub.title }}</h2>
+{% endif %}
+{% if sub.image %}
+						<img src="{{ sub.image.src }}" alt="{{ sub.image.alt | default('') }}" class="screenshot"{% if sub.image.style %} style="{{ sub.image.style }}"{% endif %}>
+{% endif %}
+{% if sub.subtitle %}
+					<p style="font-size: 0.7em;">{{ sub.subtitle }}</p>
+{% endif %}
+{% if sub.custom_html %}
+					{{ sub.custom_html }}
+{% endif %}
+{% if sub.bullets %}
+					<ul>
+{% for bullet in sub.bullets %}
+						<li>{{ bullet }}</li>
+{% endfor %}
+					</ul>
+{% endif %}
+{% if sub.notes %}
+					<aside class="notes">
+						{{ sub.notes }}
+					</aside>
+{% endif %}
+				</section>
+{% endfor %}
+				</section>
+{% endif %}
+{% endfor %}
+			</div>
+		</div>
+
+		<script src="revealjs/reveal.js"></script>
+		<script src="revealjs/plugin/notes/notes.js"></script>
+		<script src="revealjs/plugin/markdown/markdown.js"></script>
+		<script src="revealjs/plugin/highlight/highlight.js"></script>
+		<script src="plugin/elapsed-time-bar/elapsed-time-bar.js"></script>
+		<script>
+			Reveal.initialize({
+				hash: true,
+				slideNumber: 'c/t',
+				minScale: 0.2,
+				maxScale: 1.5,
+				margin: 0.04,
+				allottedTime: 15 * 60 * 1000, // 15 minutes
+				progressBarHeight: 4,
+				barColor: '#0C2340',
+				pausedBarColor: 'rgba(12,35,64,0.4)',
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, ElapsedTimeBar ]
+			});
+
+			// Toggle footer bar and logo panel based on slide type / dark backgrounds
+			function updateChrome(slide) {
+				const footer = document.querySelector('.footer-bar');
+				const logoPanel = document.querySelector('.title-logo-panel');
+				const isTitle = slide.classList.contains('title-slide');
+				const dark = ['#0C2340', '#00223D', '#0E2841'];
+				const hasDarkBg = dark.includes((slide.dataset.backgroundColor || '').toUpperCase());
+				footer.style.display = (isTitle || hasDarkBg) ? 'none' : 'flex';
+				logoPanel.style.display = isTitle ? 'flex' : 'none';
+			}
+			Reveal.on('slidechanged', event => updateChrome(event.currentSlide));
+			Reveal.on('ready', event => updateChrome(event.currentSlide));
+		</script>
+	</body>
+</html>

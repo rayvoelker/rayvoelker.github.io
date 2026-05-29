@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="360" viewBox="0 0 1080 360" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#546e7a"/>
+    </marker>
+  </defs>
+  <rect width="1080" height="360" fill="#ffffff"/>
+
+  <!-- main flow row -->
+  <!-- Patron -->
+  <rect x="40"  y="56" width="180" height="82" rx="12" fill="#eceff1" stroke="#78909c" stroke-width="1.5"/>
+  <text x="130" y="92"  text-anchor="middle" font-size="20" font-weight="700" fill="#37474f">Patron</text>
+  <text x="130" y="115" text-anchor="middle" font-size="13" fill="#607d8b">library-card login</text>
+
+  <!-- Web app -->
+  <rect x="320" y="56" width="180" height="82" rx="12" fill="#2c6e8f" stroke="#1f5266" stroke-width="1.5"/>
+  <text x="410" y="90"  text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">Suggest-a-Purchase</text>
+  <text x="410" y="113" text-anchor="middle" font-size="13" fill="#cfe3ee">web app</text>
+
+  <!-- Bot -->
+  <rect x="600" y="56" width="180" height="82" rx="12" fill="#e8f0f6" stroke="#2c6e8f" stroke-width="1.5"/>
+  <text x="690" y="90"  text-anchor="middle" font-size="18" font-weight="700" fill="#16384a">suggest-a-bot</text>
+  <text x="690" y="113" text-anchor="middle" font-size="13" fill="#4a7990">auto-enrichment</text>
+
+  <!-- Staff -->
+  <rect x="880" y="56" width="180" height="82" rx="12" fill="#eceff1" stroke="#78909c" stroke-width="1.5"/>
+  <text x="970" y="92"  text-anchor="middle" font-size="20" font-weight="700" fill="#37474f">Staff review</text>
+  <text x="970" y="115" text-anchor="middle" font-size="13" fill="#607d8b">Datasette view</text>
+
+  <!-- arrows between main boxes -->
+  <line x1="220" y1="97" x2="318" y2="97" stroke="#546e7a" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="269" y="86" text-anchor="middle" font-size="12.5" fill="#546e7a">submits</text>
+
+  <line x1="500" y1="97" x2="598" y2="97" stroke="#546e7a" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="549" y="86" text-anchor="middle" font-size="12.5" fill="#546e7a">queued</text>
+
+  <line x1="780" y1="97" x2="878" y2="97" stroke="#546e7a" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="829" y="86" text-anchor="middle" font-size="12.5" fill="#546e7a">enriched</text>
+
+  <!-- enrichment sources feeding the bot -->
+  <rect x="560" y="196" width="120" height="54" rx="10" fill="#e8f0f6" stroke="#2c6e8f" stroke-width="1.5"/>
+  <text x="620" y="220" text-anchor="middle" font-size="15" font-weight="700" fill="#16384a">Sierra</text>
+  <text x="620" y="239" text-anchor="middle" font-size="12" fill="#4a7990">catalog match</text>
+
+  <rect x="700" y="196" width="150" height="54" rx="10" fill="#e6f4ea" stroke="#2e7d4f" stroke-width="1.5"/>
+  <text x="775" y="220" text-anchor="middle" font-size="15" font-weight="700" fill="#1b4d2e">Open Library</text>
+  <text x="775" y="239" text-anchor="middle" font-size="12" fill="#2e7d4f">book metadata</text>
+
+  <line x1="635" y1="196" x2="668" y2="140" stroke="#90a4ae" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="765" y1="196" x2="712" y2="140" stroke="#90a4ae" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- footer captions -->
+  <text x="540" y="300" text-anchor="middle" font-size="15" fill="#37474f">A patron logs in with a library card and submits &#8594; the bot enriches it automatically &#8594; staff review and decide.</text>
+  <text x="540" y="326" text-anchor="middle" font-size="13" fill="#78909c">Built on tools CHPL already owns &#8212; Sierra and existing servers &#8212; plus public data from Open Library. Every step is recorded in an audit trail.</text>
+</svg>
