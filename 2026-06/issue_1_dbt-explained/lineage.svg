@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" font-family="Georgia, serif">
+  <style>
+    .n{fill:#f4efe6;stroke:#5b4636;stroke-width:2;rx:8}
+    .t{fill:#3a2c20;font-size:15px} .e{stroke:#5b4636;stroke-width:2;marker-end:url(#a)}
+  </style>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+    <path d="M0,0 L8,4 L0,8 z" fill="#5b4636"/></marker></defs>
+  <rect class="n" x="10"  y="80" width="120" height="40"/><text class="t" x="30"  y="105">raw JSON</text>
+  <rect class="n" x="190" y="80" width="120" height="40"/><text class="t" x="205" y="105">checkouts</text>
+  <rect class="n" x="370" y="20" width="120" height="40"/><text class="t" x="388" y="45">dim_title</text>
+  <rect class="n" x="370" y="140" width="120" height="40"/><text class="t" x="385" y="165">daily_format</text>
+  <rect class="n" x="560" y="80" width="150" height="40"/><text class="t" x="575" y="105">daily_by_audience</text>
+  <line class="e" x1="130" y1="100" x2="188" y2="100"/>
+  <line class="e" x1="310" y1="95"  x2="368" y2="50"/>
+  <line class="e" x1="310" y1="105" x2="368" y2="155"/>
+  <line class="e" x1="490" y1="45"  x2="600" y2="82"/>
+  <line class="e" x1="310" y1="108" x2="558" y2="100"/>
+</svg>

@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<meta name="description" content="dbt, explained with our OverDrive checkouts — how a pile of raw vendor data becomes something you can answer questions with">
+		<meta name="keywords" content="dbt, dbt-duckdb, DuckDB, OverDrive, CHPL, data">
+		<meta name="author" content="Ray Voelker">
+
+		<title>dbt, explained with our OverDrive checkouts - Ray Voelker</title>
+
+		<link rel="stylesheet" href="revealjs/reset.css">
+		<link rel="stylesheet" href="revealjs/reveal.css">
+		<link rel="stylesheet" href="revealjs/theme/white.css" id="theme">
+		<link rel="stylesheet" href="css/iug2026.css">
+
+		<!-- Syntax highlighting -->
+		<link rel="stylesheet" href="revealjs/plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<!-- Logo panel for title/closing slides — OUTSIDE .reveal so CSS transforms don't affect it -->
+		<div class="title-logo-panel" style="display: none;">
+			<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library">
+		</div>
+
+		<div class="reveal">
+			<!-- Persistent footer bar (beige bar + CHPL logo) -->
+			<div class="footer-bar">
+				<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library" class="footer-chpl-logo">
+			</div>
+
+			<div class="slides">
+
+
+
+				<!-- TITLE SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1>dbt, explained with our OverDrive checkouts</h1>
+						<h2>how a pile of raw vendor data becomes something you can answer questions with</h2>
+						<p>
+							Ray Voelker<br>
+							Cincinnati &amp; Hamilton County Public Library<br>
+							<a href="mailto:ray.voelker@chpl.org">ray.voelker@chpl.org</a>
+						</p>
+					</div>
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>What dbt is</h2>
+
+
+
+
+					<ul>
+
+						<li>**dbt** is a *build tool for SQL*. You write each transformation as one `SELECT` — called a **model** — and dbt turns it into a table, in the right order, tested and documented.</li>
+
+						<li>It has no database of its own. It's the **chef**, not the stove.</li>
+
+						<li>The vendor hands us a messy pile of JSON; one model turns it into a clean table:</li>
+
+						<li><pre><code class="language-sql">-- model: checkouts  (one SELECT = one table)
+select checkoutId as checkout_id,
+       title, branch, format,
+       try_strptime(checkoutDateUtc,
+                    '%m/%d/%Y %H:%M:%S') as checked_out
+from read_json('overdrive_*/page_*.json')</code></pre></li>
+
+					</ul>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>ref(): it figures out the order</h2>
+
+
+
+
+					<ul>
+
+						<li>**Enrichment = combining.** To get *checkouts by audience rating*, we join checkouts to a **title dimension**.</li>
+
+						<li>You point one model at another with **`ref()`**, and dbt works out what to build first — and draws the map.</li>
+
+						<li><pre><code class="language-sql">from {{ ref('checkouts') }} c
+join {{ ref('dim_title') }} d using (title_id)</code></pre></li>
+
+						<li>`raw → checkouts → dim_title ↘ daily_by_audience`</li>
+
+						<li>Arranging data in layers like this — `raw → refined → enriched` — has a name: **medallion**. dbt moves data *between* the layers. *(More in its own issue.)*</li>
+
+					</ul>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Incremental: only touch what's new</h2>
+
+
+
+
+					<ul>
+
+						<li>OverDrive is pulled twice a day on an overlapping 2-day window, so the same checkout lands in ~4 files.</li>
+
+						<li>An **incremental** model keeps **59,770 unique** checkouts — and a re-run adds **0 rows**.</li>
+
+						<li>Meaningful counts *require* this dedup; otherwise every number is inflated.</li>
+
+					</ul>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Tests: the data checks itself</h2>
+
+
+
+
+					<ul>
+
+						<li>Before you trust an enriched number, dbt checks it. A **test** is a rule that runs on every build:</li>
+
+						<li><pre><code class="language-yaml">columns:
+  - name: checkout_id
+    tests: [not_null, unique]</code></pre></li>
+
+						<li>*No two checkouts share an ID.* If that's ever false, the build **stops** — a bad number never ships.</li>
+
+					</ul>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Lineage: see the whole pipeline</h2>
+
+
+
+
+					<ul>
+
+						<li>One command — `dbt docs generate` — draws the dependency graph and the documentation.</li>
+
+						<li>You can trace *checkouts by audience rating* all the way back to the raw vendor file.</li>
+
+						<li>That traceability matters a lot when the data is about customers.</li>
+
+					</ul>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>dbt-duckdb: all on one machine</h2>
+
+
+
+
+					<ul>
+
+						<li>**DuckDB** is "SQLite for analytics" — a fast database that runs *inside* the program, no server. **dbt-duckdb** plugs dbt into it.</li>
+
+						<li>The whole enrichment pipeline runs in seconds, on one machine, against our own data — no warehouse, no cloud bill.</li>
+
+						<li>**The big-company toolchain, library-sized** — and the same recipe enriches Hoopla checkouts too.</li>
+
+					</ul>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+			</div>
+		</div>
+
+		<script src="revealjs/reveal.js"></script>
+		<script src="revealjs/plugin/notes/notes.js"></script>
+		<script src="revealjs/plugin/markdown/markdown.js"></script>
+		<script src="revealjs/plugin/highlight/highlight.js"></script>
+		<script src="plugin/elapsed-time-bar/elapsed-time-bar.js"></script>
+		<script>
+			Reveal.initialize({
+				hash: true,
+				slideNumber: 'c/t',
+				minScale: 0.2,
+				maxScale: 1.5,
+				margin: 0.04,
+				allottedTime: 15 * 60 * 1000, // 15 minutes
+				progressBarHeight: 4,
+				barColor: '#0C2340',
+				pausedBarColor: 'rgba(12,35,64,0.4)',
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, ElapsedTimeBar ]
+			});
+
+			// Toggle footer bar and logo panel based on slide type / dark backgrounds
+			function updateChrome(slide) {
+				const footer = document.querySelector('.footer-bar');
+				const logoPanel = document.querySelector('.title-logo-panel');
+				const isTitle = slide.classList.contains('title-slide');
+				const dark = ['#0C2340', '#00223D', '#0E2841'];
+				const hasDarkBg = dark.includes((slide.dataset.backgroundColor || '').toUpperCase());
+				footer.style.display = (isTitle || hasDarkBg) ? 'none' : 'flex';
+				logoPanel.style.display = isTitle ? 'flex' : 'none';
+			}
+			Reveal.on('slidechanged', event => updateChrome(event.currentSlide));
+			Reveal.on('ready', event => updateChrome(event.currentSlide));
+		</script>
+	</body>
+</html>
