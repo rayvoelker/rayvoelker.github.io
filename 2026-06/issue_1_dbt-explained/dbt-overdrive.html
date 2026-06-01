@@ -62,9 +62,9 @@
 
 					<ul>
 
-						<li>**dbt** is a *build tool for SQL*. You write each transformation as one `SELECT` — called a **model** — and dbt turns it into a table, in the right order, tested and documented.</li>
+						<li><strong>dbt</strong> is a <em>build tool for SQL</em>. You write each transformation as one <code>SELECT</code> — called a <strong>model</strong> — and dbt turns it into a table, in the right order, tested and documented.</li>
 
-						<li>It has no database of its own. It's the **chef**, not the stove.</li>
+						<li>It has no database of its own. It's the <strong>chef</strong>, not the stove.</li>
 
 						<li>The vendor hands us a messy pile of JSON; one model turns it into a clean table:</li>
 
@@ -100,16 +100,16 @@ from read_json('overdrive_*/page_*.json')</code></pre></li>
 
 					<ul>
 
-						<li>**Enrichment = combining.** To get *checkouts by audience rating*, we join checkouts to a **title dimension**.</li>
+						<li><strong>Enrichment = combining.</strong> To get <em>checkouts by audience rating</em>, we join checkouts to a <strong>title dimension</strong>.</li>
 
-						<li>You point one model at another with **`ref()`**, and dbt works out what to build first — and draws the map.</li>
+						<li>You point one model at another with <strong><code>ref()</code></strong>, and dbt works out what to build first — and draws the map.</li>
 
 						<li><pre><code class="language-sql">from {{ ref('checkouts') }} c
 join {{ ref('dim_title') }} d using (title_id)</code></pre></li>
 
-						<li>`raw → checkouts → dim_title ↘ daily_by_audience`</li>
+						<li><code>raw → checkouts → dim_title ↘ daily_by_audience</code></li>
 
-						<li>Arranging data in layers like this — `raw → refined → enriched` — has a name: **medallion**. dbt moves data *between* the layers. *(More in its own issue.)*</li>
+						<li>Arranging data in layers like this — <code>raw → refined → enriched</code> — has a name: <strong>medallion</strong>. dbt moves data <em>between</em> the layers. <em>(More in its own issue.)</em></li>
 
 					</ul>
 
@@ -138,9 +138,9 @@ join {{ ref('dim_title') }} d using (title_id)</code></pre></li>
 
 						<li>OverDrive is pulled twice a day on an overlapping 2-day window, so the same checkout lands in ~4 files.</li>
 
-						<li>An **incremental** model keeps **59,770 unique** checkouts — and a re-run adds **0 rows**.</li>
+						<li>An <strong>incremental</strong> model keeps <strong>59,770 unique</strong> checkouts — and a re-run adds <strong>0 rows</strong>.</li>
 
-						<li>Meaningful counts *require* this dedup; otherwise every number is inflated.</li>
+						<li>Meaningful counts <em>require</em> this dedup; otherwise every number is inflated.</li>
 
 					</ul>
 
@@ -167,13 +167,13 @@ join {{ ref('dim_title') }} d using (title_id)</code></pre></li>
 
 					<ul>
 
-						<li>Before you trust an enriched number, dbt checks it. A **test** is a rule that runs on every build:</li>
+						<li>Before you trust an enriched number, dbt checks it. A <strong>test</strong> is a rule that runs on every build:</li>
 
 						<li><pre><code class="language-yaml">columns:
   - name: checkout_id
     tests: [not_null, unique]</code></pre></li>
 
-						<li>*No two checkouts share an ID.* If that's ever false, the build **stops** — a bad number never ships.</li>
+						<li><em>No two checkouts share an ID.</em> If that's ever false, the build <strong>stops</strong> — a bad number never ships.</li>
 
 					</ul>
 
@@ -200,9 +200,9 @@ join {{ ref('dim_title') }} d using (title_id)</code></pre></li>
 
 					<ul>
 
-						<li>One command — `dbt docs generate` — draws the dependency graph and the documentation.</li>
+						<li>One command — <code>dbt docs generate</code> — draws the dependency graph and the documentation.</li>
 
-						<li>You can trace *checkouts by audience rating* all the way back to the raw vendor file.</li>
+						<li>You can trace <em>checkouts by audience rating</em> all the way back to the raw vendor file.</li>
 
 						<li>That traceability matters a lot when the data is about customers.</li>
 
@@ -231,11 +231,11 @@ join {{ ref('dim_title') }} d using (title_id)</code></pre></li>
 
 					<ul>
 
-						<li>**DuckDB** is "SQLite for analytics" — a fast database that runs *inside* the program, no server. **dbt-duckdb** plugs dbt into it.</li>
+						<li><strong>DuckDB</strong> is "SQLite for analytics" — a fast database that runs <em>inside</em> the program, no server. <strong>dbt-duckdb</strong> plugs dbt into it.</li>
 
 						<li>The whole enrichment pipeline runs in seconds, on one machine, against our own data — no warehouse, no cloud bill.</li>
 
-						<li>**The big-company toolchain, library-sized** — and the same recipe enriches Hoopla checkouts too.</li>
+						<li><strong>The big-company toolchain, library-sized</strong> — and the same recipe enriches Hoopla checkouts too.</li>
 
 					</ul>
 
