@@ -24,7 +24,8 @@ a:hover { text-decoration: underline; }
           border: 1px solid #cfe0cf; border-radius: 3px; padding: .04rem .4rem; }
 dl.kwindex { margin: 0; }
 dl.kwindex dt { font-family: ui-monospace, Menlo, monospace; font-weight: 700; margin: .9rem 0 .15rem; }
-dl.kwindex dd { margin: 0 0 0 1.2rem; color: var(--mut); }
+dl.kwindex dd { margin: 0 0 .25rem 1.2rem; }
+dl.kwindex dd .refs { color: var(--mut); font-size: .85rem; }
 footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule);
          color: var(--mut); font-size: .82rem; }
 </style></head><body>
@@ -46,43 +47,52 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <h2>Index of keywords</h2>
 <dl class=kwindex>
 <dt>catalog matching</dt>
-<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dd>Linking a list entry to the library&#x27;s catalog (bib) record(s). <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>control plane</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>One place to see and operate every pipeline&#x27;s status across the fleet. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>data contracts</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>A declared, validated shape a data source must satisfy before it can join the lake. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>data quality</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>Automated assertions on every load — row counts, nulls, uniqueness, schema drift. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>Datasette</dt>
-<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dd>A tool that publishes a database as a browsable, queryable website. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>dbt</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>A tool that builds SQL transformations as a tested, ordered dependency graph. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>deterministic matching</dt>
-<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dd>Exact, rule-based matching — vs. fuzzy or probabilistic guessing. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>DuckDB</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>An in-process analytical SQL database — like SQLite, but built for analytics. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>ELT</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>Load the raw data first, transform it later — vs. ETL, which transforms before loading. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>honest gaps</dt>
-<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dd>Naming the titles we could NOT confidently match, rather than hiding them. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>idempotency</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>Running a load twice has the same effect as running it once — retries can&#x27;t corrupt. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>identifier normalization</dt>
-<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dd>Cleaning and cross-deriving IDs — e.g. an ISBN-10 implies its ISBN-13 twin. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>ISBN</dt>
-<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dd>The standard book identifier; its 10- and 13-digit forms convert to each other. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>medallion</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>Layered refinement: raw (bronze) → cleaned &amp; typed (silver) → query-ready (gold). <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>observability</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>The platform records every run and computes its own health from that ledger. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>reading lists</dt>
-<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dd>Curated lists of titles (e.g. award winners) checked against what the library holds. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>SCD Type 0</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>A landed snapshot is never edited in place; history is append-only. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>schema-on-read</dt>
-<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dd>Store data exactly as it arrives; impose structure only when you query it. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>title-author key</dt>
-<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dd>A synthesized match key for records that arrive with no ISBN to match on. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 </dl>
+<h2>Talks &amp; related</h2>
+<div class=item>
+<div class=t><a href="/iug2026/talk-datalake-building-a-data-lake.html">Building a Data Lake for Your Library</a> <span class=kw>talk</span></div>
+<div class=sum>IUG 2026 conference talk — early experiments at CHPL with library-owned data infrastructure.</div>
+</div>
+<div class=item>
+<div class=t><a href="/2026-05/issue_2_our-data-our-lake/">Our Data, Our Lake</a> <span class=kw>zine</span></div>
+<div class=sum>A printable zine on owning the library&#x27;s data — the lake, in plain language.</div>
+</div>
 <footer>Generated 2026-06-09 from 2 published showboats · the version ledger is git, not a version number.</footer>
 </body></html>
