@@ -1,0 +1,88 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<title>chimpy-lake showboats</title>
+<style>
+:root { --ink:#1a1a1a; --mut:#6b6b6b; --rule:#e2e2e2; --accent:#7a3b2e; --chip:#f0ece6; }
+* { box-sizing: border-box; }
+body { font: 16px/1.6 Georgia, 'Times New Roman', serif; color: var(--ink);
+       max-width: 46rem; margin: 0 auto; padding: 3rem 1.4rem 5rem; }
+h1 { font-size: 2rem; margin: 0 0 .2rem; letter-spacing: -.01em; }
+h2 { font-size: 1.15rem; margin: 2.6rem 0 .8rem; padding-bottom: .3rem;
+     border-bottom: 1px solid var(--rule); text-transform: uppercase;
+     letter-spacing: .08em; color: var(--mut); font-weight: 600; }
+.lede { color: var(--mut); font-size: 1.02rem; margin: .2rem 0 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.item { margin: 0 0 1.8rem; }
+.item .t { font-size: 1.2rem; font-weight: 700; }
+.item .sub { font-style: italic; color: var(--mut); margin: .1rem 0 .35rem; }
+.item .sum { margin: 0 0 .5rem; }
+.kw { display: inline-block; font-family: ui-monospace, Menlo, monospace; font-size: .72rem;
+      background: var(--chip); color: #4a4a4a; border-radius: 3px; padding: .08rem .42rem;
+      margin: 0 .25rem .25rem 0; }
+.status { font-family: ui-monospace, Menlo, monospace; font-size: .68rem; color: #3a6b3a;
+          border: 1px solid #cfe0cf; border-radius: 3px; padding: .04rem .4rem; }
+dl.kwindex { margin: 0; }
+dl.kwindex dt { font-family: ui-monospace, Menlo, monospace; font-weight: 700; margin: .9rem 0 .15rem; }
+dl.kwindex dd { margin: 0 0 0 1.2rem; color: var(--mut); }
+footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+         color: var(--mut); font-size: .82rem; }
+</style></head><body>
+<h1>chimpy-lake showboats</h1>
+<p class=lede>Narrated, <em>reproducible</em> walkthroughs of working code from the chimpy-lake data platform. Each one shows real commands and their captured output; each is a living artifact — always the current render of current code.</p>
+<h2>Walkthroughs</h2>
+<div class=item>
+<div class=t><a href="by-the-book/">chimpy-lake, by the book</a> <span class=status>published</span></div>
+<div class=sub>a library data platform, pattern by pattern through the data-engineering canon</div>
+<div class=sum>A capstone tour of the platform itself — every moving part mapped to an established data-engineering pattern and shown running over a small, no-PII fixture.</div>
+<div><span class=kw>ELT</span><span class=kw>schema-on-read</span><span class=kw>data contracts</span><span class=kw>medallion</span><span class=kw>dbt</span><span class=kw>DuckDB</span><span class=kw>idempotency</span><span class=kw>SCD Type 0</span><span class=kw>data quality</span><span class=kw>observability</span><span class=kw>control plane</span></div>
+</div>
+<div class=item>
+<div class=t><a href="reading-lists-match/">From a curated list to the books on our shelves</a> <span class=status>published</span></div>
+<div class=sub>matching curated reading lists against the CHPL catalog</div>
+<div class=sum>Follow three real Newbery titles as a curated list is matched against the library catalog — confident, needs-review, or an honest gap (with the gaps named, not hidden).</div>
+<div><span class=kw>reading lists</span><span class=kw>catalog matching</span><span class=kw>identifier normalization</span><span class=kw>ISBN</span><span class=kw>title-author key</span><span class=kw>deterministic matching</span><span class=kw>honest gaps</span><span class=kw>Datasette</span></div>
+</div>
+<h2>Index of keywords</h2>
+<dl class=kwindex>
+<dt>catalog matching</dt>
+<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>control plane</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>data contracts</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>data quality</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>Datasette</dt>
+<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>dbt</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>deterministic matching</dt>
+<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>DuckDB</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>ELT</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>honest gaps</dt>
+<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>idempotency</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>identifier normalization</dt>
+<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>ISBN</dt>
+<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>medallion</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>observability</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>reading lists</dt>
+<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>SCD Type 0</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>schema-on-read</dt>
+<dd><a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>title-author key</dt>
+<dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+</dl>
+<footer>Generated 2026-06-09 from 2 published showboats · the version ledger is git, not a version number.</footer>
+</body></html>
