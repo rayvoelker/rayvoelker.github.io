@@ -101,32 +101,59 @@ th, td { border: 1px solid var(--rule); padding: .35rem .6rem; text-align: left;
 <body>
 <h1 id="from-a-curated-list-to-the-books-on-our-shelves">From a curated
 list to the books on our shelves</h1>
-<p><em>2026-06-09T02:37:48Z by Showboat 0.6.1</em>
-<!-- showboat-id: 67878512-9924-4bac-910a-36d52a6bd819 --></p>
+<p><em>2026-06-10T21:08:08Z by Showboat 0.6.1</em>
+<!-- showboat-id: f28827ab-03cd-4ad9-a179-dbb751b63224 --></p>
 <h2 id="from-a-curated-list-to-the-books-on-our-shelves-1">From a
 curated list to the books on our shelves</h2>
-<p>A reading group hands us a list — say, the <strong>Newbery Medal and
-Honor</strong> books. The question that matters is simple: <em>which of
-these do we actually have, and where are the gaps?</em> This walkthrough
-runs the real pipeline that answers it. It takes a curated list, lines
-each title up against the library catalog, and scores the match
-<strong>honestly</strong> — <em>confident</em>, <em>needs a human
-look</em>, or an outright <em>gap</em>. We follow <strong>three real
-books</strong> the whole way through.</p>
+<p>Hand us a reading list — the books your group is reading — and it
+becomes a <strong>named, browsable entry</strong> in the library’s
+catalog-match directory: who curated it, how many titles, and the one
+number that matters — <em>how many we already own</em>. This walkthrough
+opens with that directory, then follows <strong>three real
+books</strong> under the hood to show how each title is lined up against
+our shelves. The machine matches what it can be sure of; the ones it
+<em>isn’t</em> sure of, <strong>a librarian reviews</strong> — and that
+human step is the whole story. The honest result: of one award’s
+<strong>177</strong> titles, we own <strong>169</strong>.</p>
 <blockquote>
 <p>Public bibliographic data only · this reads <strong>frozen
 snapshots</strong>, never live systems · a discovery surface with no
 patron data.</p>
 </blockquote>
-<h3 id="the-curated-list">1 · The curated list</h3>
-<p>Here is the Newbery list as the lake holds it — every Medal and Honor
-title — and the three books we’ll trace: one that matches cleanly, one
-that’s ambiguous, and one very famous book that, surprisingly, comes up
-empty.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py list</span></code></pre></div>
+<h3 id="your-lists-in-one-directory">1 · Your lists, in one
+directory</h3>
+<p>Every list we take in — whether a librarian
+<strong>hand-authors</strong> it or we <strong>pull</strong> it from an
+award like the Newbery — becomes a first-class entry here:
+<strong>named</strong>, <strong>attributed</strong> to whoever curated
+it, and measured by how much of it we already hold. This is where your
+list would land.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py directory</span></code></pre></div>
 <pre class="output"><code>
-Beat 1 — the curated Newbery list, as landed (174 entries)
-──────────────────────────────────────────────────────────
+Beat 1 — your lists: named, attributed, and how much of each we own
+───────────────────────────────────────────────────────────────────
+  list                     curator                entries owned  gap pct owned
+  ----------------------------------------------------------------------------
+  Sample Newbery Starter   reading-lists demo           3     3    0      100%
+  Newbery Honor            — (pulled from award)       70    62    8     88.6%
+  Newbery Medal            — (pulled from award)      104   104    0      100%
+
+&#39;Sample Newbery Starter&#39; is a HAND-AUTHORED list — attributed to its curator,
+and we own all three titles. The Newbery lists are PULLED from an award, so they
+carry no personal curator (an honest blank, never a fabricated name). Hand us your
+list and it lands here the same way: named, with your name on it, and the share we
+already own. &#39;owned&#39; is the number that matters. Next we open one up to see how
+that number is built — and why a person is part of it.</code></pre>
+<h3 id="opening-one-list">2 · Opening one list</h3>
+<p>Let’s open one of those entries — the <strong>Newbery Medal and
+Honor</strong> winners — and watch exactly how those “owned” numbers are
+built. Three of these books are our guides: one the machine matches
+outright, and two famous ones it <em>can’t</em> be sure of on its
+own.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py list</span></code></pre></div>
+<pre class="output"><code>
+Beat 2 — going deep on one list: the Newbery winners (174 entries)
+──────────────────────────────────────────────────────────────────
 by award class:
   honor    70
   medal    104
@@ -135,20 +162,22 @@ the three titles we&#39;ll follow:
   Bud, Not Buddy                 Christopher Paul Curtis  (medal)
   Crispin: The Cross of Lead     Avi                      (medal)
   The Giver                      Lois Lowry               (medal)</code></pre>
-<h3 id="giving-every-title-something-to-match-on">2 · Giving every title
+<h3 id="giving-every-title-something-to-match-on">3 · Giving every title
 something to match on</h3>
 <p>Before we can match a title, we normalize its identifiers. Watch the
 <strong>real registry</strong> run: it cleans and cross-derives ISBNs (a
 10-digit ISBN implies its 13-digit twin) and — crucially — synthesizes a
-<em>title + author</em> key, so a book that arrives with <strong>no ISBN
-at all</strong> still has a handle to match on.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py normalize</span></code></pre></div>
+<em>title-and-author</em> match that doesn’t care about author order, so
+a book that arrives with <strong>no ISBN at all</strong> still has a
+handle to match on. Notice <em>The Giver</em> carries <strong>four
+editions’ worth</strong> of ISBNs — hold that thought.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py normalize</span></code></pre></div>
 <pre class="output"><code>
-Beat 2 — one title&#39;s identifiers, normalized by the real registry
+Beat 3 — one title&#39;s identifiers, normalized by the real registry
 ─────────────────────────────────────────────────────────────────
 
 The Giver  (Lois Lowry)
-  harvested: 9 raw id(s) -&gt; normalized: 10 (incl. derived + title_author)
+  harvested: 9 raw id(s) -&gt; normalized: 10 (incl. derived + a title-author match)
     wikidata      Q258953                    -&gt; —
     isbn13        978-0-395-64566-6          -&gt; 9780395645666
     isbn10        0395645662                 -&gt; 0395645662
@@ -161,94 +190,121 @@ The Giver  (Lois Lowry)
     title_author  The Giver|Lois Lowry       -&gt; giver|lois lowry
 
 Crispin: The Cross of Lead  (Avi)
-  harvested: 1 raw id(s) -&gt; normalized: 2 (incl. derived + title_author)
+  harvested: 1 raw id(s) -&gt; normalized: 2 (incl. derived + a title-author match)
     wikidata      Q5186028                   -&gt; —
     title_author  Crispin: The Cross of Lead|Avi -&gt; crispin the cross of lead|avi
 
-ISBN-10/13 cross-derive each other; a `title_author` key is synthesized so even
+ISBN-10/13 cross-derive each other; a title-and-author match is built (author
+order doesn&#39;t matter — &#39;Lois Lowry&#39; and &#39;Lowry, Lois&#39; come out the same) so even
 Crispin — which arrives with NO ISBN — still has something to match on.</code></pre>
-<h3 id="the-verdict">3 · The verdict</h3>
-<p>Now the match. Each title gets one of three verdicts. <strong>Bud,
-Not Buddy</strong> matches on a shared ISBN — <em>confident</em>.
-<strong>Crispin</strong> arrived with no ISBN, so its title/author key
-turned up <strong>two</strong> possible catalog records — a
-<em>review</em>, flagged for a human rather than guessed. <strong>The
-Giver</strong> finds nothing — a <em>gap</em>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py match</span></code></pre></div>
+<h3 id="the-verdict-and-where-a-librarian-comes-in">4 · The verdict —
+and where a librarian comes in</h3>
+<p>Now the match. <strong>Bud, Not Buddy</strong> shares an ISBN with a
+record on our shelves — the machine is <em>confident</em>, no human
+needed. But <strong>The Giver</strong> and <strong>Crispin</strong> have
+<strong>no ISBN our catalog shares</strong> (we hold <em>different
+editions</em>). Their title-and-author match still finds candidates —
+but <em>several</em> of them, too many to guess. So instead of faking a
+match, the system hands them to a <strong>librarian</strong>, who
+confirms the right one. That accepted verdict is what turns an uncertain
+match into an owned book.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py match</span></code></pre></div>
 <pre class="output"><code>
-Beat 3 — the match verdict (one row per match; gaps have none)
-──────────────────────────────────────────────────────────────
-  title                        status    scheme        confidence bib
-  ----------------------------------------------------------------------
-  Bud, Not Buddy               confident isbn13        confident  1946139
-  Crispin: The Cross of Lead   review    title_author  review     1819030
-  Crispin: The Cross of Lead   review    title_author  review     1912048
-  The Giver                    gap       —             —          —
+Beat 4 — the verdict, and where a librarian comes in
+────────────────────────────────────────────────────
+  title                          record  matched on    librarian  confidence
+  ----------------------------------------------------------------------------
+  Bud, Not Buddy                1946139  ISBN          —          confident
+  Bud, Not Buddy                2545365  title+author  —          review
+  Bud, Not Buddy                3597993  title+author  —          review
+  Crispin: The Cross of Lead    1819030  title+author  accepted   adjudicated
+  Crispin: The Cross of Lead    1912048  title+author  —          review
+  The Giver                     1422981  title+author  accepted   adjudicated
+  The Giver                     1481826  title+author  —          review
+  The Giver                     2545319  title+author  —          review
+  The Giver                     3419362  title+author  —          review
+  The Giver                     3706384  title+author  —          review
 
-Bud matched by ISBN (confident). Crispin had no ISBN, so the title/author key
-found TWO candidate bibs — a review, not an auto-match. The Giver: no match at all.</code></pre>
-<h3 id="honest-about-the-gaps">4 · Honest about the gaps</h3>
-<p>This is the part we refuse to paper over. <strong>142 of 174</strong>
-Newbery titles come up as gaps — including <em>The Giver</em>, one of
-the most-held children’s books in any library. The reason isn’t that we
-don’t own it: the <em>editions</em> differ (our copies carry different
-ISBNs) and the catalog lists the author surname-first, which breaks the
-title/author bridge. Below is exactly why — and the two later sprints
-that close most of this gap. A useful tool tells you what it
-<em>doesn’t</em> know.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py gaps</span></code></pre></div>
+Bud matched on a shared ISBN — the machine is CONFIDENT, no human needed (its two
+weaker title/author candidates are ignored). The Giver and Crispin had no ISBN our
+catalog shares, so the title/author bridge surfaced SEVERAL possible records — too
+many to guess. Rather than fake a match, the system handed them to a librarian, who
+ACCEPTED the right one. A human verdict promotes &#39;review&#39; -&gt; &#39;adjudicated&#39;; it never
+relabels a machine-confident match. The other candidates simply stay un-chosen.</code></pre>
+<h3 id="what-a-librarians-review-added-up-to">5 · What a librarian’s
+review added up to</h3>
+<p>Here is the payoff. On its own, the machine could be
+<em>confident</em> about only <strong>34</strong> of the 177 titles —
+exact-identifier matches. The rest were either uncertain or looked
+absent. Then a librarian spent an afternoon reviewing the uncertain
+ones. The result: we own <strong>169 of 177</strong> — <strong>every
+Newbery Medal winner (100%)</strong> and <strong>88.6%</strong> of the
+Honor books. <em>The Giver</em> — a gap to the machine — became an owned
+book the moment a person confirmed it. And the handful we <em>don’t</em>
+own becomes a tidy <strong>acquisition list</strong>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py adjudicate</span></code></pre></div>
 <pre class="output"><code>
-Beat 4 — the honest gaps (142 of 174)
-─────────────────────────────────────
-status breakdown:
-  confident 31
-  review    1
-  gap       142
+Beat 5 — what a librarian&#39;s review added up to
+──────────────────────────────────────────────
+Before any human looked, the machine could confidently own   34 of 177
+  (exact-identifier matches only).
+After a librarian reviewed the uncertain ones, we own        169 of 177.
 
-The Giver is a GAP — yet it carries 8 normalized ISBNs across editions:
-  9780395645666, 0395645662, 9780440900795, 0440900794, 9781442014961, 1442014962, 9782211021661, 2211021662
-None match a bib in our catalog: we hold DIFFERENT editions (different ISBNs).
-Its title/author key normalizes to:  &#39;giver|lois lowry&#39;
-…but the catalog records the author as &quot;Lowry, Lois&quot; (surname-first) — a different
-key — so even the title/author bridge misses. THAT is the gap.
+  list                     owned   of   share
+  --------------------------------------------
+  Newbery Medal              104  104    100%
+  Newbery Honor               62   70   88.6%
+  Sample Newbery Starter       3    3    100%
 
-Levers (later sprints): an author-order-insensitive title/author key (S3.3) and
-work-clustering across editions (S3.4). We name the gap; we don&#39;t fake the match.</code></pre>
-<h3 id="what-a-reading-group-browses">5 · What a reading group
+The Giver was one of the uncertain ones: no edition we hold shares its ISBNs, but
+the title/author bridge surfaced five possible records — too many to guess. A
+librarian confirmed the right one. Its journey: gap -&gt; reviewed -&gt; owned.
+
+The 8 titles we still don&#39;t own are a tidy acquisition list — all obscure
+early Newbery Honor titles, several long out of print:
+    [honor] Garram the Hunter, A Boy of the Hill Tribes  — Herbert Best
+    [honor] Little Blacknose  — Hildegarde Hoyt Swift
+    [honor] Mountains Are Free  — Julia Davis Adams
+    [honor] Ood-le-uk the Wanderer  — Alice Alison Lide; Margaret Alison Johansen
+    [honor] Pran of Albania  — Elizabeth Cleveland Miller
+    [honor] Queer Person  — Ralph Hubbard
+    [honor] The Dark Star of Itza, The Story of A Pagan Princess  — Alida Malkus
+    [honor] The Fairy Circus  — Dorothy P. Lathrop
+
+We name exactly what we&#39;re missing; we never fake a match we don&#39;t have.</code></pre>
+<h3 id="what-a-reading-group-browses">6 · What a reading group
 browses</h3>
-<p>All of this lands in a small, browsable <strong>Datasette</strong>.
-Three ready-made views answer the questions a reading group actually
-asks: what’s a <em>gap</em>, what do we <em>confidently own</em>, and
-what <em>needs a human’s eye</em>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py browse</span></code></pre></div>
+<p>All of this lands in a small, browsable <strong>Datasette</strong> —
+a point-and-click data browser. It answers the three questions a reading
+group actually asks: what do we <em>own</em> (whether the machine was
+sure or a librarian confirmed it), what’s a <em>gap</em> worth
+acquiring, and what’s <em>still waiting</em> on a human — now that a
+librarian has cleared the queue, nothing.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/_driver.py browse</span></code></pre></div>
 <pre class="output"><code>
-Beat 5 — what a reading group browses (the Datasette&#39;s canned queries)
-──────────────────────────────────────────────────────────────────────
+Beat 6 — what a reading group browses (the live Datasette)
+──────────────────────────────────────────────────────────
 
-• newbery_gaps  — titles with no deterministic match (142 total; first 5):
-    [medal] ...And Now Miguel  — Joseph Krumgold
-    [honor] A Girl Named Disaster  — Nancy Farmer
-    [medal] A Visit to William Blake&#39;s Inn  — Nancy Willard
-    [medal] A Wrinkle in Time  — Madeleine L&#39;Engle
-    [medal] A Year Down Yonder  — Richard Peck
+• Owned — the machine&#39;s confident matches and the librarian&#39;s confirmations
+  sit side by side; a reader can&#39;t tell (and needn&#39;t care) which is which:
+    [medal] ...And Now Miguel        — Joseph Krumgold          (adjudicated)
+    [honor] 26 Fairmount Avenue      — Tomie dePaola            (confident)
+    [medal] A Gathering of Days      — Joan Blos                (confident)
+    [honor] A Girl Named Disaster    — Nancy Farmer             (adjudicated)
+    [medal] A Single Shard           — Linda Sue Park           (confident)
+    [honor] A Snake Falls to Earth   — Darcie Little Badger     (confident)
+    …
 
-• owned (confident) — titles we hold by ISBN/OCLC (31 total; first 5):
-    [honor] 26 Fairmount Avenue  — Tomie dePaola
-    [medal] A Gathering of Days  — Joan Blos
-    [medal] A Single Shard  — Linda Sue Park
-    [honor] A Snake Falls to Earth  — Darcie Little Badger
-    [medal] Bud, Not Buddy  — Christopher Paul Curtis
+• Gaps — the acquisition list from the last step is its own browsable view.
 
-• review_queue — fuzzy candidates to triage by hand:
-    Crispin: The Cross of Lead  ~  bib: Crispin : the cross of lead  (rank 1)
-    Crispin: The Cross of Lead  ~  bib: Crispin the cross of lead  (rank 2)</code></pre>
+• Review queue — uncertain matches still awaiting a human: 0 (a librarian cleared it).</code></pre>
 <h3 id="proof">Proof</h3>
 <p>Every command above is reproducible (<code>showboat verify</code>
 re-runs and diffs them), and the identifier registry that powers the
 matching ships green.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest tests/lists tests/demos/test_reading_lists_demo.py <span class="at">-q</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">&#39;s/ in [0-9.]+s//&#39;</span></span></code></pre></div>
-<pre class="output"><code>.........................................................                [100%]
-57 passed</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest tests/lists tests/demos/test_reading_lists_demo.py <span class="at">-q</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">&#39;s/ in [0-9.]+s//&#39;</span></span></code></pre></div>
+<pre class="output"><code>...............................................................          [100%]
+63 passed</code></pre>
 <h2 id="where-this-could-go">Where this could go</h2>
 <p>Today this is a discovery surface — no patron data, nothing private.
 But picture the next step, posed as <strong>open questions, not
@@ -260,18 +316,19 @@ students (child- or teen-only).</li>
 <li>Those cards carry the <strong>reading lists</strong> themselves,
 light <strong>progress tracking</strong>, and <strong>account
 linking</strong> between a teacher and their group.</li>
-<li>And architecturally: is that a lightweight app hooked into the lake
-— or, truer to how we build, an <strong>artifact of the lake
-itself</strong>, regenerated like every other projection?</li>
+<li>And architecturally: is that a lightweight app bolted on — or, truer
+to how we build, something the system <strong>rebuilds
+automatically</strong>, like every other view it produces?</li>
 </ul>
 <p>None of that is built or designed. It would touch real patron data,
 so it stays <strong>behind the records-officer and counsel
-conversation</strong> — and it would ride on the same de-identification
-<em>identity spine</em> that lets us line a person’s activity up without
-ever storing who they are.</p>
-<p><strong>From a curated list to the books on our shelves — honestly
-scored, gaps and all.</strong></p>
+conversation</strong> — and it would lean on the <strong>privacy-first
+design</strong> we’re building for patron data, which connects a
+person’s activity without ever storing who they are.</p>
+<p><strong>From a curated list to the books on our shelves — the machine
+matches what it can, a librarian confirms the rest, and we never fake a
+match we don’t have.</strong></p>
 <hr>
-<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">Rendered from chimpy-lake <code>2ba1bd9</code> on 2026-06-09 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">Rendered from chimpy-lake <code>3592e58</code> on 2026-06-10 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
 </body>
 </html>
