@@ -100,8 +100,8 @@ th, td { border: 1px solid var(--rule); padding: .35rem .6rem; text-align: left;
 </head>
 <body>
 <h1 id="what-grade-is-this-book">What grade is this book?</h1>
-<p><em>2026-06-17T04:18:23Z by Showboat 0.6.1</em>
-<!-- showboat-id: 4a81b371-5445-4b66-84e5-8f4b821ade2e --></p>
+<p><em>2026-06-17T04:44:38Z by Showboat 0.6.1</em>
+<!-- showboat-id: abf05aac-cf4d-44d1-8d89-9c304b9fbc3e --></p>
 <h2 id="what-grade-is-this-book-1">What grade is this book?</h2>
 <p><em>Reading levels, honestly — what our catalog actually says, and
 where it’s silent.</em></p>
@@ -211,7 +211,7 @@ estimates come in later stages, flagged.</p>
 <pre class="output"><code>
 Demand-scoped extract — only the books our lists point at
 =========================================================
-run #1 — extract over the demand set (reading_lists.fct_match):
+run #1 — extract over the demand set (reading_lists_gold.fct_match):
   demand          8
   with_marc       7
   with_measures   5
@@ -245,13 +245,43 @@ landed rows in enrichment.reading_levels (9 total):
 Every landed row: is_estimated=False, derivation=&#39;native&#39;, work_key=None — RL1
 stores only what the catalog actually says. Estimates and the work-grained
 grade band come later (RL2–RL4), and will be flagged, not hidden.</code></pre>
+<h3 id="the-payoff-a-real-one">4 · The payoff — a real one</h3>
+<p>The beats above run on a curated sample. So does it actually work on
+<em>our</em> books? We ran the extractor against the live lake and
+looked for titles our reading lists reference that carry a level in the
+catalog. The catalog backfill is still in flight — of 472 referenced
+titles, ~50 have MARC landed so far — but among the first real hits are
+<strong>two Newbery Medal winners we own</strong>, with their genuine
+catalog levels. (The records below were captured once from the live lake
+and frozen, so this beat reproduces.)</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> duckdb python docs/demos/reading-levels/_driver.py realmatch</span></code></pre></div>
+<pre class="output"><code>
+A real one — from a curated list to a reading level
+===================================================
+
+  Newbery Medal (1963) · &#39;A wrinkle in time&#39; by &quot;L&#39;Engle, Madeleine.&quot;
+  catalog bib 2653698
+    measure_type       value    status    raw_value
+    reading_grade      5.8      parsed    &#39;RL: 5.8.&#39;
+    audience_note      —        raw_only  &#39;009-012.&#39;
+
+  Newbery Medal (2013) · &#39;The one and only Ivan&#39; by &#39;Applegate, Katherine.&#39;
+  catalog bib 2516043
+    measure_type       value    status    raw_value
+    interest_age       8-12     parsed    &#39;Ages 8-12.&#39;
+
+These are REAL records from our catalog (captured once from the live lake, then
+frozen so this reproduces). Of the 472 titles our reading lists reference, ~50 have
+MARC landed so far (the catalog backfill is still running) — and these two award
+winners are among the first real reading-level matches it surfaces. No guessing:
+&#39;RL: 5.8&#39; becomes grade 5.8; the rest is preserved exactly as catalogued.</code></pre>
 <h3 id="proof">Proof</h3>
 <p>Every command above re-runs under <code>showboat verify</code>. The
 on-thesis invariants — the AV-rating filter, “never guess a number,” and
 the native-only idempotent extract — ship green:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> duckdb pytest tests/demos/test_reading_levels.py <span class="at">-q</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">&#39;s/ in [0-9.]+s//&#39;</span></span></code></pre></div>
-<pre class="output"><code>...                                                                      [100%]
-3 passed</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> duckdb pytest tests/demos/test_reading_levels.py <span class="at">-q</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">&#39;s/ in [0-9.]+s//&#39;</span></span></code></pre></div>
+<pre class="output"><code>....                                                                     [100%]
+4 passed</code></pre>
 <h2 id="where-this-goes-next-open-questions-not-commitments">Where this
 goes next — open questions, not commitments</h2>
 <p>RL1 is the honest foundation. The rest of the program is
@@ -282,6 +312,6 @@ can stand behind completely — the catalog’s own words, verbatim, with
 the movie ratings thrown out and nothing guessed — and everything above
 re-runs on demand.</p>
 <hr>
-<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">Rendered from chimpy-lake <code>5989e12</code> on 2026-06-17 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">Rendered from chimpy-lake <code>e792bf4</code> on 2026-06-17 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
 </body>
 </html>
