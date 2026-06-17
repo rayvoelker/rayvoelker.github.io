@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>What grade is this book?</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style type="text/css">
+:root { --ink:#1a1a1a; --muted:#555; --rule:#e2e2e2; --accent:#3a5a8c; --code-bg:#f6f8fa; }
+* { box-sizing: border-box; }
+body { max-width: 820px; margin: 2.5rem auto; padding: 0 1.25rem;
+font: 16px/1.65 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+color: var(--ink); background:#fff; }
+h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 .25rem; }
+h2 { font-size: 1.4rem; margin: 2.5rem 0 .5rem; padding-top: 1rem; border-top: 2px solid var(--rule); color: var(--accent); }
+h3 { font-size: 1.12rem; margin: 1.75rem 0 .4rem; }
+p { margin: .6rem 0; }
+blockquote { margin: 1rem 0; padding: .5rem 1rem; border-left: 4px solid var(--accent);
+background:#f4f7fb; color: var(--muted); font-size: .94rem; }
+pre { background: var(--code-bg); border: 1px solid var(--rule); border-radius: 6px;
+padding: .85rem 1rem; overflow-x: auto; font-size: 13px; line-height: 1.5; }
+code { font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; }
+p code, li code { background: var(--code-bg); padding: .1rem .35rem; border-radius: 4px; font-size: .9em; }
+strong { color: var(--ink); }
+table { border-collapse: collapse; margin: 1rem 0; }
+th, td { border: 1px solid var(--rule); padding: .35rem .6rem; text-align: left; }
+</style>
+</head>
+<body>
+<h1 id="what-grade-is-this-book">What grade is this book?</h1>
+<p><em>2026-06-17T04:18:23Z by Showboat 0.6.1</em>
+<!-- showboat-id: 4a81b371-5445-4b66-84e5-8f4b821ade2e --></p>
+<h2 id="what-grade-is-this-book-1">What grade is this book?</h2>
+<p><em>Reading levels, honestly — what our catalog actually says, and
+where it’s silent.</em></p>
+<p>Parents and teachers ask a simple question of the library:
+<strong>what reading level is this book?</strong> Lexile, Accelerated
+Reader (ATOS), Guided Reading / Fountas &amp; Pinnell, a grade band —
+there are many scales, and the answer is scattered, when it exists at
+all.</p>
+<p>Before building anything, we <strong>measured our own
+catalog.</strong> Of ~305,000 records we’d harvested, fewer than 1%
+carried any reading-level field — and of the <code>521</code> “audience”
+fields that do exist, <strong>about two-thirds are movie
+ratings</strong> (“Rated PG-13”), not reading levels. So MARC alone is a
+<em>sparse, noisy</em> source. That finding shaped the whole design:
+<strong>RL1 is an honest extractor.</strong> It takes only what the
+catalog actually says, stores every value <strong>verbatim</strong>,
+throws out the movie ratings, and — crucially — <strong>never guesses a
+number</strong> it can’t read. Estimates and a unified, browsable grade
+band come <em>later</em>, clearly labelled as estimates.</p>
+<p>This walkthrough runs the <strong>real</strong> parser and extractor
+over a small frozen sample of <strong>genuine</strong>
+<code>526</code>/<code>521</code> field contents (bib ids are synthetic;
+no patron data). Every command is reproducible —
+<code>showboat verify</code> re-runs each one and diffs the output.</p>
+<h3 id="the-structured-but-messy-field-526-accelerated-reader">1 · The
+structured-but-messy field: <code>526</code> (Accelerated Reader)</h3>
+<p>MARC field <strong><code>526</code></strong> is the standard home for
+Accelerated Reader / Reading Counts data: <code>$a</code> the program,
+<code>$b</code> an interest band (LG/UG/“6-8”), <code>$c</code> the
+<strong>ATOS book level</strong> (a grade-equivalent number), and notes
+in <code>$z</code>. When clean, it’s the richest signal we have — but
+real records are inconsistent: subfields get mis-tagged, and a
+guided-reading level can hide inside a <code>$z</code> note.</p>
+<p>The parser is <strong>exacting</strong>: the ATOS <code>$c</code>
+becomes a real number <em>only</em> when it’s plausibly in range (0–13);
+a stray decimal mis-filed in the band <code>$b</code> is kept verbatim
+as <code>raw_only</code> rather than invented into a grade; and a
+“Guided reading level: R” buried in <code>$z</code> is recovered as its
+own measure.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> duckdb python docs/demos/reading-levels/_driver.py parse526</span></code></pre></div>
+<pre class="output"><code>
+526 — Accelerated Reader / Reading Counts: structured, but messy
+================================================================
+
+  bib 9001 — Accelerated Reader — clean
+    measure_type       value    status    raw_value
+    atos               5.6      parsed    &#39;5.6&#39;
+    interest_grade     —        raw_only  &#39;UG&#39;
+
+  bib 9002 — Accelerated Reader — mis-tagged subfield
+    measure_type       value    status    raw_value
+    atos               4.9      parsed    &#39;4.9&#39;
+    interest_grade     —        raw_only  &#39;11.0.&#39;
+
+  bib 9003 — Reading Counts — guided-reading level buried in $z
+    measure_type       value    status    raw_value
+    atos               7.2      parsed    &#39;7.2&#39;
+    interest_grade     6-8      parsed    &#39;6-8&#39;
+    guided_reading_fp  —        parsed    &#39;R&#39;
+
+The ATOS book level ($c) becomes a real number ONLY when it is in range (0–13);
+a mis-tagged decimal in the interest band ($b) is kept verbatim as raw_only — never
+guessed into a grade. A guided-reading level hiding in a $z note is recovered.</code></pre>
+<h3 id="the-noisy-field-521-where-most-of-it-is-movie-ratings">2 · The
+noisy field: <code>521</code>, where most of it is movie ratings</h3>
+<p>MARC field <strong><code>521</code></strong> is “target audience” —
+and at our library it’s dominated by AV/MPAA <strong>ratings</strong>
+(“Rated PG-13”), which are <em>not</em> reading levels. The first
+indicator tells them apart: <strong><code>ind1=8</code> is a
+rating</strong>. The parser filters those out — <strong>counted, never
+landed</strong> — and keeps the genuine signal: an interest-age note
+like “Ages 5-9” is parsed into a range; free text it can’t pin to a
+number is preserved verbatim, never fabricated.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> duckdb python docs/demos/reading-levels/_driver.py parse521</span></code></pre></div>
+<pre class="output"><code>
+521 — target audience: mostly movie ratings, with reading signal mixed in
+=========================================================================
+
+  bib 9004 — 521 with ind1=8 — a movie rating, NOT a reading level  (FILTERED — counted, never landed)
+    (no measures)
+
+  bib 9005 — 521 interest-age note
+    measure_type       value    status    raw_value
+    interest_age       5-9      parsed    &#39;Ages 5-9.&#39;
+
+  bib 9006 — 521 free-text the parser can&#39;t pin to a number
+    measure_type       value    status    raw_value
+    audience_note      —        raw_only  &#39;For mature audiences.&#39;
+
+A 521 with ind1=8 is an MPAA/AV rating (&#39;Rated PG-13&#39;), not a reading level — it is
+filtered out and counted, never landed. Real reading signal (&#39;Ages 5-9&#39;) is parsed;
+free text the parser can&#39;t pin to a number is preserved verbatim, not invented.</code></pre>
+<h3 id="extract-only-the-books-our-lists-point-at-idempotently">3 ·
+Extract only the books our lists point at — idempotently</h3>
+<p>RL1 is <strong>demand-scoped</strong>: it reads levels only for the
+bibs the curated reading lists actually reference
+(<code>reading_lists.fct_match</code>), not the whole 2-million-record
+catalog. It lands raw measures into a new
+<code>enrichment.reading_levels</code> table, and it’s
+<strong>idempotent</strong> — a per-bib content hash with same-day
+replace means re-running over unchanged MARC rewrites nothing
+(“reverified”). Every landed row is <code>is_estimated=False</code>,
+<code>derivation=&#39;native&#39;</code>, <code>work_key=None</code>: RL1
+records only what the catalog says; the work-grained grade band and any
+estimates come in later stages, flagged.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> duckdb python docs/demos/reading-levels/_driver.py extract</span></code></pre></div>
+<pre class="output"><code>
+Demand-scoped extract — only the books our lists point at
+=========================================================
+run #1 — extract over the demand set (reading_lists.fct_match):
+  demand          8
+  with_marc       7
+  with_measures   5
+  landed_bibs     5
+  measures        9
+  skipped_rating  1
+  reverified      0
+  parse_errors    0
+
+  demand bib 9099 has no landed MARC yet -&gt; counted in demand, not with_marc.
+  bib 9004 was an AV rating only -&gt; 0 measures (skipped_rating=1).
+  bib 9007 has no level fields  -&gt; examined, nothing to land.
+
+run #2 — same MARC, same day:
+  landed_bibs     0
+  reverified      5
+  unchanged content hashes -&gt; every bib &#39;reverified&#39;, nothing rewritten (idempotent).
+
+landed rows in enrichment.reading_levels (9 total):
+  bib    source      measure_type       estimated deriv    raw_value
+  9001   marc526_ar  atos               False     native   &#39;5.6&#39;
+  9001   marc526_ar  interest_grade     False     native   &#39;UG&#39;
+  9002   marc526_ar  atos               False     native   &#39;4.9&#39;
+  9002   marc526_ar  interest_grade     False     native   &#39;11.0.&#39;
+  9003   marc526_ar  atos               False     native   &#39;7.2&#39;
+  9003   marc526_ar  guided_reading_fp  False     native   &#39;R&#39;
+  9003   marc526_ar  interest_grade     False     native   &#39;6-8&#39;
+  9005   marc521     interest_age       False     native   &#39;Ages 5-9.&#39;
+  9006   marc521     audience_note      False     native   &#39;For mature audiences.&#39;
+
+Every landed row: is_estimated=False, derivation=&#39;native&#39;, work_key=None — RL1
+stores only what the catalog actually says. Estimates and the work-grained
+grade band come later (RL2–RL4), and will be flagged, not hidden.</code></pre>
+<h3 id="proof">Proof</h3>
+<p>Every command above re-runs under <code>showboat verify</code>. The
+on-thesis invariants — the AV-rating filter, “never guess a number,” and
+the native-only idempotent extract — ship green:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> duckdb pytest tests/demos/test_reading_levels.py <span class="at">-q</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">&#39;s/ in [0-9.]+s//&#39;</span></span></code></pre></div>
+<pre class="output"><code>...                                                                      [100%]
+3 passed</code></pre>
+<h2 id="where-this-goes-next-open-questions-not-commitments">Where this
+goes next — open questions, not commitments</h2>
+<p>RL1 is the honest foundation. The rest of the program is
+<strong>designed, not yet built</strong>, and posed here as questions
+rather than claims:</p>
+<ul>
+<li><strong>RL2 — fill the gaps from free sources.</strong> Open Library
+and Wikidata sometimes carry a Lexile or grade; per-title lookups for
+the few hundred demand titles could raise coverage well beyond what our
+own MARC holds.</li>
+<li><strong>RL3 — one browsable axis.</strong> The scales don’t compare
+directly (a Lexile isn’t an ATOS isn’t an F&amp;P letter), so a
+downstream dbt step would convert everything to a <strong>grade
+band</strong> — the one axis an educator can actually browse — keyed to
+the <em>work</em> so all editions share it. Any converted value is an
+estimate, and labelled as one.</li>
+<li><strong>RL4 — estimate the rest, visibly.</strong> Where no measure
+exists, a model could estimate a grade band — but it would render
+<strong>faint / outlined</strong>, never solid, so an estimate can never
+be mistaken for what the catalog actually says.</li>
+<li><strong>RL5 — “browse by reading level” in chimpy-reader.</strong>
+The payoff: a teacher filters a Newbery list to grades 3–5, sees the
+real measures as chips, and the estimates clearly marked as
+estimates.</li>
+</ul>
+<p><strong>The discipline is the point.</strong> RL1 ships the part we
+can stand behind completely — the catalog’s own words, verbatim, with
+the movie ratings thrown out and nothing guessed — and everything above
+re-runs on demand.</p>
+<hr>
+<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">Rendered from chimpy-lake <code>5989e12</code> on 2026-06-17 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
+</body>
+</html>

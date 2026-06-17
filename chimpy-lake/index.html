@@ -33,6 +33,12 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <p class=lede>Narrated, <em>reproducible</em> walkthroughs of working code from the chimpy-lake data platform. Each one shows real commands and their captured output; each is a living artifact — always the current render of current code.</p>
 <h2>Walkthroughs</h2>
 <div class=item>
+<div class=t><a href="reading-levels/">What grade is this book?</a> <span class=status>published</span></div>
+<div class=sub>reading levels, honestly — what the catalog actually says, and where it&#x27;s silent</div>
+<div class=sum>We measured our own catalog and found reading-level data sparse and noisy — most of the 521 &quot;audience&quot; field is movie ratings, not levels. RL1 is the honest extractor that answers anyway: it parses the real 526/521 fields, stores every value verbatim, throws out the movie ratings, and never guesses a number it can&#x27;t read. Estimates and a unified browsable grade band come later, clearly flagged.</div>
+<div><span class=kw>reading levels</span><span class=kw>Lexile</span><span class=kw>Accelerated Reader</span><span class=kw>ATOS</span><span class=kw>Guided Reading</span><span class=kw>Fountas and Pinnell</span><span class=kw>MARC 526</span><span class=kw>MARC 521</span><span class=kw>interest age</span><span class=kw>grade band</span><span class=kw>target audience</span><span class=kw>AV rating filter</span><span class=kw>enrichment</span><span class=kw>demand-scoped</span><span class=kw>idempotency</span><span class=kw>SCD Type 0</span><span class=kw>verbatim</span><span class=kw>honest data</span><span class=kw>chimpy-reader</span></div>
+</div>
+<div class=item>
 <div class=t><a href="by-the-book/">chimpy-lake, by the book</a> <span class=status>published</span></div>
 <div class=sub>a library data platform, pattern by pattern through the data-engineering canon</div>
 <div class=sum>A capstone tour of the platform itself — every moving part mapped to an established data-engineering pattern and shown running over a small, no-PII fixture.</div>
@@ -46,12 +52,20 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 </div>
 <h2>Index of keywords</h2>
 <dl class=kwindex>
+<dt>Accelerated Reader</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>acquisition list</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>adjudication</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>ATOS</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>AV rating filter</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>catalog matching</dt>
 <dd>Linking a list entry to the library&#x27;s catalog (bib) record(s). <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>chimpy-reader</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>clerical review</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>control plane</dt>
@@ -64,38 +78,64 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>A tool that publishes a database as a browsable, queryable website. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>dbt</dt>
 <dd>A tool that builds SQL transformations as a tested, ordered dependency graph. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>demand-scoped</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>DuckDB</dt>
 <dd>An in-process analytical SQL database — like SQLite, but built for analytics. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>ELT</dt>
 <dd>Load the raw data first, transform it later — vs. ETL, which transforms before loading. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>enrichment</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>Fountas and Pinnell</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>grade band</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>Guided Reading</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>honest data</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>honest gaps</dt>
 <dd>Naming the titles we could NOT confidently match, rather than hiding them. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>human in the loop</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>idempotency</dt>
-<dd>Running a load twice has the same effect as running it once — retries can&#x27;t corrupt. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dd>Running a load twice has the same effect as running it once — retries can&#x27;t corrupt. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>identifier normalization</dt>
 <dd>Cleaning and cross-deriving IDs — e.g. an ISBN-10 implies its ISBN-13 twin. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>interest age</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>ISBN</dt>
 <dd>The standard book identifier; its 10- and 13-digit forms convert to each other. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>Lexile</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>list attribution</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>lists directory</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>MARC 521</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>MARC 526</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>medallion</dt>
 <dd>Layered refinement: raw (bronze) → cleaned &amp; typed (silver) → query-ready (gold). <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>observability</dt>
 <dd>The platform records every run and computes its own health from that ledger. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>pct owned</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>reading levels</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>reading lists</dt>
 <dd>Curated lists of titles (e.g. award winners) checked against what the library holds. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>SCD Type 0</dt>
-<dd>A landed snapshot is never edited in place; history is append-only. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dd>A landed snapshot is never edited in place; history is append-only. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>schema-on-read</dt>
 <dd>Store data exactly as it arrives; impose structure only when you query it. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>target audience</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>title-author key</dt>
 <dd>A synthesized match key for records that arrive with no ISBN to match on. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>verbatim</dt>
+<dd><a href="reading-levels/">What grade is this book?</a></dd>
 </dl>
 <h2>Talks &amp; related</h2>
 <div class=item>
@@ -106,5 +146,5 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <div class=t><a href="/2026-05/issue_2_our-data-our-lake/">Our Data, Our Lake</a> <span class=kw>zine</span></div>
 <div class=sum>A printable zine on owning the library&#x27;s data — the lake, in plain language.</div>
 </div>
-<footer>Generated 2026-06-10 from 2 published showboats · the version ledger is git, not a version number.</footer>
+<footer>Generated 2026-06-17 from 3 published showboats · the version ledger is git, not a version number.</footer>
 </body></html>
