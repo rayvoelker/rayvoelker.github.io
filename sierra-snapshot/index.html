@@ -1,0 +1,83 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<title>sierra-snapshot showboats</title>
+<style>
+:root { --ink:#1a1a1a; --mut:#6b6b6b; --rule:#e2e2e2; --accent:#7a3b2e; --chip:#f0ece6; }
+* { box-sizing: border-box; }
+body { font: 16px/1.6 Georgia, 'Times New Roman', serif; color: var(--ink);
+       max-width: 46rem; margin: 0 auto; padding: 3rem 1.4rem 5rem; }
+h1 { font-size: 2rem; margin: 0 0 .2rem; letter-spacing: -.01em; }
+h2 { font-size: 1.15rem; margin: 2.6rem 0 .8rem; padding-bottom: .3rem;
+     border-bottom: 1px solid var(--rule); text-transform: uppercase;
+     letter-spacing: .08em; color: var(--mut); font-weight: 600; }
+.lede { color: var(--mut); font-size: 1.02rem; margin: .2rem 0 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.item { margin: 0 0 1.8rem; }
+.item .t { font-size: 1.2rem; font-weight: 700; }
+.item .sub { font-style: italic; color: var(--mut); margin: .1rem 0 .35rem; }
+.item .sum { margin: 0 0 .5rem; }
+.kw { display: inline-block; font-family: ui-monospace, Menlo, monospace; font-size: .72rem;
+      background: var(--chip); color: #4a4a4a; border-radius: 3px; padding: .08rem .42rem;
+      margin: 0 .25rem .25rem 0; }
+.status { font-family: ui-monospace, Menlo, monospace; font-size: .68rem; color: #3a6b3a;
+          border: 1px solid #cfe0cf; border-radius: 3px; padding: .04rem .4rem; }
+.item .rel { font-size: .85rem; color: var(--mut); margin: 0 0 .4rem; }
+.item .rel a { font-weight: 600; }
+dl.kwindex { margin: 0; }
+dl.kwindex dt { font-family: ui-monospace, Menlo, monospace; font-weight: 700; margin: .9rem 0 .15rem; }
+dl.kwindex dd { margin: 0 0 .25rem 1.2rem; }
+dl.kwindex dd .refs { color: var(--mut); font-size: .85rem; }
+footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+         color: var(--mut); font-size: .82rem; }
+</style></head><body>
+<h1>sierra-snapshot showboats</h1>
+<p class=lede>Narrated, <em>reproducible</em> walkthroughs of the chimpy-lake <strong>sierra-snapshot</strong> tenant — a bitemporal bronze that keeps every nightly Sierra snapshot, deduplicated to just the churn, so the catalog as it stood on any past date can be reconstructed exactly. Each shows real code running; each is a living artifact — always the current render of current code.</p>
+<h2>Walkthroughs</h2>
+<div class=item>
+<div class=t><a href="time-travel/">What did the catalog say last Tuesday?</a> <span class=status>published &middot; 2026-06-18</span></div>
+<div class=sub>bitemporal bronze — keep every nightly snapshot as churn, reconstruct any past state exactly</div>
+<div class=sum>The sierra-snapshot tenant keeps a bitemporal bronze: every nightly Sierra snapshot is set-diffed against the prior state and stored as just the churn — only what moved — each row stamped with the epoch it opened and closed. This runs the real engine: the pure diff classifier, three nights ingested into the envelope (stored as base + churn, not full copies), an as_of() time-travel that reconstructs each night exactly, and the safety rails — idempotent re-runs and strictly forward epochs — that make the timeline impossible to corrupt.</div>
+<div><span class=kw>bitemporal</span><span class=kw>time-travel</span><span class=kw>as_of</span><span class=kw>snapshot</span><span class=kw>sierra-snapshot</span><span class=kw>bronze</span><span class=kw>SCD Type 2</span><span class=kw>epoch</span><span class=kw>valid_from</span><span class=kw>valid_to</span><span class=kw>diff</span><span class=kw>churn</span><span class=kw>dedup</span><span class=kw>idempotent</span><span class=kw>monotonic epochs</span><span class=kw>DuckDB</span><span class=kw>tenant</span><span class=kw>chimpy-lake</span></div>
+</div>
+<h2>Index of keywords</h2>
+<dl class=kwindex>
+<dt>as_of</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>bitemporal</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>bronze</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>chimpy-lake</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>churn</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>dedup</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>diff</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>DuckDB</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>epoch</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>idempotent</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>monotonic epochs</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>SCD Type 2</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>sierra-snapshot</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>snapshot</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>tenant</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>time-travel</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>valid_from</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>valid_to</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+</dl>
+<footer>Generated 2026-06-18 from 1 published showboat · the version ledger is git, not a version number.</footer>
+</body></html>
