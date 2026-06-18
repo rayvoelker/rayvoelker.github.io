@@ -33,6 +33,12 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <p class=lede>Narrated, <em>reproducible</em> walkthroughs of working code from the chimpy-lake data platform. Each one shows real commands and their captured output; each is a living artifact — always the current render of current code.</p>
 <h2>Walkthroughs</h2>
 <div class=item>
+<div class=t><a href="browse-by-level/">Find books at the right level</a> <span class=status>published</span></div>
+<div class=sub>the payoff — browse a curated reading list by grade band, estimates marked and inspectable</div>
+<div class=sum>The companion to &quot;What grade is this book?&quot;: where that one extracted reading levels honestly, this one is the patron payoff — turning scattered, multi-scale measures (Lexile / ATOS / Fountas &amp; Pinnell) into one browsable grade band per book. A real catalogued grade shows solid; a converted or AI-estimated band shows faint with an ⓘ that links to how it was made. AI estimates are included in the browse facet (marked), so the surface stays useful without ever passing an estimate off as the catalog&#x27;s word.</div>
+<div><span class=kw>reading levels</span><span class=kw>grade band</span><span class=kw>browse by level</span><span class=kw>Lexile</span><span class=kw>ATOS</span><span class=kw>Accelerated Reader</span><span class=kw>Fountas and Pinnell</span><span class=kw>native-first consensus</span><span class=kw>is_estimated</span><span class=kw>AI estimate</span><span class=kw>self-consistency</span><span class=kw>qwen3:32b</span><span class=kw>local model</span><span class=kw>abstain</span><span class=kw>transparency</span><span class=kw>faceted browse</span><span class=kw>Datasette</span><span class=kw>render plugin</span><span class=kw>honest data</span><span class=kw>chimpy-reader</span><span class=kw>Newbery</span></div>
+</div>
+<div class=item>
 <div class=t><a href="reading-levels/">What grade is this book?</a> <span class=status>published</span></div>
 <div class=sub>reading levels, honestly — what the catalog actually says, and where it&#x27;s silent</div>
 <div class=sum>We measured our own catalog and found reading-level data sparse and noisy — most of the 521 &quot;audience&quot; field is movie ratings, not levels. RL1 is the honest extractor that answers anyway: it parses the real 526/521 fields, stores every value verbatim, throws out the movie ratings, and never guesses a number it can&#x27;t read. Estimates and a unified browsable grade band come later, clearly flagged.</div>
@@ -52,20 +58,26 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 </div>
 <h2>Index of keywords</h2>
 <dl class=kwindex>
+<dt>abstain</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>Accelerated Reader</dt>
-<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>acquisition list</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>adjudication</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>AI estimate</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>ATOS</dt>
-<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>AV rating filter</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>browse by level</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>catalog matching</dt>
 <dd>Linking a list entry to the library&#x27;s catalog (bib) record(s). <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>chimpy-reader</dt>
-<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>clerical review</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>control plane</dt>
@@ -75,7 +87,7 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dt>data quality</dt>
 <dd>Automated assertions on every load — row counts, nulls, uniqueness, schema drift. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>Datasette</dt>
-<dd>A tool that publishes a database as a browsable, queryable website. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dd>A tool that publishes a database as a browsable, queryable website. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>dbt</dt>
 <dd>A tool that builds SQL transformations as a tested, ordered dependency graph. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>demand-scoped</dt>
@@ -86,14 +98,16 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>Load the raw data first, transform it later — vs. ETL, which transforms before loading. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>enrichment</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>faceted browse</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>Fountas and Pinnell</dt>
-<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>grade band</dt>
-<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>Guided Reading</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>honest data</dt>
-<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>honest gaps</dt>
 <dd>Naming the titles we could NOT confidently match, rather than hiding them. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>human in the loop</dt>
@@ -104,36 +118,52 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>Cleaning and cross-deriving IDs — e.g. an ISBN-10 implies its ISBN-13 twin. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>interest age</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>is_estimated</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>ISBN</dt>
 <dd>The standard book identifier; its 10- and 13-digit forms convert to each other. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>Lexile</dt>
-<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>list attribution</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>lists directory</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>local model</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>MARC 521</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>MARC 526</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>medallion</dt>
 <dd>Layered refinement: raw (bronze) → cleaned &amp; typed (silver) → query-ready (gold). <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>native-first consensus</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
+<dt>Newbery</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>observability</dt>
 <dd>The platform records every run and computes its own health from that ledger. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>pct owned</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
+<dt>qwen3:32b</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>reading levels</dt>
-<dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>reading lists</dt>
 <dd>Curated lists of titles (e.g. award winners) checked against what the library holds. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>render plugin</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>SCD Type 0</dt>
 <dd>A landed snapshot is never edited in place; history is append-only. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>schema-on-read</dt>
 <dd>Store data exactly as it arrives; impose structure only when you query it. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>self-consistency</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>target audience</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>title-author key</dt>
 <dd>A synthesized match key for records that arrive with no ISBN to match on. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>transparency</dt>
+<dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>verbatim</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 </dl>
@@ -146,5 +176,5 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <div class=t><a href="/2026-05/issue_2_our-data-our-lake/">Our Data, Our Lake</a> <span class=kw>zine</span></div>
 <div class=sum>A printable zine on owning the library&#x27;s data — the lake, in plain language.</div>
 </div>
-<footer>Generated 2026-06-17 from 3 published showboats · the version ledger is git, not a version number.</footer>
+<footer>Generated 2026-06-18 from 4 published showboats · the version ledger is git, not a version number.</footer>
 </body></html>
