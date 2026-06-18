@@ -20,6 +20,9 @@ a:hover { text-decoration: underline; }
 .kw { display: inline-block; font-family: ui-monospace, Menlo, monospace; font-size: .72rem;
       background: var(--chip); color: #4a4a4a; border-radius: 3px; padding: .08rem .42rem;
       margin: 0 .25rem .25rem 0; }
+.kw.kw--featured { background: var(--accent); color: #fff; font-weight: 700; }
+dl.kwindex dt.featured { color: var(--accent); }
+dl.kwindex dt.featured::after { content: " °5"; font-size: .7em; }
 .status { font-family: ui-monospace, Menlo, monospace; font-size: .68rem; color: #3a6b3a;
           border: 1px solid #cfe0cf; border-radius: 3px; padding: .04rem .4rem; }
 .item .rel { font-size: .85rem; color: var(--mut); margin: 0 0 .4rem; }
@@ -35,37 +38,43 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <p class=lede>Narrated, <em>reproducible</em> walkthroughs of working code from the chimpy-lake data platform. Each one shows real commands and their captured output; each is a living artifact — always the current render of current code.</p>
 <h2>Walkthroughs</h2>
 <div class=item>
+<div class=t><a href="time-travel/">What did the catalog say last Tuesday?</a> <span class=status>published &middot; 2026-06-18</span></div>
+<div class=sub>bitemporal bronze — keep every nightly snapshot as churn, reconstruct any past state exactly</div>
+<div class=sum>The sierra-snapshot tenant keeps a bitemporal bronze: every nightly Sierra snapshot is set-diffed against the prior state and stored as just the churn — only what moved — each row stamped with the epoch it opened and closed. This runs the real engine: the pure diff classifier, three nights ingested into the envelope (stored as base + churn, not full copies), an as_of() time-travel that reconstructs each night exactly, and the safety rails — idempotent re-runs and strictly forward epochs — that make the timeline impossible to corrupt.</div>
+<div><span class="kw">bitemporal</span><span class="kw">time-travel</span><span class="kw">as_of</span><span class="kw">snapshot</span><span class="kw">sierra-snapshot</span><span class="kw">bronze</span><span class="kw">SCD Type 2</span><span class="kw">epoch</span><span class="kw">valid_from</span><span class="kw">valid_to</span><span class="kw">diff</span><span class="kw">churn</span><span class="kw">dedup</span><span class="kw">idempotent</span><span class="kw">monotonic epochs</span><span class="kw">DuckDB</span><span class="kw kw--featured">tenants</span><span class="kw">chimpy-lake</span></div>
+</div>
+<div class=item>
 <div class=t><a href="browse-by-level/">Find books at the right level</a> <span class=status>published &middot; 2026-06-18</span></div>
 <div class=sub>the payoff — browse a curated reading list by grade band, estimates marked and inspectable</div>
 <div class=rel>Related: <a href="reading-levels/">What grade is this book?</a></div>
 <div class=sum>The companion to &quot;What grade is this book?&quot;: where that one extracted reading levels honestly, this one is the patron payoff — turning scattered, multi-scale measures (Lexile / ATOS / Fountas &amp; Pinnell) into one browsable grade band per book. A real catalogued grade shows solid; a converted or AI-estimated band shows faint with an ⓘ that links to how it was made. AI estimates are included in the browse facet (marked), so the surface stays useful without ever passing an estimate off as the catalog&#x27;s word.</div>
-<div><span class=kw>reading levels</span><span class=kw>grade band</span><span class=kw>browse by level</span><span class=kw>Lexile</span><span class=kw>ATOS</span><span class=kw>Accelerated Reader</span><span class=kw>Fountas and Pinnell</span><span class=kw>native-first consensus</span><span class=kw>is_estimated</span><span class=kw>AI estimate</span><span class=kw>self-consistency</span><span class=kw>qwen3:32b</span><span class=kw>local model</span><span class=kw>abstain</span><span class=kw>transparency</span><span class=kw>faceted browse</span><span class=kw>Datasette</span><span class=kw>render plugin</span><span class=kw>honest data</span><span class=kw>chimpy-reader</span><span class=kw>Newbery</span></div>
+<div><span class="kw">reading levels</span><span class="kw">grade band</span><span class="kw">browse by level</span><span class="kw">Lexile</span><span class="kw">ATOS</span><span class="kw">Accelerated Reader</span><span class="kw">Fountas and Pinnell</span><span class="kw">native-first consensus</span><span class="kw">is_estimated</span><span class="kw">AI estimate</span><span class="kw">self-consistency</span><span class="kw">qwen3:32b</span><span class="kw">local model</span><span class="kw">abstain</span><span class="kw">transparency</span><span class="kw">faceted browse</span><span class="kw">Datasette</span><span class="kw">render plugin</span><span class="kw">honest data</span><span class="kw">chimpy-reader</span><span class="kw">Newbery</span></div>
 </div>
 <div class=item>
 <div class=t><a href="parse-fidelity/">Did we keep your catalog intact?</a> <span class=status>published &middot; 2026-06-18</span></div>
 <div class=sub>the parse-fidelity invariant — proving, byte-for-byte, that the lake&#x27;s copy IS the record</div>
 <div class=rel>Related: <a href="by-the-book/">chimpy-lake, by the book</a></div>
 <div class=sum>A data lake is only trustworthy if its copy of a record is the record. This runs the platform&#x27;s standing parse-fidelity check for real: it reads each record&#x27;s field tags straight from the raw ISO-2709 bytes and proves they match the stored marc_json, catches a dropped field by naming the exact bib, is honest about which of its four facets actually proves fidelity, and treats a corrupt record as a counted failure — never a crash that could hide it.</div>
-<div><span class=kw>parse fidelity</span><span class=kw>MARC</span><span class=kw>ISO-2709</span><span class=kw>marc_json</span><span class=kw>catalog</span><span class=kw>ils-lake</span><span class=kw>data quality</span><span class=kw>never-fatal</span><span class=kw>byte-for-byte</span><span class=kw>record directory</span><span class=kw>UTF-8 leader</span><span class=kw>field tags</span><span class=kw>ingest invariant</span><span class=kw>tenant</span><span class=kw>chimpy-lake</span></div>
+<div><span class="kw">parse fidelity</span><span class="kw">MARC</span><span class="kw">ISO-2709</span><span class="kw">marc_json</span><span class="kw">catalog</span><span class="kw">ils-lake</span><span class="kw">data quality</span><span class="kw">never-fatal</span><span class="kw">byte-for-byte</span><span class="kw">record directory</span><span class="kw">UTF-8 leader</span><span class="kw">field tags</span><span class="kw">ingest invariant</span><span class="kw kw--featured">tenants</span><span class="kw">chimpy-lake</span></div>
 </div>
 <div class=item>
 <div class=t><a href="reading-levels/">What grade is this book?</a> <span class=status>published &middot; 2026-06-17</span></div>
 <div class=sub>reading levels, honestly — what the catalog actually says, and where it&#x27;s silent</div>
 <div class=rel>Related: <a href="browse-by-level/">Find books at the right level</a></div>
 <div class=sum>We measured our own catalog and found reading-level data sparse and noisy — most of the 521 &quot;audience&quot; field is movie ratings, not levels. RL1 is the honest extractor that answers anyway: it parses the real 526/521 fields, stores every value verbatim, throws out the movie ratings, and never guesses a number it can&#x27;t read. Estimates and a unified browsable grade band come later, clearly flagged.</div>
-<div><span class=kw>reading levels</span><span class=kw>Lexile</span><span class=kw>Accelerated Reader</span><span class=kw>ATOS</span><span class=kw>Guided Reading</span><span class=kw>Fountas and Pinnell</span><span class=kw>MARC 526</span><span class=kw>MARC 521</span><span class=kw>interest age</span><span class=kw>grade band</span><span class=kw>target audience</span><span class=kw>AV rating filter</span><span class=kw>enrichment</span><span class=kw>demand-scoped</span><span class=kw>idempotency</span><span class=kw>SCD Type 0</span><span class=kw>verbatim</span><span class=kw>honest data</span><span class=kw>chimpy-reader</span></div>
+<div><span class="kw">reading levels</span><span class="kw">Lexile</span><span class="kw">Accelerated Reader</span><span class="kw">ATOS</span><span class="kw">Guided Reading</span><span class="kw">Fountas and Pinnell</span><span class="kw">MARC 526</span><span class="kw">MARC 521</span><span class="kw">interest age</span><span class="kw">grade band</span><span class="kw">target audience</span><span class="kw">AV rating filter</span><span class="kw">enrichment</span><span class="kw">demand-scoped</span><span class="kw">idempotency</span><span class="kw">SCD Type 0</span><span class="kw">verbatim</span><span class="kw">honest data</span><span class="kw">chimpy-reader</span></div>
 </div>
 <div class=item>
 <div class=t><a href="by-the-book/">chimpy-lake, by the book</a> <span class=status>published &middot; 2026-06-08</span></div>
 <div class=sub>a library data platform, pattern by pattern through the data-engineering canon</div>
 <div class=sum>A capstone tour of the platform itself — every moving part mapped to an established data-engineering pattern and shown running over a small, no-PII fixture.</div>
-<div><span class=kw>ELT</span><span class=kw>schema-on-read</span><span class=kw>data contracts</span><span class=kw>medallion</span><span class=kw>dbt</span><span class=kw>DuckDB</span><span class=kw>idempotency</span><span class=kw>SCD Type 0</span><span class=kw>data quality</span><span class=kw>observability</span><span class=kw>control plane</span></div>
+<div><span class="kw">ELT</span><span class="kw">schema-on-read</span><span class="kw">data contracts</span><span class="kw">medallion</span><span class="kw kw--featured">tenants</span><span class="kw">dbt</span><span class="kw">DuckDB</span><span class="kw">idempotency</span><span class="kw">SCD Type 0</span><span class="kw">data quality</span><span class="kw">observability</span><span class="kw">control plane</span></div>
 </div>
 <div class=item>
 <div class=t><a href="reading-lists-match/">From a curated list to the books on our shelves</a> <span class=status>published &middot; 2026-06-08</span></div>
 <div class=sub>matching curated reading lists against the CHPL catalog — with a human in the loop</div>
 <div class=sum>Every reading list — hand-authored or pulled from an award — becomes a named, attributed, browsable entry showing how much of it we already own. Follow three real Newbery titles through the match: the machine is confident where identifiers align, and hands the uncertain ones to a librarian who confirms the right record. The honest payoff — of 177 award titles we own 169 (every Medal winner, 88.6% of Honor) — and the rest is a tidy acquisition list.</div>
-<div><span class=kw>reading lists</span><span class=kw>lists directory</span><span class=kw>list attribution</span><span class=kw>pct owned</span><span class=kw>catalog matching</span><span class=kw>identifier normalization</span><span class=kw>ISBN</span><span class=kw>title-author key</span><span class=kw>human in the loop</span><span class=kw>adjudication</span><span class=kw>clerical review</span><span class=kw>acquisition list</span><span class=kw>honest gaps</span><span class=kw>Datasette</span></div>
+<div><span class="kw">reading lists</span><span class="kw">lists directory</span><span class="kw">list attribution</span><span class="kw">pct owned</span><span class="kw">catalog matching</span><span class="kw">identifier normalization</span><span class="kw">ISBN</span><span class="kw">title-author key</span><span class="kw">human in the loop</span><span class="kw">adjudication</span><span class="kw">clerical review</span><span class="kw">acquisition list</span><span class="kw">honest gaps</span><span class="kw">Datasette</span></div>
 </div>
 <h2>Index of keywords</h2>
 <dl class=kwindex>
@@ -79,10 +88,16 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>AI estimate</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
+<dt>as_of</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>ATOS</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>AV rating filter</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>bitemporal</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>bronze</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>browse by level</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>byte-for-byte</dt>
@@ -92,9 +107,11 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dt>catalog matching</dt>
 <dd>Linking a list entry to the library&#x27;s catalog (bib) record(s). <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>chimpy-lake</dt>
-<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a>, <a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>chimpy-reader</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
+<dt>churn</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>clerical review</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>control plane</dt>
@@ -107,14 +124,20 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>A tool that publishes a database as a browsable, queryable website. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>dbt</dt>
 <dd>A tool that builds SQL transformations as a tested, ordered dependency graph. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>dedup</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>demand-scoped</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>diff</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>DuckDB</dt>
-<dd>An in-process analytical SQL database — like SQLite, but built for analytics. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dd>An in-process analytical SQL database — like SQLite, but built for analytics. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>ELT</dt>
 <dd>Load the raw data first, transform it later — vs. ETL, which transforms before loading. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>enrichment</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>epoch</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>faceted browse</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>field tags</dt>
@@ -133,6 +156,8 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>idempotency</dt>
 <dd>Running a load twice has the same effect as running it once — retries can&#x27;t corrupt. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>idempotent</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>identifier normalization</dt>
 <dd>Cleaning and cross-deriving IDs — e.g. an ISBN-10 implies its ISBN-13 twin. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>ils-lake</dt>
@@ -165,6 +190,8 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>medallion</dt>
 <dd>Layered refinement: raw (bronze) → cleaned &amp; typed (silver) → query-ready (gold). <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>monotonic epochs</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>native-first consensus</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>never-fatal</dt>
@@ -189,20 +216,32 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>SCD Type 0</dt>
 <dd>A landed snapshot is never edited in place; history is append-only. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>SCD Type 2</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>schema-on-read</dt>
 <dd>Store data exactly as it arrives; impose structure only when you query it. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>self-consistency</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
+<dt>sierra-snapshot</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>snapshot</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>target audience</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
-<dt>tenant</dt>
-<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
+<dt class=featured>tenants</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a>, <a href="parse-fidelity/">Did we keep your catalog intact?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></dd>
+<dt>time-travel</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>title-author key</dt>
 <dd>A synthesized match key for records that arrive with no ISBN to match on. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>transparency</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>UTF-8 leader</dt>
 <dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
+<dt>valid_from</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
+<dt>valid_to</dt>
+<dd><a href="time-travel/">What did the catalog say last Tuesday?</a></dd>
 <dt>verbatim</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 </dl>
@@ -215,5 +254,5 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <div class=t><a href="/2026-05/issue_2_our-data-our-lake/">Our Data, Our Lake</a> <span class=kw>zine</span></div>
 <div class=sum>A printable zine on owning the library&#x27;s data — the lake, in plain language.</div>
 </div>
-<footer>Generated 2026-06-18 from 5 published showboats · the version ledger is git, not a version number.</footer>
+<footer>Generated 2026-06-18 from 6 published showboats · the version ledger is git, not a version number.</footer>
 </body></html>
