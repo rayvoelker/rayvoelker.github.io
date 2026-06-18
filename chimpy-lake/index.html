@@ -42,6 +42,13 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <div><span class=kw>reading levels</span><span class=kw>grade band</span><span class=kw>browse by level</span><span class=kw>Lexile</span><span class=kw>ATOS</span><span class=kw>Accelerated Reader</span><span class=kw>Fountas and Pinnell</span><span class=kw>native-first consensus</span><span class=kw>is_estimated</span><span class=kw>AI estimate</span><span class=kw>self-consistency</span><span class=kw>qwen3:32b</span><span class=kw>local model</span><span class=kw>abstain</span><span class=kw>transparency</span><span class=kw>faceted browse</span><span class=kw>Datasette</span><span class=kw>render plugin</span><span class=kw>honest data</span><span class=kw>chimpy-reader</span><span class=kw>Newbery</span></div>
 </div>
 <div class=item>
+<div class=t><a href="parse-fidelity/">Did we keep your catalog intact?</a> <span class=status>published &middot; 2026-06-18</span></div>
+<div class=sub>the parse-fidelity invariant — proving, byte-for-byte, that the lake&#x27;s copy IS the record</div>
+<div class=rel>Related: <a href="by-the-book/">chimpy-lake, by the book</a></div>
+<div class=sum>A data lake is only trustworthy if its copy of a record is the record. This runs the platform&#x27;s standing parse-fidelity check for real: it reads each record&#x27;s field tags straight from the raw ISO-2709 bytes and proves they match the stored marc_json, catches a dropped field by naming the exact bib, is honest about which of its four facets actually proves fidelity, and treats a corrupt record as a counted failure — never a crash that could hide it.</div>
+<div><span class=kw>parse fidelity</span><span class=kw>MARC</span><span class=kw>ISO-2709</span><span class=kw>marc_json</span><span class=kw>catalog</span><span class=kw>ils-lake</span><span class=kw>data quality</span><span class=kw>never-fatal</span><span class=kw>byte-for-byte</span><span class=kw>record directory</span><span class=kw>UTF-8 leader</span><span class=kw>field tags</span><span class=kw>ingest invariant</span><span class=kw>tenant</span><span class=kw>chimpy-lake</span></div>
+</div>
+<div class=item>
 <div class=t><a href="reading-levels/">What grade is this book?</a> <span class=status>published &middot; 2026-06-17</span></div>
 <div class=sub>reading levels, honestly — what the catalog actually says, and where it&#x27;s silent</div>
 <div class=rel>Related: <a href="browse-by-level/">Find books at the right level</a></div>
@@ -78,8 +85,14 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>browse by level</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
+<dt>byte-for-byte</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
+<dt>catalog</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>catalog matching</dt>
 <dd>Linking a list entry to the library&#x27;s catalog (bib) record(s). <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>chimpy-lake</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>chimpy-reader</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>clerical review</dt>
@@ -89,7 +102,7 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dt>data contracts</dt>
 <dd>A declared, validated shape a data source must satisfy before it can join the lake. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>data quality</dt>
-<dd>Automated assertions on every load — row counts, nulls, uniqueness, schema drift. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dd>Automated assertions on every load — row counts, nulls, uniqueness, schema drift. <span class=refs>&rarr; <a href="parse-fidelity/">Did we keep your catalog intact?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>Datasette</dt>
 <dd>A tool that publishes a database as a browsable, queryable website. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>dbt</dt>
@@ -104,6 +117,8 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>faceted browse</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
+<dt>field tags</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>Fountas and Pinnell</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>grade band</dt>
@@ -120,12 +135,18 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>Running a load twice has the same effect as running it once — retries can&#x27;t corrupt. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>identifier normalization</dt>
 <dd>Cleaning and cross-deriving IDs — e.g. an ISBN-10 implies its ISBN-13 twin. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>ils-lake</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
+<dt>ingest invariant</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>interest age</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>is_estimated</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>ISBN</dt>
 <dd>The standard book identifier; its 10- and 13-digit forms convert to each other. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>ISO-2709</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>Lexile</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>list attribution</dt>
@@ -134,18 +155,26 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>local model</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
+<dt>MARC</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>MARC 521</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 <dt>MARC 526</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>marc_json</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>medallion</dt>
 <dd>Layered refinement: raw (bronze) → cleaned &amp; typed (silver) → query-ready (gold). <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>native-first consensus</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
+<dt>never-fatal</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>Newbery</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>observability</dt>
 <dd>The platform records every run and computes its own health from that ledger. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>parse fidelity</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>pct owned</dt>
 <dd><a href="reading-lists-match/">From a curated list to the books on our shelves</a></dd>
 <dt>qwen3:32b</dt>
@@ -154,6 +183,8 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd><a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></dd>
 <dt>reading lists</dt>
 <dd>Curated lists of titles (e.g. award winners) checked against what the library holds. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>record directory</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>render plugin</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>SCD Type 0</dt>
@@ -164,10 +195,14 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
 <dt>target audience</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
+<dt>tenant</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>title-author key</dt>
 <dd>A synthesized match key for records that arrive with no ISBN to match on. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>transparency</dt>
 <dd><a href="browse-by-level/">Find books at the right level</a></dd>
+<dt>UTF-8 leader</dt>
+<dd><a href="parse-fidelity/">Did we keep your catalog intact?</a></dd>
 <dt>verbatim</dt>
 <dd><a href="reading-levels/">What grade is this book?</a></dd>
 </dl>
@@ -180,5 +215,5 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <div class=t><a href="/2026-05/issue_2_our-data-our-lake/">Our Data, Our Lake</a> <span class=kw>zine</span></div>
 <div class=sum>A printable zine on owning the library&#x27;s data — the lake, in plain language.</div>
 </div>
-<footer>Generated 2026-06-18 from 4 published showboats · the version ledger is git, not a version number.</footer>
+<footer>Generated 2026-06-18 from 5 published showboats · the version ledger is git, not a version number.</footer>
 </body></html>
