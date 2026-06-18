@@ -46,6 +46,13 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <div><span class="kw">bitemporal</span><span class="kw">time-travel</span><span class="kw">snapshot</span><span class="kw">sierra-snapshot</span><span class="kw">bronze</span><span class="kw">SCD Type 2</span><span class="kw">epoch</span><span class="kw">diff</span><span class="kw">churn</span><span class="kw">idempotency</span><span class="kw">monotonic epochs</span><span class="kw">DuckDB</span><span class="kw kw--featured">tenants</span><span class="kw">chimpy-lake</span></div>
 </div>
 <div class=item>
+<div class=t><a href="control-plane/">One lake, many tenants: the control plane</a> <span class=status>published &middot; 2026-06-18</span></div>
+<div class=sub>how a tenant declares itself, inherits a lifecycle, and is driven by one operator CLI</div>
+<div class=rel>Related: <a href="by-the-book/">chimpy-lake, by the book</a></div>
+<div class=sum>The platform claim made concrete: each data source is a tenant that declares itself in a manifest, inherits a uniform lifecycle, and is installed + run from one control-plane CLI — idempotently and safely, over a small no-PII fixture.</div>
+<div><span class="kw kw--featured">tenants</span><span class="kw">lifecycle</span><span class="kw">control plane</span><span class="kw">manifest</span><span class="kw">data contracts</span><span class="kw">tiers</span><span class="kw">instance registry</span><span class="kw">idempotency</span><span class="kw">desired-state reconciliation</span><span class="kw">Quadlet</span><span class="kw">run-now</span></div>
+</div>
+<div class=item>
 <div class=t><a href="browse-by-level/">Find books at the right level</a> <span class=status>published &middot; 2026-06-18</span></div>
 <div class=sub>the payoff — browse a curated reading list by grade band, estimates marked and inspectable</div>
 <div class=rel>Related: <a href="reading-levels/">What grade is this book?</a></div>
@@ -111,9 +118,9 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dt>churn</dt>
 <dd>The rows that actually changed between two snapshots — what we store instead of a full copy. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
 <dt>control plane</dt>
-<dd>One place to see and operate every pipeline&#x27;s status across the fleet. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dd>One place to see and operate every pipeline&#x27;s status across the fleet. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>data contracts</dt>
-<dd>A declared, validated shape a data source must satisfy before it can join the lake. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_contract" rel=noopener>Wikipedia: Data contract &#8599;</a></div></dd>
+<dd>A declared, validated shape a data source must satisfy before it can join the lake. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_contract" rel=noopener>Wikipedia: Data contract &#8599;</a></div></dd>
 <dt>data quality</dt>
 <dd>Automated assertions on every load — row counts, nulls, uniqueness, schema drift. <span class=refs>&rarr; <a href="parse-fidelity/">Did we keep your catalog intact?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_quality" rel=noopener>Wikipedia: Data quality &#8599;</a></div></dd>
 <dt>Datasette</dt>
@@ -122,6 +129,8 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>A tool that builds SQL transformations as a tested, ordered dependency graph. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_build_tool" rel=noopener>Wikipedia: Data build tool &#8599;</a> &middot; <a href="https://docs.getdbt.com/docs/introduction" rel=noopener>dbt docs: Introduction &#8599;</a></div></dd>
 <dt>demand-scoped</dt>
 <dd>Processing only the titles a curated list references, not the whole catalog. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a></span></dd>
+<dt>desired-state reconciliation</dt>
+<dd>Declare the target state and let the tool make the host match it — the same model as a Kubernetes controller or kubectl apply. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Kubernetes" rel=noopener>Wikipedia: Kubernetes &#8599;</a></div></dd>
 <dt>diff</dt>
 <dd>Comparing tonight&#x27;s snapshot to the prior state row-by-row — new, changed, deleted, or unchanged. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
 <dt>DuckDB</dt>
@@ -145,11 +154,13 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dt>human in the loop</dt>
 <dd>A design pattern where a person reviews and confirms uncertain machine output before it&#x27;s treated as final. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Human-in-the-loop" rel=noopener>Wikipedia: Human-in-the-loop &#8599;</a></div></dd>
 <dt>idempotency</dt>
-<dd>Running a load twice has the same effect as running it once — retries can&#x27;t corrupt. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a>, <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Idempotence" rel=noopener>Wikipedia: Idempotence &#8599;</a></div></dd>
+<dd>Running a load twice has the same effect as running it once — retries can&#x27;t corrupt. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a>, <a href="control-plane/">One lake, many tenants: the control plane</a>, <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Idempotence" rel=noopener>Wikipedia: Idempotence &#8599;</a></div></dd>
 <dt>identifier normalization</dt>
 <dd>Cleaning and cross-deriving IDs — e.g. an ISBN-10 implies its ISBN-13 twin. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/ISBN" rel=noopener>Wikipedia: ISBN &#8599;</a></div></dd>
 <dt>ingest invariant</dt>
 <dd>A rule checked automatically on every ingest run, so violations surface at load time. <span class=refs>&rarr; <a href="parse-fidelity/">Did we keep your catalog intact?</a></span></dd>
+<dt>instance registry</dt>
+<dd>The per-host list of which tenants are deployed there; the inventory the control plane acts on. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a></span></dd>
 <dt>interest age</dt>
 <dd>An age range (e.g. 8–12) for the intended reader, drawn from catalog notes — not a grade. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a></span></dd>
 <dt>ISBN</dt>
@@ -158,8 +169,12 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>The ISO standard for the binary wire format MARC records travel in. <span class=refs>&rarr; <a href="parse-fidelity/">Did we keep your catalog intact?</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/ISO_2709" rel=noopener>Wikipedia: ISO 2709 &#8599;</a></div></dd>
 <dt>Lexile</dt>
 <dd>A numeric reading-difficulty score for books and readers, from MetaMetrics (e.g. 850L). <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Lexile" rel=noopener>Wikipedia: Lexile &#8599;</a></div></dd>
+<dt>lifecycle</dt>
+<dd>The uniform verb set (run / status / dry-run / migrate) every onboarded tenant answers, so the operator never learns a per-tenant CLI. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a></span></dd>
 <dt>local model</dt>
 <dd>Running AI on library-owned hardware so patron-adjacent text never leaves the network. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a></span></dd>
+<dt>manifest</dt>
+<dd>A file in which a tenant declares what it is (name, schema, schedule), validated before it can join the lake. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Manifest_file" rel=noopener>Wikipedia: Manifest file &#8599;</a></div></dd>
 <dt>MARC</dt>
 <dd>The dominant library record format — a binary envelope of bibliographic fields (245 title, 020 ISBN…). <span class=refs>&rarr; <a href="parse-fidelity/">Did we keep your catalog intact?</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/MARC_standards" rel=noopener>Wikipedia: MARC standards &#8599;</a></div></dd>
 <dt>MARC field</dt>
@@ -178,10 +193,14 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>The platform records every run and computes its own health from that ledger. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Observability_(software)" rel=noopener>Wikipedia: Observability (software) &#8599;</a></div></dd>
 <dt>parse fidelity</dt>
 <dd>A standing guarantee that every stored record is byte-for-byte what the source sent. <span class=refs>&rarr; <a href="parse-fidelity/">Did we keep your catalog intact?</a></span></dd>
+<dt>Quadlet</dt>
+<dd>A systemd-native unit file that describes a Podman container, so containers run as ordinary systemd services. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a></span><div class=cite>Further reading: <a href="https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html" rel=noopener>Podman: Quadlet &#8599;</a></div></dd>
 <dt>reading levels</dt>
 <dd>Standardized measures of how hard a book is to read, used to match books to readers. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Readability" rel=noopener>Wikipedia: Readability &#8599;</a></div></dd>
 <dt>reading lists</dt>
 <dd>Curated lists of titles (e.g. award winners) checked against what the library holds. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
+<dt>run-now</dt>
+<dd>Fire a tenant on demand via the same code path a timer fire uses — no parallel manual-run logic to drift. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a></span></dd>
 <dt>SCD Type 0</dt>
 <dd>A landed snapshot is never edited in place; history is append-only. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Slowly_changing_dimension" rel=noopener>Wikipedia: Slowly changing dimension &#8599;</a></div></dd>
 <dt>SCD Type 2</dt>
@@ -195,7 +214,9 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dt>snapshot</dt>
 <dd>A full read of a source system at a point in time, kept as an immutable record. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
 <dt class=featured>tenants</dt>
-<dd>Per-source extract pipelines that feed the lake; each tenant owns its own ingest logic and landing zone. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a>, <a href="parse-fidelity/">Did we keep your catalog intact?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dd>Per-source extract pipelines that feed the lake; each tenant owns its own ingest logic and landing zone. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a>, <a href="control-plane/">One lake, many tenants: the control plane</a>, <a href="parse-fidelity/">Did we keep your catalog intact?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dt>tiers</dt>
+<dd>How deeply a tenant plugs in — Tier-2 = a validated data contract; Tier-3 = contract plus a lifecycle the control plane can operate. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a></span></dd>
 <dt>time-travel</dt>
 <dd>Reconstructing what the data looked like at any past date, without keeping a full copy of every night. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
 <dt>title-author key</dt>
@@ -214,5 +235,5 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <div class=t><a href="/2026-05/issue_2_our-data-our-lake/">Our Data, Our Lake</a> <span class=kw>zine</span></div>
 <div class=sum>A printable zine on owning the library&#x27;s data — the lake, in plain language.</div>
 </div>
-<footer>Generated 2026-06-18 from 6 published showboats · the version ledger is git, not a version number.</footer>
+<footer>Generated 2026-06-18 from 7 published showboats · the version ledger is git, not a version number.</footer>
 </body></html>

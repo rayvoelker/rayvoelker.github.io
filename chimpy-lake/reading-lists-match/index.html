@@ -96,6 +96,46 @@ p code, li code { background: var(--code-bg); padding: .1rem .35rem; border-radi
 strong { color: var(--ink); }
 table { border-collapse: collapse; margin: 1rem 0; }
 th, td { border: 1px solid var(--rule); padding: .35rem .6rem; text-align: left; }
+
+
+pre.sourceCode.bash { background:#eef1f6; border-color:#dbe1ea; }
+pre.sourceCode.bash::before { content:"$ "; color: var(--accent); font-weight:700; }
+
+pre.output { position: relative; margin-top: 1.15rem; padding-top: 2.1rem; }
+pre.output::before {
+content: "output";
+position: absolute; top: 0; left: 0; right: 0; height: 1.55rem;
+padding: .32rem .7rem 0 0; box-sizing: border-box;
+text-align: right; font: .6rem/1 ui-monospace, Menlo, monospace;
+letter-spacing: .08em; color: #8a8f98;
+border-bottom: 1px solid var(--rule); border-radius: 6px 6px 0 0;
+background:
+radial-gradient(circle 3.5px at 13px 11px, #ff5f56 98%, transparent 100%),
+radial-gradient(circle 3.5px at 27px 11px, #ffbd2e 98%, transparent 100%),
+radial-gradient(circle 3.5px at 41px 11px, #27c93f 98%, transparent 100%),
+#ededf1;
+}
+
+pre.output .ok { color:#1a7f37; font-weight:600; }
+pre.output .bad { color:#c1121f; font-weight:600; }
+pre.output .warn { color:#9a6700; font-weight:600; }
+.tier { font-weight:700; border-radius:3px; padding:0 .32rem; font-size:.92em; }
+.tier.t3 { color:#0a7d3f; background:#e7f7ec; }
+.tier.t2 { color:#5a5f68; background:#e9eaee; }
+
+.callout { border-left:4px solid var(--accent); background:#f4f7fb;
+padding:.4rem .9rem; margin:.75rem 0; border-radius:0 4px 4px 0; }
+.callout p { margin:.25rem 0; }
+.callout-what { border-left-color:#3a5a8c; background:#eef3fb; }
+.callout-why { border-left-color:#3f7d4f; background:#eef6ef; }
+.callout-term { border-left-color:#8c6a3a; background:#f8f4ec; }
+
+table tr:first-child th, thead th { background:#eef2f8; }
+tbody tr:nth-child(even), table tr:nth-child(even) td { background:#fafbfd; }
+
+figure.diagram { margin:1.6rem 0; text-align:center; }
+figure.diagram svg { max-width:100%; height:auto; }
+figure.diagram figcaption { color: var(--muted); font-size:.85rem; margin-top:.45rem; }
 </style>
 </head>
 <body>
@@ -304,7 +344,7 @@ re-runs and diffs them), and the identifier registry that powers the
 matching ships green.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest tests/lists tests/demos/test_reading_lists_demo.py <span class="at">-q</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">&#39;s/ in [0-9.]+s//&#39;</span></span></code></pre></div>
 <pre class="output"><code>...............................................................          [100%]
-63 passed</code></pre>
+63 <span class="ok">passed</span></code></pre>
 <h2 id="where-this-could-go">Where this could go</h2>
 <p>Today this is a discovery surface — no patron data, nothing private.
 But picture the next step, posed as <strong>open questions, not
@@ -329,6 +369,6 @@ person’s activity without ever storing who they are.</p>
 matches what it can, a librarian confirms the rest, and we never fake a
 match we don’t have.</strong></p>
 <hr>
-<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">Rendered from chimpy-lake <code>3592e58</code> on 2026-06-10 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">&larr; <a href="../">all walkthroughs</a> &middot; Rendered from <code>226199c</code> on 2026-06-18 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
 </body>
 </html>

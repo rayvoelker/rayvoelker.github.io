@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>One lake, many tenants: the control plane</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style type="text/css">
+:root { --ink:#1a1a1a; --muted:#555; --rule:#e2e2e2; --accent:#3a5a8c; --code-bg:#f6f8fa; }
+* { box-sizing: border-box; }
+body { max-width: 820px; margin: 2.5rem auto; padding: 0 1.25rem;
+font: 16px/1.65 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+color: var(--ink); background:#fff; }
+h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 .25rem; }
+h2 { font-size: 1.4rem; margin: 2.5rem 0 .5rem; padding-top: 1rem; border-top: 2px solid var(--rule); color: var(--accent); }
+h3 { font-size: 1.12rem; margin: 1.75rem 0 .4rem; }
+p { margin: .6rem 0; }
+blockquote { margin: 1rem 0; padding: .5rem 1rem; border-left: 4px solid var(--accent);
+background:#f4f7fb; color: var(--muted); font-size: .94rem; }
+pre { background: var(--code-bg); border: 1px solid var(--rule); border-radius: 6px;
+padding: .85rem 1rem; overflow-x: auto; font-size: 13px; line-height: 1.5; }
+code { font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; }
+p code, li code { background: var(--code-bg); padding: .1rem .35rem; border-radius: 4px; font-size: .9em; }
+strong { color: var(--ink); }
+table { border-collapse: collapse; margin: 1rem 0; }
+th, td { border: 1px solid var(--rule); padding: .35rem .6rem; text-align: left; }
+
+
+pre.sourceCode.bash { background:#eef1f6; border-color:#dbe1ea; }
+pre.sourceCode.bash::before { content:"$ "; color: var(--accent); font-weight:700; }
+
+pre.output { position: relative; margin-top: 1.15rem; padding-top: 2.1rem; }
+pre.output::before {
+content: "output";
+position: absolute; top: 0; left: 0; right: 0; height: 1.55rem;
+padding: .32rem .7rem 0 0; box-sizing: border-box;
+text-align: right; font: .6rem/1 ui-monospace, Menlo, monospace;
+letter-spacing: .08em; color: #8a8f98;
+border-bottom: 1px solid var(--rule); border-radius: 6px 6px 0 0;
+background:
+radial-gradient(circle 3.5px at 13px 11px, #ff5f56 98%, transparent 100%),
+radial-gradient(circle 3.5px at 27px 11px, #ffbd2e 98%, transparent 100%),
+radial-gradient(circle 3.5px at 41px 11px, #27c93f 98%, transparent 100%),
+#ededf1;
+}
+
+pre.output .ok { color:#1a7f37; font-weight:600; }
+pre.output .bad { color:#c1121f; font-weight:600; }
+pre.output .warn { color:#9a6700; font-weight:600; }
+.tier { font-weight:700; border-radius:3px; padding:0 .32rem; font-size:.92em; }
+.tier.t3 { color:#0a7d3f; background:#e7f7ec; }
+.tier.t2 { color:#5a5f68; background:#e9eaee; }
+
+.callout { border-left:4px solid var(--accent); background:#f4f7fb;
+padding:.4rem .9rem; margin:.75rem 0; border-radius:0 4px 4px 0; }
+.callout p { margin:.25rem 0; }
+.callout-what { border-left-color:#3a5a8c; background:#eef3fb; }
+.callout-why { border-left-color:#3f7d4f; background:#eef6ef; }
+.callout-term { border-left-color:#8c6a3a; background:#f8f4ec; }
+
+table tr:first-child th, thead th { background:#eef2f8; }
+tbody tr:nth-child(even), table tr:nth-child(even) td { background:#fafbfd; }
+
+figure.diagram { margin:1.6rem 0; text-align:center; }
+figure.diagram svg { max-width:100%; height:auto; }
+figure.diagram figcaption { color: var(--muted); font-size:.85rem; margin-top:.45rem; }
+</style>
+</head>
+<body>
+<h1 id="one-lake-many-tenants-the-control-plane">One lake, many tenants:
+the control plane</h1>
+<p><em>2026-06-18T22:36:12Z by Showboat 0.6.1</em>
+<!-- showboat-id: edf5acd4-efe6-4fdc-a0e0-fe92bb0ce2ad --></p>
+<h2 id="one-lake-many-tenants-the-control-plane-1">One lake, many
+tenants: the control plane</h2>
+<p><em>What makes chimpy-lake a <strong>platform</strong>, and not five
+cron jobs in a trench coat.</em></p>
+<p>chimpy-lake pulls data from many sources — the Sierra ILS, OverDrive,
+curated reading lists, the catalog — refines it, and serves it. Each
+source is a <strong>tenant</strong>. The claim of this walkthrough is
+that they are not five hand-wired scripts that happen to share a disk:
+each tenant <strong>declares itself</strong> in one manifest,
+<strong>inherits a uniform lifecycle</strong>, and a single operator
+drives the <strong>whole fleet</strong> from one CLI.</p>
+<p>If you’ve used a few familiar tools, you already know the shape of
+this:</p>
+<ul>
+<li><strong>The manifest + tiers</strong> are like a <em>package
+manifest</em> (<code>package.json</code>, <code>Cargo.toml</code>) or a
+Kubernetes manifest: a tenant <em>declares what it is</em>, and the
+platform knows how to handle it. No per-tenant glue.</li>
+<li><strong>The lifecycle SDK</strong> is like a <em>plugin
+interface</em>: every fully-onboarded tenant speaks the same handful of
+verbs, so the operator never learns a bespoke CLI per source.</li>
+<li><strong>The control plane</strong> (<code>install</code>,
+<code>run-now</code>) is like <code>kubectl apply</code>: you declare
+the desired state and the CLI <strong>reconciles</strong> it onto the
+host — idempotently and safely.</li>
+</ul>
+<p>Pinned legend — the <strong>tier ladder</strong>, how deep a tenant
+plugs in:</p>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 41%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tier</th>
+<th>What it ships</th>
+<th>What it earns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Tier-2</strong></td>
+<td>a validated data <strong>contract</strong></td>
+<td>a tenant the lake <strong>trusts</strong></td>
+</tr>
+<tr class="even">
+<td><strong>Tier-3</strong></td>
+<td>contract <strong>+</strong> a <code>[lifecycle]</code> section</td>
+<td>a tenant the control plane can <strong>operate</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Every beat below runs the <strong>real</strong> chimpy-lake modules
+over a small <strong>frozen fixture</strong> — two tenants,
+<code>circ-trans</code> (Tier-3) and <code>catalog</code> (Tier-2). The
+commands are real and reproducible (<code>showboat verify</code> re-runs
+them); the live lake, <code>~/.config</code>, and real systemd are never
+touched. We follow one tenant from <em>declared</em> → <em>operable</em>
+→ <em>installed</em>.</p>
+<figure class="diagram">
+<svg viewBox="0 0 760 230" role="img" aria-label="A tenant declares itself in a manifest; the control plane installs and runs it on the host." xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,sans-serif">
+<defs>
+<marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+<path d="M0,0 L7,3 L0,6 Z" fill="#3a5a8c"></path> </marker> </defs>
+<!-- spine labels -->
+<text x="120" y="22" text-anchor="middle" font-size="12" fill="#8a8f98" letter-spacing="1">DECLARE</text>
+<text x="380" y="22" text-anchor="middle" font-size="12" fill="#8a8f98" letter-spacing="1">OPERATE</text>
+<text x="640" y="22" text-anchor="middle" font-size="12" fill="#8a8f98" letter-spacing="1">INSTALL</text>
+<!-- tenant -->
+<rect x="30" y="50" width="180" height="120" rx="8" fill="#eef3fb" stroke="#3a5a8c"></rect>
+<text x="120" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Tenant</text>
+<text x="120" y="100" text-anchor="middle" font-size="12" fill="#555">chimpy-tenant.toml</text>
+<rect x="58" y="118" width="48" height="22" rx="3" fill="#e9eaee"></rect>
+<text x="82" y="133" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5f68">T2</text>
+<rect x="116" y="118" width="48" height="22" rx="3" fill="#e7f7ec"></rect>
+<text x="140" y="133" text-anchor="middle" font-size="11" font-weight="700" fill="#0a7d3f">T3</text>
+<!-- control plane -->
+<rect x="290" y="50" width="180" height="120" rx="8" fill="#f6f8fa" stroke="#3a5a8c"></rect>
+<text x="380" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Control
+plane</text>
+<text x="380" y="100" text-anchor="middle" font-size="12" fill="#555">chimpy-lake
+CLI</text>
+<text x="380" y="121" text-anchor="middle" font-size="11" fill="#3a5a8c">list-tenants</text>
+<text x="380" y="137" text-anchor="middle" font-size="11" fill="#3a5a8c">install
+· run-now</text> <!-- host -->
+<rect x="550" y="50" width="180" height="120" rx="8" fill="#f6f8fa" stroke="#3a5a8c"></rect>
+<text x="640" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Host</text>
+<text x="640" y="100" text-anchor="middle" font-size="12" fill="#555">systemd
++ Podman</text>
+<text x="640" y="121" text-anchor="middle" font-size="11" fill="#555">Quadlets</text>
+<text x="640" y="137" text-anchor="middle" font-size="11" fill="#555">timers</text>
+<!-- arrows -->
+<line x1="210" y1="110" x2="288" y2="110" stroke="#3a5a8c" stroke-width="2" marker-end="url(#ar)"></line>
+<line x1="470" y1="110" x2="548" y2="110" stroke="#3a5a8c" stroke-width="2" marker-end="url(#ar)"></line>
+<!-- reconcile loop -->
+<path d="M640,170 C640,205 380,205 380,172" fill="none" stroke="#9aa0a8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ar)"></path>
+<text x="510" y="200" text-anchor="middle" font-size="11" fill="#8a8f98" font-style="italic">reconcile
+(idempotent)</text>
+</svg>
+<figcaption>
+A tenant <strong>declares</strong> itself in a manifest; the control
+plane <strong>installs</strong> it onto the host and
+<strong>runs</strong> it — reconciling desired state, idempotently.
+</figcaption>
+</figure>
+<h3 id="a-tenant-declares-itself-the-tier-ladder">1 · A tenant declares
+itself — the tier ladder</h3>
+<div class="callout callout-what"><p><strong>What.</strong> A source joins the lake by shipping a
+<code>chimpy-tenant.toml</code> <strong>manifest</strong>, not by
+hand-wired glue. A validator enforces it. <strong>Tier-2</strong> is the
+data contract (name, schema, schedule, telemetry).
+<strong>Tier-3</strong> adds a <code>[lifecycle]</code> section — and
+that’s what lets the control plane <em>operate</em> the tenant, not just
+trust its data.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> The manifest is a single, checkable
+definition of “what a valid tenant is,” enforced in CI — a bad manifest
+fails the build, it never crashes production at 3 a.m. And the tier is
+explicit: you can see, per tenant, how deeply it participates.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>data contract</em>; <em>tiered
+onboarding</em>.</p></div>
+<p><strong>How we do it</strong> — a Tier-2 manifest passes the contract
+but is refused as Tier-3; a Tier-3 manifest carries the lifecycle
+section:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/control-plane/_driver.py tiers</span></code></pre></div>
+<pre class="output"><code>
+The tier ladder — a tenant declares itself in chimpy-tenant.toml
+================================================================
+A tenant is admitted by its MANIFEST, not by hand-wired glue. Two tiers:
+  Tier-2  the data contract        — a tenant the lake TRUSTS
+  Tier-3  contract + [lifecycle]   — a tenant the control plane can OPERATE
+
+Tier-2  catalog     kind=extract schema=catalog
+        contract satisfied; sources=[&#39;catalog&#39;]
+        as Tier-3? <span class="bad">REFUSED</span> — lifecycle: required section missing
+
+Tier-3  circ-trans  kind=extract schema=circ_trans
+        entrypoint   [&#39;python&#39;, &#39;app.py&#39;]
+        subcommands  [&#39;run&#39;, &#39;status&#39;, &#39;dry-run&#39;, &#39;migrate&#39;]
+
+The contract is enforced in the conformance suite, never at runtime — a bad
+manifest fails CI, it never crashes production. Tier is how deep a tenant plugs in.</code></pre>
+<h3 id="every-tenant-speaks-the-same-verbs-the-lifecycle-sdk">2 · Every
+tenant speaks the same verbs — the Lifecycle SDK</h3>
+<div class="callout callout-what"><p><strong>What.</strong> A Tier-3 tenant wraps its own
+<code>run()</code> in <code>LifecycleApp</code>. In return, the SDK
+supplies a <strong>uniform verb set</strong> — <code>run</code>,
+<code>status</code>, <code>dry-run</code>, <code>migrate</code> — so the
+tenant only writes the one thing that’s actually tenant-specific.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> The operator (and the control plane)
+never learns a per-tenant CLI: <em>every</em> Tier-3 tenant answers the
+same four verbs the same way. The verb set is <strong>closed</strong> —
+an unknown verb is refused, so the contract can’t quietly drift.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>uniform interface</em>; <em>plugin
+/ service contract</em>.</p></div>
+<p><strong>How we do it</strong> — a toy tenant supplies only
+<code>run</code>; the SDK provides the rest, and <code>dry-run</code>
+flips the tenant into a no-write mode:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/control-plane/_driver.py lifecycle</span></code></pre></div>
+<pre class="output"><code>
+The Lifecycle SDK — every Tier-3 tenant speaks the same four verbs
+==================================================================
+A tenant wraps its own run() in LifecycleApp; the SDK supplies the rest, so
+the operator never learns a per-tenant CLI:
+
+    from chimpy_lake.lifecycle import LifecycleApp
+    LifecycleApp(run=run).main()   # status / dry-run / migrate come for free
+
+verbs the SDK exposes for this tenant:
+  run        the tenant&#39;s own logic (the one handler it supplied)
+  status     SDK default: one-line health from the telemetry hub
+  dry-run    SDK default: sets CHPL_DRY_RUN=1, then calls run
+  migrate    SDK default: schema/data migration hook
+
+    [tenant run] mode=live — would extract circ-trans for this window
+$ app run       -&gt; exit 0
+    [tenant run] mode=dry-run — would extract circ-trans for this window
+$ app dry-run   -&gt; exit 0   (note mode flips to dry-run)
+$ app migrate   -&gt; exit 0   (no migrations registered)
+$ app frobnicate-&gt; exit 2   (unknown verb refused — the verb set is closed)</code></pre>
+<h3 id="the-operators-fleet-the-roster">3 · The operator’s fleet — the
+roster</h3>
+<div class="callout callout-what"><p><strong>What.</strong> An <strong>instance</strong> (a deployment of
+the lake on a host) declares the tenants deployed there in a small
+registry — one <code>tenants/&lt;name&gt;.toml</code> per tenant.
+<code>chimpy-lake list-tenants</code> reads that registry: the inventory
+the control plane acts on.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> Adding a source to the fleet is a
+one-file change, not a code change — drop a registry entry and it joins
+every fleet-wide command. The roster is the seam between “what’s
+declared” and “what gets operated.”</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>instance registry /
+inventory</em>.</p></div>
+<p><strong>How we do it</strong> — the declared fleet for this instance,
+each tenant with its tier read straight from its manifest:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/control-plane/_driver.py roster</span></code></pre></div>
+<pre class="output"><code>
+The roster — `chimpy-lake list-tenants` reads the instance registry
+===================================================================
+the operator&#39;s declared fleet for this instance (org=chpl, scope=dev):
+
+  tenant       kind     tier  schedule
+  catalog      extract  <span class="tier t2">T2</span>    *-*-* 03:00:00 America/New_York
+  circ-trans   extract  <span class="tier t3">T3</span>    *-*-* 08:35:00 America/New_York
+
+The registry is the inventory the control plane acts on — add a tenant by
+dropping one tenants/&lt;name&gt;.toml, and it joins every fleet-wide command below.</code></pre>
+<h3 id="declare-the-desired-state-install">4 · Declare the desired state
+— <code>install</code></h3>
+<div class="callout callout-what"><p><strong>What.</strong>
+<code>chimpy-lake install &lt;tenant&gt;</code> materialises a tenant’s
+Quadlet (container) + timer units onto the host by symlinking them into
+the systemd user dirs, then enabling the timers. <code>--dry-run</code>
+shows the <strong>plan</strong> without touching anything. It is
+<strong>idempotent</strong> (a second run is a no-op) and
+<strong>safe</strong> (a link a human re-pointed is flagged as a
+<em>conflict</em> and refused without <code>--force</code>).</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> This is the
+<code>kubectl apply</code> of the lake: you declare the desired state,
+the CLI reconciles the host to match — and because it’s idempotent,
+re-running is always safe; because conflicts are refused, it never
+silently clobbers a hand-edit.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>desired-state reconciliation</em>;
+<em>idempotent apply</em>.</p></div>
+<p><strong>How we do it</strong> — a fresh host plans the links; a
+re-run is a no-op; a hand-edited link conflicts and is refused (the live
+<code>~/.config</code> and systemd are never touched — the planner is
+driven against a scratch dir):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/control-plane/_driver.py install</span></code></pre></div>
+<pre class="output"><code>
+Install — `chimpy-lake install circ-trans --dry-run` plans, idempotently
+========================================================================
+FRESH  host has nothing linked yet:
+  <span class="ok">create</span>   4 symlink(s): circ-trans-reconcile.container, circ-trans.container, circ-trans-reconcile.timer, circ-trans.timer
+  enable   2 timer(s): circ-trans-reconcile.timer, circ-trans.timer
+  conflicts 0
+
+RE-RUN  same command again, host already in the desired state:
+  <span class="ok">create</span>   0
+  <span class="ok">already-ok</span> 4 symlink(s) — no-op (idempotent)
+
+CONFLICT  a managed link was re-pointed by hand:
+  <span class="bad">conflicting</span> 1: circ-trans.container
+  apply -&gt; <span class="bad">REFUSED</span>: won&#39;t overwrite 1 <span class="bad">conflicting</span> link without --force
+
+Declare the desired state, the control plane reconciles it onto the host —
+safe (conflicts refused), idempotent (re-runs converge). Nothing was applied here.</code></pre>
+<h3 id="fire-one-on-demand-run-now">5 · Fire one on demand —
+<code>run-now</code></h3>
+<div class="callout callout-what"><p><strong>What.</strong> Tenants run on a timer, but the operator
+sometimes needs one <em>now</em> — a backfill, a re-pull after a fix.
+<code>chimpy-lake run-now &lt;tenant&gt;</code> resolves the tenant’s
+service unit and starts it via the <strong>same code path a timer fire
+uses</strong>, surfacing the tenant’s true exit code. Multi-service
+tenants (here, a primary + a <code>reconcile</code>) resolve by
+suffix.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> On-demand and scheduled runs share
+one mechanism — no parallel “manual run” logic to drift out of sync. The
+operator triggers by tenant name, not by memorising unit names.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>on-demand trigger</em>; <em>unit
+resolution</em>.</p></div>
+<p><strong>How we do it</strong> — resolve which unit
+<code>run-now</code> would start, for both the primary and the reconcile
+service (resolution only — nothing is started here):</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/control-plane/_driver.py run-now</span></code></pre></div>
+<pre class="output"><code>
+Run-now — fire one tenant on demand (atop its timer schedule)
+=============================================================
+`chimpy-lake run-now circ-trans` resolves which unit it would start:
+
+  primary               -&gt; circ-trans.service
+  --service reconcile   -&gt; circ-trans-reconcile.service
+
+Resolution only — the real command then does `systemctl --user start &lt;unit&gt;
+--wait` and surfaces the tenant&#39;s true exit via ExecMainStatus. Same code path
+as a timer fire; here we only resolved the name, nothing was started.</code></pre>
+<h3 id="proof">Proof</h3>
+<p>Every command above is reproducible — <code>showboat verify</code>
+re-runs each one and diffs its output. And the on-thesis invariants (the
+tier ladder, the closed verb set, and the idempotent-and-safe install)
+ship green:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest tests/demos/test_control_plane.py <span class="at">-q</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">&#39;s/ in [0-9.]+s//&#39;</span></span></code></pre></div>
+<pre class="output"><code>....                                                                     [100%]
+4 <span class="ok">passed</span></code></pre>
+<h2 id="glossary">Glossary</h2>
+<ul>
+<li><strong>Tenant</strong> — one data source onboarded to the lake (a
+Sierra extract, OverDrive, …). (Beat 1)</li>
+<li><strong>Manifest (<code>chimpy-tenant.toml</code>) / data
+contract</strong> — a tenant’s declared, validated shape; it must pass
+to join the lake. (Beat 1)</li>
+<li><strong>Tier-2 / Tier-3</strong> — Tier-2 = the data contract;
+Tier-3 = contract <strong>plus</strong> a <code>[lifecycle]</code>
+section the control plane can operate. (Beat 1)</li>
+<li><strong>Lifecycle SDK / uniform verbs</strong> —
+<code>LifecycleApp</code> gives every Tier-3 tenant the same
+<code>run</code> / <code>status</code> / <code>dry-run</code> /
+<code>migrate</code> verbs. (Beat 2)</li>
+<li><strong>Instance / roster / registry</strong> — a deployment of the
+lake on a host, and its declared list of tenants. (Beat 3)</li>
+<li><strong>Control plane</strong> — the operator CLI that reconciles
+declared tenants onto the host. (Beats 4–5)</li>
+<li><strong>Quadlet</strong> — a systemd-native unit file describing a
+Podman container. (Beat 4)</li>
+<li><strong>Idempotent apply / desired-state reconciliation</strong> —
+declare the target state; re-runs converge and never double-apply. (Beat
+4)</li>
+<li><strong>Run-now / on-demand trigger</strong> — fire a tenant
+immediately, via the same path a timer uses. (Beat 5)</li>
+</ul>
+<h2 id="where-the-control-plane-goes-next-open-questions-not-commitments">Where
+the control plane goes next — open questions, not commitments</h2>
+<p>Three directions the platform is shaped for but that are <strong>not
+built</strong>, posed as questions rather than claims:</p>
+<ul>
+<li><strong>Self-service onboarding.</strong> Today an operator adds a
+registry entry by hand. The seam is there to let a tenant open a pull
+request with its manifest and have CI promote it onto the roster once it
+passes the contract — onboarding as review, not as ops.</li>
+<li><strong>Remote, multi-host install.</strong> <code>install</code>
+reconciles one host. The same plan/apply split could drive several hosts
+from one place — the moment there’s a second instance to drive.</li>
+<li><strong>A desired-state reconciler.</strong> <code>install</code>
+reconciles on demand; a periodic reconciler could <em>heal drift</em>
+continuously — re-link anything a host lost, flag anything a human
+changed — so the registry is always the source of truth.</li>
+</ul>
+<p><strong>Nothing exotic — and that’s the point.</strong> Manifests, a
+uniform interface, and declarative, idempotent apply are the ordinary
+platform playbook, implemented for a real library lake and running
+today. Everything above re-runs on demand.</p>
+<hr>
+<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">&larr; <a href="../">all walkthroughs</a> &middot; Rendered from <code>226199c</code> on 2026-06-18 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
+</body>
+</html>

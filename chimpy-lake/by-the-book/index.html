@@ -96,12 +96,52 @@ p code, li code { background: var(--code-bg); padding: .1rem .35rem; border-radi
 strong { color: var(--ink); }
 table { border-collapse: collapse; margin: 1rem 0; }
 th, td { border: 1px solid var(--rule); padding: .35rem .6rem; text-align: left; }
+
+
+pre.sourceCode.bash { background:#eef1f6; border-color:#dbe1ea; }
+pre.sourceCode.bash::before { content:"$ "; color: var(--accent); font-weight:700; }
+
+pre.output { position: relative; margin-top: 1.15rem; padding-top: 2.1rem; }
+pre.output::before {
+content: "output";
+position: absolute; top: 0; left: 0; right: 0; height: 1.55rem;
+padding: .32rem .7rem 0 0; box-sizing: border-box;
+text-align: right; font: .6rem/1 ui-monospace, Menlo, monospace;
+letter-spacing: .08em; color: #8a8f98;
+border-bottom: 1px solid var(--rule); border-radius: 6px 6px 0 0;
+background:
+radial-gradient(circle 3.5px at 13px 11px, #ff5f56 98%, transparent 100%),
+radial-gradient(circle 3.5px at 27px 11px, #ffbd2e 98%, transparent 100%),
+radial-gradient(circle 3.5px at 41px 11px, #27c93f 98%, transparent 100%),
+#ededf1;
+}
+
+pre.output .ok { color:#1a7f37; font-weight:600; }
+pre.output .bad { color:#c1121f; font-weight:600; }
+pre.output .warn { color:#9a6700; font-weight:600; }
+.tier { font-weight:700; border-radius:3px; padding:0 .32rem; font-size:.92em; }
+.tier.t3 { color:#0a7d3f; background:#e7f7ec; }
+.tier.t2 { color:#5a5f68; background:#e9eaee; }
+
+.callout { border-left:4px solid var(--accent); background:#f4f7fb;
+padding:.4rem .9rem; margin:.75rem 0; border-radius:0 4px 4px 0; }
+.callout p { margin:.25rem 0; }
+.callout-what { border-left-color:#3a5a8c; background:#eef3fb; }
+.callout-why { border-left-color:#3f7d4f; background:#eef6ef; }
+.callout-term { border-left-color:#8c6a3a; background:#f8f4ec; }
+
+table tr:first-child th, thead th { background:#eef2f8; }
+tbody tr:nth-child(even), table tr:nth-child(even) td { background:#fafbfd; }
+
+figure.diagram { margin:1.6rem 0; text-align:center; }
+figure.diagram svg { max-width:100%; height:auto; }
+figure.diagram figcaption { color: var(--muted); font-size:.85rem; margin-top:.45rem; }
 </style>
 </head>
 <body>
 <h1 id="chimpy-lake-by-the-book">chimpy-lake, by the book</h1>
-<p><em>2026-06-09T00:19:03Z by Showboat 0.6.1</em>
-<!-- showboat-id: 2faa598f-6fbb-458a-bc30-d8b608cde4ed --></p>
+<p><em>2026-06-18T23:14:05Z by Showboat 0.6.1</em>
+<!-- showboat-id: 60c2fc87-0ccb-4789-9796-85588b8116e5 --></p>
 <h2 id="chimpy-lake-by-the-book-1">chimpy-lake, by the book</h2>
 <p><em>A library data platform, pattern by pattern through the
 data-engineering canon.</em></p>
@@ -119,14 +159,14 @@ commands are real and reproducible (<code>showboat verify</code> re-runs
 them); the data is a public fixture with <strong>no patron
 data</strong>.</p>
 <h3 id="elt-not-etl">1 · ELT, not ETL</h3>
-<p><strong>What.</strong> ETL = <em>Extract, Transform, Load</em>. ELT
+<div class="callout callout-what"><p><strong>What.</strong> ETL = <em>Extract, Transform, Load</em>. ELT
 swaps the last two: we <strong>load the raw vendor data first, exactly
-as it arrives, then transform</strong> it downstream.</p>
-<p><strong>Why it matters.</strong> The original is never lost,
+as it arrives, then transform</strong> it downstream.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> The original is never lost,
 reprocessing is cheap, and the vendor can change their format without
-breaking our load. We keep the truth and derive from it.</p>
-<p><strong>Term to know:</strong> <em>schema-on-read</em> — store now,
-impose structure when you query.</p>
+breaking our load. We keep the truth and derive from it.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>schema-on-read</em> — store now,
+impose structure when you query.</p></div>
 <p><strong>How we do it</strong> — one raw OverDrive page, landed
 verbatim:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/by-the-book/_driver.py elt</span></code></pre></div>
@@ -160,29 +200,29 @@ one checkout record, exactly as OverDrive sent it (19 fields):
 Nothing is reshaped at load time — the original is always recoverable, and we
 can re-derive everything below from it. (Patron ids are synthetic in this fixture.)</code></pre>
 <h3 id="data-contracts">2 · Data contracts</h3>
-<p><strong>What.</strong> Every data source (a “tenant”) ships a
+<div class="callout callout-what"><p><strong>What.</strong> Every data source (a “tenant”) ships a
 manifest declaring its shape and schedule, and a <strong>validator
 enforces that contract</strong> — a source that doesn’t satisfy it can’t
-join the lake.</p>
-<p><strong>Why it matters.</strong> Bad inputs are caught at the door,
+join the lake.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> Bad inputs are caught at the door,
 in CI — not at 3 a.m. in production. The contract is a single, checkable
-definition of “what a valid tenant is.”</p>
-<p><strong>Term to know:</strong> <em>data contract / contract
-testing.</em></p>
+definition of “what a valid tenant is.”</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>data contract / contract
+testing.</em></p></div>
 <p><strong>How we do it</strong> — one valid manifest passes; one bad
 manifest is refused with every violation at once:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/by-the-book/_driver.py contract</span></code></pre></div>
 <pre class="output"><code>
 Pattern — Data contracts: a tenant must satisfy its manifest to exist
 =====================================================================
-PASS  good_tenant.toml satisfies the Tier-2 contract:
+<span class="ok">PASS</span>  good_tenant.toml satisfies the Tier-2 contract:
   tenant.name        overdrive-checkouts
   tenant.kind        extract
   tenant.schema      overdrive_raw
   telemetry.sources  [&#39;overdrive-checkouts&#39;]
   default_schedule   OnCalendar=*-*-* 07,18:05:00 UTC
 
-FAIL  bad_tenant.toml is REFUSED — 4 contract violation(s), all at once:
+<span class="bad">FAIL</span>  bad_tenant.toml is <span class="bad">REFUSED</span> — 4 contract violation(s), all at once:
   tenant.name: must match ^[a-z][a-z0-9-]*$ (got &#39;BadName&#39;)
   tenant.kind: must be one of [&#39;extract&#39;, &#39;report&#39;] (got &#39;warehouse&#39;)
   runtime.default_schedule: must start with &#39;OnCalendar=&#39; (got &#39;daily&#39;)
@@ -191,16 +231,16 @@ FAIL  bad_tenant.toml is REFUSED — 4 contract violation(s), all at once:
 The contract is enforced in the conformance test suite, not at runtime — a bad
 manifest fails CI, it never crashes production.</code></pre>
 <h3 id="medallion-architecture">3 · Medallion architecture</h3>
-<p><strong>What.</strong> Data flows through named layers:
+<div class="callout callout-what"><p><strong>What.</strong> Data flows through named layers:
 <strong>bronze</strong> (raw) → <strong>silver</strong> (cleaned, typed,
 deduplicated) → <strong>gold</strong> (aggregated, query-ready “marts”).
-Each layer is more refined than the last.</p>
-<p><strong>Why it matters.</strong> Analysts read gold and trust it;
+Each layer is more refined than the last.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> Analysts read gold and trust it;
 engineers debug against bronze. Responsibilities are separated, and you
-never re-clean the same data twice.</p>
-<p><strong>Term to know:</strong> <em>medallion architecture</em>; a
+never re-clean the same data twice.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>medallion architecture</em>; a
 <strong>dimension</strong> (<code>dim_title</code>) is a reusable lookup
-table; a <strong>mart</strong> is a purpose-built summary.</p>
+table; a <strong>mart</strong> is a purpose-built summary.</p></div>
 <p><strong>How we do it</strong> — the real dbt SQL, run end-to-end over
 one frozen page:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/by-the-book/_driver.py medallion</span></code></pre></div>
@@ -229,17 +269,17 @@ GOLD — daily_by_audience (a mart: checkouts per day per audience):
 This is the SAME dbt SQL that runs in production (there over ~59,770 deduped
 checkouts); here it runs end-to-end over one frozen page.</code></pre>
 <h3 id="idempotent-incremental">4 · Idempotent + incremental</h3>
-<p><strong>What.</strong> A load is <strong>idempotent</strong> when
+<div class="callout callout-what"><p><strong>What.</strong> A load is <strong>idempotent</strong> when
 running it twice has the same effect as running it once. chimpy-lake
 gets this two ways: it <strong>deduplicates</strong> within a load, and
 on re-runs an <strong>incremental</strong> anti-join inserts only
-genuinely new rows.</p>
-<p><strong>Why it matters.</strong> Pipelines crash and get retried.
+genuinely new rows.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> Pipelines crash and get retried.
 Idempotency means a retry can never double-count or corrupt — the data
-converges to the same answer every time.</p>
-<p><strong>Term to know:</strong> <em>idempotency</em>, <em>incremental
+converges to the same answer every time.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>idempotency</em>, <em>incremental
 load</em>, and <em>SCD Type 0</em> (a landed snapshot is never edited —
-history is append-only).</p>
+history is append-only).</p></div>
 <p><strong>How we do it</strong> — load the same page twice; the second
 pass adds nothing:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/by-the-book/_driver.py idempotent</span></code></pre></div>
@@ -258,16 +298,16 @@ re-running the SAME data inserts nothing. Re-runs converge — that is idempoten
 And history is append-only (snapshot-at-ingest, SCD Type 0): a landed row is
 never updated in place, so the lake is a faithful record of what was seen.</code></pre>
 <h3 id="data-quality-as-code">5 · Data quality as code</h3>
-<p><strong>What.</strong> Assertions that run on <strong>every</strong>
+<div class="callout callout-what"><p><strong>What.</strong> Assertions that run on <strong>every</strong>
 load — is the row count sane, are key columns non-null and unique, did
-the schema drift? Like unit tests, but for data.</p>
-<p><strong>Why it matters.</strong> Silent data corruption is the worst
+the schema drift? Like unit tests, but for data.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> Silent data corruption is the worst
 kind: reports look fine while being wrong. These checks make bad data
 <em>loud</em>. And they’re <strong>never-fatal</strong> — a failure is
-recorded as a signal; the load still completes.</p>
-<p><strong>Term to know:</strong> <em>data quality / assertions</em>
+recorded as a signal; the load still completes.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>data quality / assertions</em>
 (cf. dbt tests, Great Expectations); a <em>freshness SLO</em> is the
-“how stale is too stale” line.</p>
+“how stale is too stale” line.</p></div>
 <p><strong>How we do it</strong> — a clean page passes; a defective page
 fails, loudly:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/by-the-book/_driver.py quality</span></code></pre></div>
@@ -275,34 +315,34 @@ fails, loudly:</p>
 Pattern — Data quality as code: assertions that run on every load
 =================================================================
 GOOD page (6 records):
-  volume           PASS  6 ingested (min —)
-  key_not_null     PASS  0 null of 6
-  key_unique       PASS  0 duplicate of 6
-  schema           PASS  baseline: 19 columns
+  volume           <span class="ok">PASS</span>  6 ingested (min —)
+  key_not_null     <span class="ok">PASS</span>  0 null of 6
+  key_unique       <span class="ok">PASS</span>  0 duplicate of 6
+  schema           <span class="ok">PASS</span>  baseline: 19 columns
 
 BAD page (6 records, defects injected):
-  volume           PASS  6 ingested (min —)
-  key_not_null     FAIL  1 null of 6
-  key_unique       FAIL  1 duplicate of 6
-  schema           DRIFT removed [&#39;publisher&#39;] (18 vs 19 columns)
+  volume           <span class="ok">PASS</span>  6 ingested (min —)
+  key_not_null     <span class="bad">FAIL</span>  1 null of 6
+  key_unique       <span class="bad">FAIL</span>  1 duplicate of 6
+  schema           <span class="bad">DRIFT</span> removed [&#39;publisher&#39;] (18 vs 19 columns)
 
 Volume also catches count anomalies against history, e.g. a partial fetch:
-  volume           FAIL  412 vs prior 6740 — 93.9% delta &gt; 20%
+  volume           <span class="bad">FAIL</span>  412 vs prior 6740 — 93.9% delta &gt; 20%
 
 Nothing here raised; every result is a row the platform can act on later.</code></pre>
 <h3 id="observability-the-control-plane">6 · Observability + the control
 plane</h3>
-<p><strong>What.</strong> Every run — success or failure — writes a row
+<div class="callout callout-what"><p><strong>What.</strong> Every run — success or failure — writes a row
 to an <strong>append-only ledger</strong> (<code>_platform.runs</code>).
 From that one ledger the platform computes each tenant’s health and
 presents a <strong>fleet-wide view</strong>
-(<code>chimpy-lake status --by-tenant</code>).</p>
-<p><strong>Why it matters.</strong> One operator can see the health of
+(<code>chimpy-lake status --by-tenant</code>).</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> One operator can see the health of
 every pipeline at a glance, and the system explains <em>itself</em> — no
 separate monitoring to wire up. The ledger is the single source of truth
-for “what ran, when, and did it work.”</p>
-<p><strong>Term to know:</strong> <em>observability</em>, <em>control
-plane</em>, <em>run ledger</em>.</p>
+for “what ran, when, and did it work.”</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>observability</em>, <em>control
+plane</em>, <em>run ledger</em>.</p></div>
 <p><strong>How we do it</strong> — the real telemetry schema + health
 view, over a seeded ledger:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/by-the-book/_driver.py observability</span></code></pre></div>
@@ -311,22 +351,22 @@ Pattern — Observability + the control plane (the run ledger)
 ============================================================
 the run ledger — every run, every tenant (append-only):
   source               status        records  started_at
-  catalog              succeeded   2,080,000  2026-06-08 03:00:00+00:00
-  circ-trans           succeeded  46,813,744  2026-06-08 06:30:00+00:00
-  circ-trans           failed              —  2026-06-08 11:00:00+00:00
-  overdrive-checkouts  succeeded       6,123  2026-06-07 18:05:00+00:00
-  overdrive-checkouts  succeeded       6,740  2026-06-08 07:05:00+00:00
-  reading-lists        succeeded         174  2026-05-31 04:00:00+00:00
+  catalog              <span class="ok">succeeded</span>   2,080,000  2026-06-08 03:00:00+00:00
+  circ-trans           <span class="ok">succeeded</span>  46,813,744  2026-06-08 06:30:00+00:00
+  circ-trans           <span class="bad">failed</span>              —  2026-06-08 11:00:00+00:00
+  overdrive-checkouts  <span class="ok">succeeded</span>       6,123  2026-06-07 18:05:00+00:00
+  overdrive-checkouts  <span class="ok">succeeded</span>       6,740  2026-06-08 07:05:00+00:00
+  reading-lists        <span class="ok">succeeded</span>         174  2026-05-31 04:00:00+00:00
 
 the fleet at a glance — `chimpy-lake status --by-tenant` reads _platform.tenant_health:
   source               env   health            since  last_error
   catalog              prod  ok                   9h  
   circ-trans           prod  last_run_failed      6h  ParserException: syntax error near &#39;;&#39;
   overdrive-checkouts  prod  ok                   5h  
-  reading-lists        prod  stale              200h  
+  reading-lists        prod  <span class="warn">stale</span>              200h  
 
-The view classifies each tenant (ok / stale / last_run_failed / never) from the
-ledger against its SLO. schema_version=2, built by the real
+The view classifies each tenant (ok / <span class="warn">stale</span> / last_run_failed / never) from the
+ledger against its SLO. schema_version=3, built by the real
 forward-only migrations. (now() pinned to 2026-06-08 12:00 UTC for reproducibility.)</code></pre>
 <h3 id="proof">Proof</h3>
 <p>Every command above is reproducible — <code>showboat verify</code>
@@ -335,7 +375,7 @@ idempotent, incremental silver dedup) plus the contract and quality
 assertions ship green:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest tests/demos/test_by_the_book.py <span class="at">-q</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">&#39;s/ in [0-9.]+s//&#39;</span></span></code></pre></div>
 <pre class="output"><code>...                                                                      [100%]
-3 passed</code></pre>
+3 <span class="ok">passed</span></code></pre>
 <h2 id="glossary">Glossary</h2>
 <ul>
 <li><strong>ELT / schema-on-read</strong> — load raw first, transform
@@ -382,6 +422,6 @@ The whole platform is the standard data-engineering playbook,
 implemented for a real library, and still running. Everything above
 re-runs on demand.</p>
 <hr>
-<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">Rendered from chimpy-lake <code>4152989</code> on 2026-06-09 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">&larr; <a href="../">all walkthroughs</a> &middot; Rendered from <code>226199c</code> on 2026-06-18 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
 </body>
 </html>
