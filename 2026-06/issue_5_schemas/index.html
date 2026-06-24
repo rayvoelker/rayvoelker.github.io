@@ -16,23 +16,24 @@ what actually <em>sits</em> in each. Every box is a real schema in the lake righ
 
 <p>The front is a curated map &mdash; Bronze (catalog, circulation, OpenLibrary), Silver (cleaned &amp;
 joined), Gold (ready-to-pull marts), and the Platform spine that logs and validates every load. The back
-is the full inventory: every headline table named, the dbt build layer counted &mdash; the complete bill
-of materials, generated straight from the lake so it can&rsquo;t drift.</p>
+is the <strong>complete live schema</strong>: all 17 notable views, every column, with its type &mdash;
+219 columns in all, generated straight from the lake&rsquo;s <code>information_schema</code> so it
+can&rsquo;t drift.</p>
 
 <h2>The zine</h2>
 <ul>
   <li><a href="schemas-flat.pdf">&#10515; The leave-behind</a> (prints <strong>double-sided</strong> on
-  letter &mdash; curated map on the front, full-scope inventory on the back)</li>
-  <li><a href="schemas-back.pdf">&#10515; Just the full-scope back</a> (the complete schema inventory, one page)</li>
+  letter &mdash; curated map on the front, complete live schema on the back)</li>
+  <li><a href="schemas-back.pdf">&#10515; Just the schema sheet</a> (every view, every column, with types &mdash; one page)</li>
   <li><a href="schemas-minizine.pdf">&#10515; The micro-zine</a> (one sheet, fold &times;3 + 1 cut &rarr; an 8-page pocket zine)</li>
 </ul>
 
 <figure>
   <a href="schemas-flat.pdf"><img src="preview-flat.png" alt="What's In the Lake one-page zine preview"></a>
   <figcaption>The front map: Bronze, Silver, Gold, and the governance spine &mdash; each box a real schema,
-  with the full inventory on the reverse.</figcaption>
+  with the complete live schema (every view, every column) on the reverse.</figcaption>
 </figure>
 
 <p class="foot">Cincinnati &amp; Hamilton County Public Library &middot; concept zine series #5
-&middot; <em>dbt &rsaquo; medallion &rsaquo; roadmap &rsaquo; schemas &rsaquo; retention</em> &middot; schemas v1.0.0 &middot; 2026-06</p>
+&middot; <em>dbt &rsaquo; medallion &rsaquo; roadmap &rsaquo; schemas &rsaquo; retention</em> &middot; schemas v1.1.0 &middot; 2026-06</p>
 </body></html>
