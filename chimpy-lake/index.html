@@ -40,6 +40,13 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <p class=lede>Narrated, <em>reproducible</em> walkthroughs of working code from the chimpy-lake data platform. Each one shows real commands and their captured output; each is a living artifact — always the current render of current code.</p>
 <h2>Walkthroughs</h2>
 <div class=item>
+<div class=t><a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a> <span class=status>published &middot; 2026-07-06</span></div>
+<div class=sub>turning Sierra codes into staff-facing labels, without hand-copying the machinery per dim</div>
+<div class=rel>Related: <a href="by-the-book/">chimpy-lake, by the book</a></div>
+<div class=sum>How we industrialised Sierra&#x27;s flat code-&gt;label dictionaries: one versioned manifest is the single source of truth, a generator emits the committed dbt dims from it, the extract tenant harvests bronze from the same manifest, and a freshness guard fails the build on any drift. Runs the real manifest, generator, and macro over a frozen no-PII fixture.</div>
+<div><span class="kw">code-&gt;label dimension</span><span class="kw">single source of truth</span><span class="kw">DRY</span><span class="kw">code generation</span><span class="kw">medallion</span><span class="kw">schema-on-read</span><span class="kw">SCD Type 0</span><span class="kw">SCD Type 1</span><span class="kw">conformed dimension</span><span class="kw">freshness guard</span><span class="kw">data contracts</span><span class="kw">data quality</span><span class="kw">dbt</span><span class="kw">DuckDB</span><span class="kw">provenance</span><span class="kw">grain</span></div>
+</div>
+<div class=item>
 <div class=t><a href="time-travel/">What did the catalog say last Tuesday?</a> <span class=status>published &middot; 2026-06-18</span></div>
 <div class=sub>bitemporal bronze — keep every nightly snapshot as churn, reconstruct any past state exactly</div>
 <div class=sum>The sierra-snapshot tenant keeps a bitemporal bronze: every nightly Sierra snapshot is set-diffed against the prior state and stored as just the churn — only what moved — each row stamped with the epoch it opened and closed. This runs the real engine: the pure diff classifier, three nights ingested into the envelope (stored as base + churn, not full copies), an as_of() time-travel that reconstructs each night exactly, and the safety rails — idempotent re-runs and strictly forward epochs — that make the timeline impossible to corrupt.</div>
@@ -124,28 +131,36 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>The library&#x27;s public reading-list browser, built on Datasette over the chimpy-lake pipeline. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></span></dd>
 <dt>churn</dt>
 <dd>The rows that actually changed between two snapshots — what we store instead of a full copy. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
+<dt>code generation</dt>
+<dd>Emitting committed source files from one declaration (the manifest), rather than hand-writing each. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a></span></dd>
+<dt>code-&gt;label dimension</dt>
+<dd>A small lookup table mapping a raw code to a human-readable label (e.g. item_status &#x27;!&#x27; → ON HOLDSHELF). <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Lookup_table" rel=noopener>Wikipedia: Lookup table &#8599;</a></div></dd>
 <dt>conformance</dt>
 <dd>A tenant passes the platform&#x27;s contract test suite (manifest + SDK + Quadlet + smoke). <span class=refs>&rarr; <a href="scaffold-a-tenant/">Scaffolding a tenant: from cookiecutter to conformance</a></span></dd>
+<dt>conformed dimension</dt>
+<dd>A shared, standardized lookup that every mart joins to the same way, so labels mean one thing lake-wide. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Dimension_(data_warehouse)" rel=noopener>Wikipedia: Dimension (data warehouse) &#8599;</a></div></dd>
 <dt>control plane</dt>
 <dd>One place to see and operate every pipeline&#x27;s status across the fleet. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>cookiecutter</dt>
 <dd>A tool that generates a project from a templated directory and a set of answers. <span class=refs>&rarr; <a href="scaffold-a-tenant/">Scaffolding a tenant: from cookiecutter to conformance</a></span><div class=cite>Further reading: <a href="https://cookiecutter.readthedocs.io/" rel=noopener>cookiecutter docs &#8599;</a></div></dd>
 <dt>data contracts</dt>
-<dd>A declared, validated shape a data source must satisfy before it can join the lake. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_contract" rel=noopener>Wikipedia: Data contract &#8599;</a></div></dd>
+<dd>A declared, validated shape a data source must satisfy before it can join the lake. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="control-plane/">One lake, many tenants: the control plane</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_contract" rel=noopener>Wikipedia: Data contract &#8599;</a></div></dd>
 <dt>data quality</dt>
-<dd>Automated assertions on every load — row counts, nulls, uniqueness, schema drift. <span class=refs>&rarr; <a href="parse-fidelity/">Did we keep your catalog intact?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_quality" rel=noopener>Wikipedia: Data quality &#8599;</a></div></dd>
+<dd>Automated assertions on every load — row counts, nulls, uniqueness, schema drift. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="parse-fidelity/">Did we keep your catalog intact?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_quality" rel=noopener>Wikipedia: Data quality &#8599;</a></div></dd>
 <dt>Datasette</dt>
 <dd>A tool that publishes a database as a browsable, queryable website. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span><div class=cite>Further reading: <a href="https://datasette.io" rel=noopener>Datasette &#8599;</a></div></dd>
 <dt>dbt</dt>
-<dd>A tool that builds SQL transformations as a tested, ordered dependency graph. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_build_tool" rel=noopener>Wikipedia: Data build tool &#8599;</a> &middot; <a href="https://docs.getdbt.com/docs/introduction" rel=noopener>dbt docs: Introduction &#8599;</a></div></dd>
+<dd>A tool that builds SQL transformations as a tested, ordered dependency graph. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_build_tool" rel=noopener>Wikipedia: Data build tool &#8599;</a> &middot; <a href="https://docs.getdbt.com/docs/introduction" rel=noopener>dbt docs: Introduction &#8599;</a></div></dd>
 <dt>demand-scoped</dt>
 <dd>Processing only the titles a curated list references, not the whole catalog. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a></span></dd>
 <dt>desired-state reconciliation</dt>
 <dd>Declare the target state and let the tool make the host match it — the same model as a Kubernetes controller or kubectl apply. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Kubernetes" rel=noopener>Wikipedia: Kubernetes &#8599;</a></div></dd>
 <dt>diff</dt>
 <dd>Comparing tonight&#x27;s snapshot to the prior state row-by-row — new, changed, deleted, or unchanged. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
+<dt>DRY</dt>
+<dd>Don&#x27;t Repeat Yourself — every piece of knowledge lives in exactly one place. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" rel=noopener>Wikipedia: Don&#x27;t repeat yourself &#8599;</a></div></dd>
 <dt>DuckDB</dt>
-<dd>An in-process analytical SQL database — like SQLite, but built for analytics. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/DuckDB" rel=noopener>Wikipedia: DuckDB &#8599;</a> &middot; <a href="https://duckdb.org/why_duckdb" rel=noopener>DuckDB: Why DuckDB &#8599;</a></div></dd>
+<dd>An in-process analytical SQL database — like SQLite, but built for analytics. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="time-travel/">What did the catalog say last Tuesday?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/DuckDB" rel=noopener>Wikipedia: DuckDB &#8599;</a> &middot; <a href="https://duckdb.org/why_duckdb" rel=noopener>DuckDB: Why DuckDB &#8599;</a></div></dd>
 <dt>ELT</dt>
 <dd>Load the raw data first, transform it later — vs. ETL, which transforms before loading. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Extract,_load,_transform" rel=noopener>Wikipedia: Extract, load, transform &#8599;</a></div></dd>
 <dt>epoch</dt>
@@ -154,8 +169,12 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>Narrowing a list by picking a category from a sidebar — here, a grade band. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a></span></dd>
 <dt>Fountas and Pinnell</dt>
 <dd>A leveled-reading system assigning books letters A–Z+ by text characteristics. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Fountas_and_Pinnell_reading_levels" rel=noopener>Wikipedia: Fountas and Pinnell reading levels &#8599;</a></div></dd>
+<dt>freshness guard</dt>
+<dd>A build-time check that fails if a generated artifact has drifted from the source it&#x27;s derived from — one generator vs one source, not two lists reconciled. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a></span></dd>
 <dt>grade band</dt>
 <dd>A coarse range (K–2, 3–5, 6–8) that collapses competing reading scales into one browsable label. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-levels/">What grade is this book?</a></span></dd>
+<dt>grain</dt>
+<dd>The one thing a table stores per row — here, exactly one row per code. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Dimensional_modeling" rel=noopener>Wikipedia: Dimensional modeling &#8599;</a></div></dd>
 <dt>Guided Reading</dt>
 <dd>Small-group reading instruction, and the A–Z leveling it popularized. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Guided_reading" rel=noopener>Wikipedia: Guided reading &#8599;</a></div></dd>
 <dt>honest data</dt>
@@ -193,7 +212,7 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dt>MARC field</dt>
 <dd>A named slot in a MARC record (e.g. 245 title, 526 reading program, 521 target audience). <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/MARC_standards" rel=noopener>Wikipedia: MARC standards &#8599;</a></div></dd>
 <dt>medallion</dt>
-<dd>Layered refinement: raw (bronze) → cleaned &amp; typed (silver) → query-ready (gold). <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://www.databricks.com/glossary/medallion-architecture" rel=noopener>Databricks: Medallion Architecture &#8599;</a></div></dd>
+<dd>Layered refinement: raw (bronze) → cleaned &amp; typed (silver) → query-ready (gold). <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://www.databricks.com/glossary/medallion-architecture" rel=noopener>Databricks: Medallion Architecture &#8599;</a></div></dd>
 <dt>monotonic epochs</dt>
 <dd>The rule that each ingest epoch must move strictly forward — out-of-order runs are refused. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
 <dt>native-first consensus</dt>
@@ -209,7 +228,7 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dt>plugin contract</dt>
 <dd>The rules a tenant container must satisfy to run inside an instance (manifest + lifecycle + telemetry). <span class=refs>&rarr; <a href="scaffold-a-tenant/">Scaffolding a tenant: from cookiecutter to conformance</a></span></dd>
 <dt>provenance</dt>
-<dd>A record of where an artifact came from — here, which chimpy-lake version scaffolded a tenant. <span class=refs>&rarr; <a href="scaffold-a-tenant/">Scaffolding a tenant: from cookiecutter to conformance</a></span></dd>
+<dd>A record of where an artifact came from — e.g. which chimpy-lake version generated a dim or scaffolded a tenant. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="scaffold-a-tenant/">Scaffolding a tenant: from cookiecutter to conformance</a></span></dd>
 <dt>Quadlet</dt>
 <dd>A systemd-native unit file that describes a Podman container, so containers run as ordinary systemd services. <span class=refs>&rarr; <a href="control-plane/">One lake, many tenants: the control plane</a></span><div class=cite>Further reading: <a href="https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html" rel=noopener>Podman: Quadlet &#8599;</a></div></dd>
 <dt>reading levels</dt>
@@ -221,15 +240,19 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dt>scaffold</dt>
 <dd>Generate a correct project skeleton from a template + one command (here, a tenant). <span class=refs>&rarr; <a href="scaffold-a-tenant/">Scaffolding a tenant: from cookiecutter to conformance</a></span></dd>
 <dt>SCD Type 0</dt>
-<dd>A landed snapshot is never edited in place; history is append-only. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Slowly_changing_dimension" rel=noopener>Wikipedia: Slowly changing dimension &#8599;</a></div></dd>
+<dd>A landed snapshot is never edited in place; history is append-only. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="reading-levels/">What grade is this book?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Slowly_changing_dimension" rel=noopener>Wikipedia: Slowly changing dimension &#8599;</a></div></dd>
+<dt>SCD Type 1</dt>
+<dd>Keep only the current value per key — a new value overwrites the old, no history kept. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Slowly_changing_dimension" rel=noopener>Wikipedia: Slowly changing dimension &#8599;</a></div></dd>
 <dt>SCD Type 2</dt>
 <dd>Preserve history by adding a new row with open/close dates, instead of overwriting the old one. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Slowly_changing_dimension" rel=noopener>Wikipedia: Slowly changing dimension &#8599;</a></div></dd>
 <dt>schema-on-read</dt>
-<dd>Store data exactly as it arrives; impose structure only when you query it. <span class=refs>&rarr; <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
+<dd>Store data exactly as it arrives; impose structure only when you query it. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>self-consistency</dt>
 <dd>Run the model several times and only accept an answer when the runs agree. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Prompt_engineering" rel=noopener>Wikipedia: Prompt engineering &#8599;</a></div></dd>
 <dt>sierra-snapshot</dt>
 <dd>The tenant that ingests the Sierra ILS catalog nightly and stores it as bitemporal bronze. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
+<dt>single source of truth</dt>
+<dd>One authoritative declaration that every consumer imports, instead of parallel copies kept in sync by hand. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Single_source_of_truth" rel=noopener>Wikipedia: Single source of truth &#8599;</a></div></dd>
 <dt>snapshot</dt>
 <dd>A full read of a source system at a point in time, kept as an immutable record. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
 <dt class=featured>tenants</dt>
@@ -254,5 +277,5 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <div class=t><a href="/2026-05/issue_2_our-data-our-lake/">Our Data, Our Lake</a> <span class=kw>zine</span></div>
 <div class=sum>A printable zine on owning the library&#x27;s data — the lake, in plain language.</div>
 </div>
-<footer>Generated 2026-06-19 from 8 published showboats · the version ledger is git, not a version number.</footer>
+<footer>Generated 2026-07-06 from 9 published showboats · the version ledger is git, not a version number.</footer>
 </body></html>

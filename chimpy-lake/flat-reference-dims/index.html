@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Flat reference dimensions — one manifest, generated
+dims</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style type="text/css">
+:root { --ink:#1a1a1a; --muted:#555; --rule:#e2e2e2; --accent:#3a5a8c; --code-bg:#f6f8fa; }
+* { box-sizing: border-box; }
+body { max-width: 820px; margin: 2.5rem auto; padding: 0 1.25rem;
+font: 16px/1.65 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+color: var(--ink); background:#fff; }
+h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 .25rem; }
+h2 { font-size: 1.4rem; margin: 2.5rem 0 .5rem; padding-top: 1rem; border-top: 2px solid var(--rule); color: var(--accent); }
+h3 { font-size: 1.12rem; margin: 1.75rem 0 .4rem; }
+p { margin: .6rem 0; }
+blockquote { margin: 1rem 0; padding: .5rem 1rem; border-left: 4px solid var(--accent);
+background:#f4f7fb; color: var(--muted); font-size: .94rem; }
+pre { background: var(--code-bg); border: 1px solid var(--rule); border-radius: 6px;
+padding: .85rem 1rem; overflow-x: auto; font-size: 13px; line-height: 1.5; }
+code { font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; }
+p code, li code { background: var(--code-bg); padding: .1rem .35rem; border-radius: 4px; font-size: .9em; }
+strong { color: var(--ink); }
+table { border-collapse: collapse; margin: 1rem 0; }
+th, td { border: 1px solid var(--rule); padding: .35rem .6rem; text-align: left; }
+
+
+pre.sourceCode.bash { background:#eef1f6; border-color:#dbe1ea; }
+pre.sourceCode.bash::before { content:"$ "; color: var(--accent); font-weight:700; }
+
+pre.output { position: relative; margin-top: 1.15rem; padding-top: 2.1rem; }
+pre.output::before {
+content: "output";
+position: absolute; top: 0; left: 0; right: 0; height: 1.55rem;
+padding: .32rem .7rem 0 0; box-sizing: border-box;
+text-align: right; font: .6rem/1 ui-monospace, Menlo, monospace;
+letter-spacing: .08em; color: #8a8f98;
+border-bottom: 1px solid var(--rule); border-radius: 6px 6px 0 0;
+background:
+radial-gradient(circle 3.5px at 13px 11px, #ff5f56 98%, transparent 100%),
+radial-gradient(circle 3.5px at 27px 11px, #ffbd2e 98%, transparent 100%),
+radial-gradient(circle 3.5px at 41px 11px, #27c93f 98%, transparent 100%),
+#ededf1;
+}
+
+pre.output .ok { color:#1a7f37; font-weight:600; }
+pre.output .bad { color:#c1121f; font-weight:600; }
+pre.output .warn { color:#9a6700; font-weight:600; }
+.tier { font-weight:700; border-radius:3px; padding:0 .32rem; font-size:.92em; }
+.tier.t3 { color:#0a7d3f; background:#e7f7ec; }
+.tier.t2 { color:#5a5f68; background:#e9eaee; }
+
+.callout { border-left:4px solid var(--accent); background:#f4f7fb;
+padding:.4rem .9rem; margin:.75rem 0; border-radius:0 4px 4px 0; }
+.callout p { margin:.25rem 0; }
+.callout-what { border-left-color:#3a5a8c; background:#eef3fb; }
+.callout-why { border-left-color:#3f7d4f; background:#eef6ef; }
+.callout-term { border-left-color:#8c6a3a; background:#f8f4ec; }
+
+table tr:first-child th, thead th { background:#eef2f8; }
+tbody tr:nth-child(even), table tr:nth-child(even) td { background:#fafbfd; }
+
+figure.diagram { margin:1.6rem 0; text-align:center; }
+figure.diagram svg { max-width:100%; height:auto; }
+figure.diagram figcaption { color: var(--muted); font-size:.85rem; margin-top:.45rem; }
+</style>
+</head>
+<body>
+<h1 id="flat-reference-dimensions-one-manifest-generated-dims">Flat
+reference dimensions — one manifest, generated dims</h1>
+<p><em>2026-07-06T19:56:45Z by Showboat 0.6.1</em>
+<!-- showboat-id: b952d3cb-959a-4e46-8e51-06ad8c4649f1 --></p>
+<h2 id="flat-reference-dimensions-one-manifest-generated-dims-1">Flat
+reference dimensions — one manifest, generated dims</h2>
+<p><em>Turning Sierra’s cryptic codes (<code>item_status=&#39;!&#39;</code>,
+<code>ptype=0</code>) into staff-facing language
+(<code>ON HOLDSHELF</code>, <code>Unlimited</code>) — without
+hand-copying the same machinery twenty times.</em></p>
+<p>Our library’s Sierra ILS speaks in short codes. An item’s status is a
+single character; a patron type is a small integer; an agency is a
+number. The analytics layer has to show those as <strong>words</strong>,
+which means a <strong>code→label dimension</strong> for each one — a
+little lookup table that says <code>! → ON HOLDSHELF</code>.</p>
+<p>Sierra exposes about <strong>25</strong> of these flat
+<code>X_property</code> / <code>X_property_name</code> dictionary
+tables. They all share one shape, but their column names and types drift
+from table to table — so the tempting path is to hand-write the same
+extract-and-conform machinery once per dim, in <em>two</em> repos (the
+extractor and the transformer). That is the
+<strong>hand-maintained-parallel-list anti-pattern</strong>: two lists
+that must agree, kept in sync by discipline, drifting the moment someone
+forgets.</p>
+<p>This walkthrough shows the approach we took instead. The
+plain-language version is a <strong>label printer with a
+template</strong>: you don’t keep a drawer of hand-typed labels, you
+keep <strong>one template</strong> and reprint from it — and a lint step
+refuses to ship if the printed labels ever stop matching the
+template.</p>
+<blockquote>
+<p><strong>One manifest</strong>
+(<code>chimpy_lake.reference.CODE_TABLES</code>) is the single source of
+truth. A <strong>generator</strong> emits the committed dbt models from
+it; the <strong>extract tenant imports the same manifest</strong> to
+harvest bronze. A <strong><code>--check</code> freshness guard</strong>
+fails the build if the committed output ever drifts. <strong>Adding a
+dim = adding one manifest row + regenerating.</strong></p>
+</blockquote>
+<p>Every beat below runs the <strong>real code</strong> — the actual
+manifest, generator, and committed dbt staging SQL + macro — over a
+small <strong>frozen bronze fixture</strong> with no patron data. The
+commands are reproducible (<code>showboat verify</code> re-runs them);
+the production numbers are called out separately where they can’t be
+reproduced offline.</p>
+<h3 id="the-problem-same-pattern-different-columns">1 · The problem —
+same pattern, different columns</h3>
+<div class="callout callout-what"><p><strong>What.</strong> The three proving tables
+(<code>item_status</code>, <code>agency</code>, <code>ptype</code>) are
+structurally identical — a code table joined to a name table — but every
+column name and type is different. <code>agency</code>’s code is an
+integer; <code>ptype</code> is renamed end to end.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> That per-table drift is exactly what
+makes hand-cloning look easy and go wrong. Two lossy mistakes already
+happened in the hand-built dims: <code>display_order</code> (the
+<em>curated</em> sort order) was dropped from every one, and
+<code>dim_itype</code> silently lost three of its four axes.</p></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py problem</span></code></pre></div>
+<pre class="output"><code>
+The problem — same pattern, different columns (a copy-paste trap)
+=================================================================
+Sierra ships ~25 flat code-&gt;label lookup tables. Three prove the family.
+Every one is an X_property (the code + curated display_order) joined to an
+X_property_name (the English label) — SAME SHAPE, but the column names/types
+drift table to table. That drift is exactly what tempts a hand-copy per dim:
+
+  dim          code column          name column    name-table FK
+  ------------ -------------------- -------------- -------------
+  item_status  code (varchar)       name           item_status_property_id
+  agency       code_num (integer)   name           agency_property_id
+  ptype        value (smallint)     description    ptype_id
+
+agency&#39;s code is an integer; ptype is renamed end to end (value / description /
+ptype_id). Hand-cloning ~20 more of these is where drift and lossy drops creep in
+(two already happened: display_order dropped everywhere, itype lost 3 of 4 axes).</code></pre>
+<h3 id="the-one-manifest">2 · The one manifest</h3>
+<div class="callout callout-what"><p><strong>What.</strong> A single frozen dataclass registry in the
+shared <code>chimpy_lake</code> package — the neutral node
+<strong>both</strong> repos already import. Each row pins the per-table
+variation (which column is the code, its type, which column is the
+label, the FK). Exclusions are first-class entries, so the manifest is
+also the <strong>honest catalog</strong> of what we deliberately don’t
+model, and why.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> One declaration, two consumers.
+There is no second list to keep in sync — the whole class of drift bugs
+is designed out, not tested for after the fact.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>single source of truth</em>; the
+<em>DRY principle</em> (don’t repeat yourself).</p></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py manifest</span></code></pre></div>
+<pre class="output"><code>
+One manifest — chimpy_lake.reference v0.1.0 (the single source of truth)
+========================================================================
+A frozen dataclass registry, versioned in the shared package BOTH repos import:
+the extract tenant harvests from it; the generator emits dbt models from it.
+
+  name         -&gt; sierra tables                             facet
+  item_status  sierra_view.item_status_property(+_name)     true
+  agency       sierra_view.agency_property(+_name)          true
+  ptype        sierra_view.ptype_property(+_name)           true
+                 note: reference dictionary only (non-PII); independent of the GATED patron de-id track
+
+Exclusions are first-class too — the honest catalog of what we DON&#39;T model, and why:
+  - fund           fund-master table (fund_master_id, percentages, is_active), not a code-&gt;label dictionary
+  - external_fund  code_num but no display_order; fund-adjacent footgun
+  - firm           zero rows at CHPL
+  - gtype          zero rows at CHPL
+  - user_defined   consolidated super-table partitioned by user_defined_category_id; Tier-2, deferred
+  - order_status   order family footguns — validate the dictionary before adding
+  - order_type     order family footguns — validate the dictionary before adding
+  - order_note     order family footguns — validate the dictionary before adding
+
+Add a dim = add one CodeTable row + regenerate. No second hand-maintained list.</code></pre>
+<h3 id="bronze-a-faithful-snapshot-with-no-transformation">3 · Bronze —
+a faithful snapshot, with no transformation</h3>
+<div class="callout callout-what"><p><strong>What.</strong> The extract tenant lands each Sierra table
+<strong>verbatim</strong>: every column as text, append-only, all
+languages, one snapshot per weekly harvest. Bronze does
+<strong>not</strong> type, filter, or deduplicate anything.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> The raw truth is always recoverable
+and reprocessing is cheap — if we later change how we conform the data,
+we re-derive from bronze without re-reading Sierra. Keeping the Spanish
+rows, the un-labelled codes, and <em>both</em> harvests of every name is
+the point: bronze remembers everything; silver decides.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>medallion architecture</em>
+(bronze → silver → gold); <em>schema-on-read</em>; <em>SCD Type 0</em>
+(a landed snapshot is never edited — history is append-only).</p></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py bronze</span></code></pre></div>
+<pre class="output"><code>
+Bronze — a faithful snapshot: NO transformation happens here
+============================================================
+The extract tenant lands each X_property / X_property_name verbatim: every
+column VARCHAR, append-only, ALL languages, one snapshot per weekly harvest.
+Nothing is typed, filtered, or deduplicated at this layer (schema-on-read /
+SCD Type 0) — the raw truth is always recoverable.
+
+reference.item_status_property_name_snapshots — 11 raw rows across 2 harvests:
+  fk   name               lang  observed_at
+  1    AVAILABLE          1     2026-06-29T00:00:00
+  1    DISPONIBLE         2     2026-06-29T00:00:00
+  2    ON HOLDSHELF       1     2026-06-29T00:00:00
+  3    IN TRANSIT         1     2026-06-29T00:00:00
+  4    IN TRANSIT LONG    1     2026-06-29T00:00:00
+  5    NULL               1     2026-06-29T00:00:00
+  1    AVAILABLE          1     2026-07-06T00:00:00
+  2    ON HOLDSHELF       1     2026-07-06T00:00:00
+  3    NULL               1     2026-07-06T00:00:00
+  4    LONG INTRANSIT     1     2026-07-06T00:00:00
+  5    NULL               1     2026-07-06T00:00:00
+
+Note what bronze KEEPS, untouched: the Spanish row (lang 2), the un-labelled
+code (fk 5, NULL name), BOTH harvests of every name, and a rename in flight
+(fk 4: &#39;IN TRANSIT LONG&#39; then &#39;LONG INTRANSIT&#39;). Silver decides what to do with
+all of it — bronze just remembers.</code></pre>
+<h3 id="generate-one-row-becomes-a-full-model-set">4 · Generate — one
+row becomes a full model set</h3>
+<div class="callout callout-what"><p><strong>What.</strong> <code>chimpy-lake gen-reference-dims</code>
+reads the manifest and emits, per row: two thin staging models, a
+<strong>one-call</strong> dim that delegates to the shared macro, and
+the spliced <code>_sources.yml</code> / <code>_dims.yml</code> blocks.
+Every generated file is stamped
+<code>GENERATED FROM chimpy_lake.reference vX — do not edit</code>
+(provenance you can grep for).</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> The dim files carry no logic — the
+logic lives once, in the macro. And because the output is <em>provably
+derived</em>, we can ask at any time whether the committed tree still
+matches the manifest. It does: the run below reports
+<strong>fresh</strong>.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>code generation</em>;
+<em>provenance</em>; <em>idempotence</em> (regenerating a clean tree
+changes nothing).</p></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py generate</span></code></pre></div>
+<pre class="output"><code>
+Generate — one manifest row becomes a full, provenance-stamped model set
+========================================================================
+`chimpy-lake gen-reference-dims` renders, per row: two stg models, a thin dim,
+and the spliced _sources.yml / _dims.yml blocks. The dim is a ONE-CALL stub into
+the shared macro (the logic lives once):
+
+--- transform/reference_dims/models/dims/dim_item_status.sql (generated) ---
+-- GENERATED FROM chimpy_lake.reference v0.1.0 — do not edit
+{{ config(materialized=&#39;table&#39;, alias=&#39;item_status&#39;) }}
+{{ reference_flat_dim(
+    stg_property=&#39;stg_item_status_property&#39;,
+    stg_name=&#39;stg_item_status_property_name&#39;,
+    code_column=&#39;code&#39;,
+    name_column=&#39;name&#39;,
+    fk_column=&#39;item_status_property_id&#39;,
+    code_out=&#39;item_status_code&#39;,
+    name_out=&#39;item_status_name&#39;) }}
+
+--- the managed block spliced into models/staging/_sources.yml ---
+# GENERATED FROM chimpy_lake.reference v0.1.0 — do not edit
+# flat-dictionary sources (managed block)
+      - name: item_status_property_snapshots
+      - name: item_status_property_name_snapshots
+      - name: agency_property_snapshots
+      - name: agency_property_name_snapshots
+      - name: ptype_property_snapshots
+      - name: ptype_property_name_snapshots
+
+Idempotence / freshness — does the committed tree still match the manifest?
+  reference dims fresh.  (rc=0)
+
+Every generated file carries `-- GENERATED FROM chimpy_lake.reference v0.1.0 — do not edit`.</code></pre>
+<h3 id="the-freshness-guard-bites">5 · The freshness guard bites</h3>
+<div class="callout callout-what"><p><strong>What.</strong> <code>--check</code> re-derives every artifact
+from the manifest and fails (<code>rc=1</code>) if any committed file
+differs. It’s wired into the transform runner’s freshness gate, so a
+drifted commit fails the nightly build <strong>fast</strong>, before dbt
+touches the lake.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> This is the crucial distinction from
+a parity test. A parity test compares two hand-maintained lists
+<em>after</em> they’ve diverged. This polices <strong>one generator
+against one source</strong> — there is no second list. The fix for drift
+is never a hand-patch; it’s regenerate-and-commit.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>freshness guard</em> vs <em>parity
+test</em>; <em>fail-fast</em>.</p></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py guard</span></code></pre></div>
+<pre class="output"><code>
+The freshness guard bites — a drifted commit fails the build fast
+=================================================================
+`--check` (the same check_all() wired into run_transform.py&#39;s freshness gate)
+re-derives every artifact from the manifest and fails rc=1 on ANY drift. It
+polices ONE generator against ONE source — not two hand-lists reconciled later.
+
+clean tree:
+  reference dims fresh.  (rc=0)
+
+after a hand-edit to dim_agency.sql:
+  STALE: dims/dim_agency.sql
+  reference dims are <span class="warn">stale</span> — run `chimpy-lake gen-reference-dims` and commit.
+  (rc=1)
+
+The fix is never a hand-patch — it&#39;s regenerate-and-commit. The template is law.</code></pre>
+<h3 id="silver-the-one-transformation-run">6 · Silver — the one
+transformation, run</h3>
+<div class="callout callout-what"><p><strong>What.</strong> All the conforming logic — typing, the
+English-only filter (<code>iii_language_id=1</code>), the <strong>Type-1
+latest-per-code</strong> pick, and the append-only <strong>name
+dedup</strong> — lives in a single shared dbt macro. Here it runs,
+unmodified, over the frozen bronze from beat 3, producing the conformed
+dims.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> One query has to get several subtle
+things right at once, and the macro does: a code keeps its
+<strong>curated</strong> sort order (not alphabetical); a <em>later</em>
+NULL-name harvest does <strong>not</strong> clobber a resolved label; a
+renamed code takes its newest non-null name; an un-labelled code is
+<strong>kept</strong> as NULL, never dropped; and the grain holds —
+exactly one row per code — despite two harvests of every name. The
+load-bearing bit is a single <code>(name is not null) desc</code> sort
+key; get it wrong and unlabelled codes silently vanish.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>conformed dimension</em>; <em>SCD
+Type 1</em> (current value per key); <em>grain</em> (one row per
+code).</p></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py silver</span></code></pre></div>
+<pre class="output"><code>
+Silver — the one transformation, run over the frozen bronze
+===========================================================
+Typing, English filter (iii_language_id=1), Type-1 latest-per-code, and the
+append-only NAME dedup all happen HERE, via the shared macro. Row counts from
+the fixture (prod carries far more: 30 / 53 / 45):
+
+  dim                     rows  code type
+  reference.item_status      5  varchar
+  reference.agency           3  integer
+  reference.ptype            3  smallint
+
+reference.item_status (ordered by display_order — the CURATED sort, not A-Z):
+  code  name             display_order
+  -     AVAILABLE        0
+  !     ON HOLDSHELF     1
+  t     IN TRANSIT       5
+  g     LONG INTRANSIT   6
+  n     NULL  &lt;- kept    10
+
+What that one query got right, all from the macro:
+  - t  -&gt; IN TRANSIT     a LATER null-name harvest did NOT clobber the resolved name
+  - g  -&gt; LONG INTRANSIT a rename kept its newest non-null label
+  - n  -&gt; NULL           an unlabelled code is KEPT (left join), never dropped
+  - the Spanish &#39;DISPONIBLE&#39; row was filtered out (English only)
+  - grain intact: 0 duplicate codes despite 2 harvests of every English name
+
+reference.agency (integer code) and reference.ptype (smallint / description / ptype_id):
+  agency   1 -&gt; Main Library, 4 -&gt; Branch Libraries, 11 -&gt; Outreach Services
+  ptype    0 -&gt; Unlimited, 1 -&gt; Adult, 10 -&gt; Staff</code></pre>
+<h3 id="the-enforced-contract">7 · The enforced contract</h3>
+<div class="callout callout-what"><p><strong>What.</strong> Each generated dim ships an
+<strong>enforced</strong> dbt contract that pins every column name and
+type. If a build ever produces a different shape, dbt aborts with
+<code>data type mismatch</code>, exit 1 — the same guardrail that
+already caught a real type drift on <code>itype</code>. Grain
+(<code>not_null</code> + <code>unique</code> on the code) stays as data
+tests, because DuckLake refuses PRIMARY KEY / UNIQUE DDL;
+<code>display_order</code> gets its own <code>not_null</code> test as
+the curated sort key.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> The manifest guarantees the models
+are <em>generated right</em>; the contract guarantees they <em>stay
+right</em> at build time. Two independent guards — one on the source,
+one on the output — with no hand-maintained list between them.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>data contract / contract
+enforcement</em>; <em>data quality as code</em>.</p></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py contract</span></code></pre></div>
+<pre class="output"><code>
+The enforced contract — the conformed shape is pinned, drift fails loud
+=======================================================================
+Each generated dim ships an ENFORCED dbt contract (config.contract.enforced:
+true) that pins every column name + type. If a build ever produces a different
+shape, dbt aborts with `data type mismatch`, exit 1 — the same way itype&#39;s
+contract already caught a real type drift. The managed _dims.yml block:
+
+# GENERATED FROM chimpy_lake.reference v0.1.0 — do not edit
+# flat-dictionary dims (managed block)
+  - name: dim_item_status
+    description: &quot;Conformed Sierra item_status dimension (one row per item_status_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: item_status_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: item_status_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_agency
+    description: &quot;Conformed Sierra agency dimension (one row per agency_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: agency_code
+        data_type: integer
+        tests: [not_null, unique]
+      - name: agency_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_ptype
+    description: &quot;Conformed Sierra ptype dimension (one row per ptype_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: ptype_code
+        data_type: smallint
+        tests: [not_null, unique]
+      - name: ptype_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+
+Grain (not_null + unique on the code) stays a dbt DATA test, never a contract
+constraint — DuckLake rejects PRIMARY KEY / UNIQUE DDL. display_order gets its
+own not_null test: it is the curated sort key and 0-null across every table, so
+a null there is a real regression worth failing.</code></pre>
+<h3 id="whats-live-in-the-lake-right-now">What’s live in the lake right
+now</h3>
+<p>Everything above runs offline against a frozen fixture so it
+reproduces. For the record, here is the <strong>production</strong>
+state (verified 2026-07-06 by a read-only query of the live lake — not
+reproduced here, because live counts change as Sierra changes):</p>
+<table>
+<thead>
+<tr class="header">
+<th>dim</th>
+<th style="text-align: right;">rows</th>
+<th>code type</th>
+<th>a real label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>reference.item_status</code></td>
+<td style="text-align: right;">30</td>
+<td>varchar</td>
+<td><code>!</code> → ON HOLDSHELF</td>
+</tr>
+<tr class="even">
+<td><code>reference.agency</code></td>
+<td style="text-align: right;">53</td>
+<td>integer</td>
+<td><code>1</code> → Main Library</td>
+</tr>
+<tr class="odd">
+<td><code>reference.ptype</code></td>
+<td style="text-align: right;">45</td>
+<td>smallint</td>
+<td><code>0</code> → Unlimited</td>
+</tr>
+</tbody>
+</table>
+<p>Plus six <code>*_property(_name)_snapshots</code> bronze tables,
+provenance <code>sierra-db.cincinnatilibrary.org</code>. Both the
+extract harvest and the transform build run on enabled <strong>weekly
+(Sunday)</strong> systemd timers, so the dims stay fresh with no
+hand-holding. The <code>item_status</code> dim is the join target that
+lets the long-in-transit worklist show <code>IN TRANSIT</code> instead
+of a bare <code>t</code>.</p>
+<h3 id="proof">Proof</h3>
+<p>Every command above is reproducible — <code>showboat verify</code>
+re-runs each one and diffs its output. The thesis invariants (the shared
+macro’s NULL-kept / no-clobber / rename-wins / grain behaviour, the
+code-type variants, and the committed tree’s freshness against the
+manifest) ship as a guard test:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest tests/demos/test_flat_reference_dims.py <span class="at">-q</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">&#39;s/ in [0-9.]+s//&#39;</span></span></code></pre></div>
+<pre class="output"><code>...                                                                      [100%]
+3 <span class="ok">passed</span></code></pre>
+<h2 id="glossary">Glossary</h2>
+<ul>
+<li><strong>Code→label dimension</strong> — a lookup table mapping a raw
+Sierra code to a human name (<code>! → ON HOLDSHELF</code>). (Beats 1,
+6)</li>
+<li><strong>Single source of truth / DRY</strong> — one authoritative
+declaration that all consumers import, instead of parallel
+hand-maintained copies. (Beat 2)</li>
+<li><strong>Medallion (bronze/silver/gold)</strong> — layered refinement
+from raw to query-ready. Bronze is verbatim; silver conforms; gold
+aggregates. (Beats 3, 6)</li>
+<li><strong>Schema-on-read / SCD Type 0</strong> — store raw now, impose
+structure at query time; a landed snapshot is never edited. (Beat
+3)</li>
+<li><strong>Code generation / provenance</strong> — the dbt models are
+emitted from the manifest and stamped with their origin, not written by
+hand. (Beat 4)</li>
+<li><strong>Freshness guard vs parity test</strong> — a guard polices
+one generator against one source; a parity test reconciles two lists
+after they diverge. We use the guard. (Beat 5)</li>
+<li><strong>SCD Type 1 / grain</strong> — keep the current value per
+key; the grain is one row per code. (Beat 6)</li>
+<li><strong>Data contract</strong> — an enforced declaration of a
+model’s columns + types; a drifting build fails loud. (Beat 7)</li>
+</ul>
+<h2 id="where-this-goes-next-backlog-not-commitments">Where this goes
+next — backlog, not commitments</h2>
+<p>The generator deliberately ships a <strong>narrow</strong> proving
+set. What it unlocks, posed as direction rather than done work:</p>
+<ul>
+<li><strong>The rest of the eligible family, one row each.</strong> A
+dozen more flat dictionaries (<code>bib_level</code>, <code>form</code>,
+<code>material</code>, <code>language</code>, <code>country</code>, …)
+are catalogued in the manifest as backlog. Each is a one-line
+<code>CodeTable</code> addition plus a regenerate — no new
+machinery.</li>
+<li><strong>The conformed reference <em>hierarchy</em> (sub-project
+#2).</strong> <code>branch</code> / <code>location</code> /
+<code>statistic_group</code> / <code>itype</code> are a snowflake with
+name-path structure and data-quality landmines; they stay hand-built
+here and get their own treatment later.</li>
+<li><strong>A reference data-quality layer (sub-project #3).</strong>
+Referential-integrity, naming-convention, and retired-placeholder
+detection (the en-dash names, the “DO NOT USE” rows, an orphaned
+<code>statistic_group</code>) — surfaced in discovery, not yet
+built.</li>
+<li><strong><code>display_order</code> backport.</strong> Now that it’s
+standard, the four existing hand-built dims can gain the curated sort
+key they dropped.</li>
+</ul>
+<p><strong>The claim isn’t cleverness — it’s the opposite.</strong> One
+manifest, one macro, one guard, and the whole flat family conforms
+itself. Everything above re-runs on demand.</p>
+<hr>
+<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">&larr; <a href="../">all walkthroughs</a> &middot; Rendered from <code>81546b1</code> on 2026-07-06 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
+</body>
+</html>
