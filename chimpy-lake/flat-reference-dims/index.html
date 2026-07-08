@@ -142,8 +142,8 @@ figure.diagram figcaption { color: var(--muted); font-size:.85rem; margin-top:.4
 <body>
 <h1 id="flat-reference-dimensions-one-manifest-generated-dims">Flat
 reference dimensions — one manifest, generated dims</h1>
-<p><em>2026-07-06T19:56:45Z by Showboat 0.6.1</em>
-<!-- showboat-id: b952d3cb-959a-4e46-8e51-06ad8c4649f1 --></p>
+<p><em>2026-07-08T02:02:21Z by Showboat 0.6.1</em>
+<!-- showboat-id: f5ca761a-ff18-452b-9da8-231055474321 --></p>
 <h2 id="flat-reference-dimensions-one-manifest-generated-dims-1">Flat
 reference dimensions — one manifest, generated dims</h2>
 <p><em>Turning Sierra’s cryptic codes (<code>item_status=&#39;!&#39;</code>,
@@ -222,7 +222,10 @@ shared <code>chimpy_lake</code> package — the neutral node
 variation (which column is the code, its type, which column is the
 label, the FK). Exclusions are first-class entries, so the manifest is
 also the <strong>honest catalog</strong> of what we deliberately don’t
-model, and why.</p></div>
+model, and why. This walkthrough follows the <strong>three proving
+rows</strong> that exercise every field-mapping variant; the manifest
+now holds many more, each added the same one-row way (see the
+closer).</p></div>
 <div class="callout callout-why"><p><strong>Why it matters.</strong> One declaration, two consumers.
 There is no second list to keep in sync — the whole class of drift bugs
 is designed out, not tested for after the fact.</p></div>
@@ -230,7 +233,7 @@ is designed out, not tested for after the fact.</p></div>
 <em>DRY principle</em> (don’t repeat yourself).</p></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py manifest</span></code></pre></div>
 <pre class="output"><code>
-One manifest — chimpy_lake.reference v0.1.0 (the single source of truth)
+One manifest — chimpy_lake.reference v0.2.0 (the single source of truth)
 ========================================================================
 A frozen dataclass registry, versioned in the shared package BOTH repos import:
 the extract tenant harvests from it; the generator emits dbt models from it.
@@ -319,7 +322,7 @@ and the spliced _sources.yml / _dims.yml blocks. The dim is a ONE-CALL stub into
 the shared macro (the logic lives once):
 
 --- transform/reference_dims/models/dims/dim_item_status.sql (generated) ---
--- GENERATED FROM chimpy_lake.reference v0.1.0 — do not edit
+-- GENERATED FROM chimpy_lake.reference v0.2.0 — do not edit
 {{ config(materialized=&#39;table&#39;, alias=&#39;item_status&#39;) }}
 {{ reference_flat_dim(
     stg_property=&#39;stg_item_status_property&#39;,
@@ -331,7 +334,7 @@ the shared macro (the logic lives once):
     name_out=&#39;item_status_name&#39;) }}
 
 --- the managed block spliced into models/staging/_sources.yml ---
-# GENERATED FROM chimpy_lake.reference v0.1.0 — do not edit
+# GENERATED FROM chimpy_lake.reference v0.2.0 — do not edit
 # flat-dictionary sources (managed block)
       - name: item_status_property_snapshots
       - name: item_status_property_name_snapshots
@@ -339,49 +342,49 @@ the shared macro (the logic lives once):
       - name: agency_property_name_snapshots
       - name: ptype_property_snapshots
       - name: ptype_property_name_snapshots
+      - name: billing_location_property_snapshots
+      - name: billing_location_property_name_snapshots
+      - name: temp_location_property_snapshots
+      - name: temp_location_property_name_snapshots
+      - name: receiving_location_property_snapshots
+      - name: receiving_location_property_name_snapshots
+      - name: receiving_action_property_snapshots
+      - name: receiving_action_property_name_snapshots
+      - name: bib_level_property_snapshots
+      - name: bib_level_property_name_snapshots
+      - name: form_property_snapshots
+      - name: form_property_name_snapshots
+      - name: mblock_property_snapshots
+      - name: mblock_property_name_snapshots
+      - name: notification_medium_property_snapshots
+      - name: notification_medium_property_name_snapshots
+      - name: claim_action_property_snapshots
+      - name: claim_action_property_name_snapshots
+      - name: acq_type_property_snapshots
+      - name: acq_type_property_name_snapshots
+      - name: material_property_snapshots
+      - name: material_property_name_snapshots
+      - name: branch_snapshots
+      - name: branch_name_snapshots
+      - name: location_snapshots
+      - name: location_name_snapshots
+      - name: statistic_group_snapshots
+      - name: statistic_group_name_snapshots
 
 Idempotence / freshness — does the committed tree still match the manifest?
   reference dims fresh.  (rc=0)
 
-Every generated file carries `-- GENERATED FROM chimpy_lake.reference v0.1.0 — do not edit`.</code></pre>
-<h3 id="the-freshness-guard-bites">5 · The freshness guard bites</h3>
-<div class="callout callout-what"><p><strong>What.</strong> <code>--check</code> re-derives every artifact
-from the manifest and fails (<code>rc=1</code>) if any committed file
-differs. It’s wired into the transform runner’s freshness gate, so a
-drifted commit fails the nightly build <strong>fast</strong>, before dbt
-touches the lake.</p></div>
-<div class="callout callout-why"><p><strong>Why it matters.</strong> This is the crucial distinction from
-a parity test. A parity test compares two hand-maintained lists
-<em>after</em> they’ve diverged. This polices <strong>one generator
-against one source</strong> — there is no second list. The fix for drift
-is never a hand-patch; it’s regenerate-and-commit.</p></div>
-<div class="callout callout-term"><p><strong>Term to know:</strong> <em>freshness guard</em> vs <em>parity
-test</em>; <em>fail-fast</em>.</p></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py guard</span></code></pre></div>
-<pre class="output"><code>
-The freshness guard bites — a drifted commit fails the build fast
-=================================================================
-`--check` (the same check_all() wired into run_transform.py&#39;s freshness gate)
-re-derives every artifact from the manifest and fails rc=1 on ANY drift. It
-polices ONE generator against ONE source — not two hand-lists reconciled later.
-
-clean tree:
-  reference dims fresh.  (rc=0)
-
-after a hand-edit to dim_agency.sql:
-  STALE: dims/dim_agency.sql
-  reference dims are <span class="warn">stale</span> — run `chimpy-lake gen-reference-dims` and commit.
-  (rc=1)
-
-The fix is never a hand-patch — it&#39;s regenerate-and-commit. The template is law.</code></pre>
-<h3 id="silver-the-one-transformation-run">6 · Silver — the one
+Every generated file carries `-- GENERATED FROM chimpy_lake.reference v0.2.0 — do not edit`.</code></pre>
+<h3 id="silver-the-one-transformation-run">5 · Silver — the one
 transformation, run</h3>
 <div class="callout callout-what"><p><strong>What.</strong> All the conforming logic — typing, the
 English-only filter (<code>iii_language_id=1</code>), the <strong>Type-1
 latest-per-code</strong> pick, and the append-only <strong>name
 dedup</strong> — lives in a single shared dbt macro. Here it runs,
 unmodified, over the frozen bronze from beat 3, producing the conformed
-dims.</p></div>
+dims — including the payoff this whole walkthrough follows:
+<code>item_status</code> code <code>t</code> now reads as <strong>IN
+TRANSIT</strong>.</p></div>
 <div class="callout callout-why"><p><strong>Why it matters.</strong> One query has to get several subtle
 things right at once, and the macro does: a code keeps its
 <strong>curated</strong> sort order (not alphabetical); a <em>later</em>
@@ -394,7 +397,7 @@ key; get it wrong and unlabelled codes silently vanish.</p></div>
 <div class="callout callout-term"><p><strong>Term to know:</strong> <em>conformed dimension</em>; <em>SCD
 Type 1</em> (current value per key); <em>grain</em> (one row per
 code).</p></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py silver</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py silver</span></code></pre></div>
 <pre class="output"><code>
 Silver — the one transformation, run over the frozen bronze
 ===========================================================
@@ -425,6 +428,36 @@ What that one query got right, all from the macro:
 reference.agency (integer code) and reference.ptype (smallint / description / ptype_id):
   agency   1 -&gt; Main Library, 4 -&gt; Branch Libraries, 11 -&gt; Outreach Services
   ptype    0 -&gt; Unlimited, 1 -&gt; Adult, 10 -&gt; Staff</code></pre>
+<h3 id="the-freshness-guard-bites">6 · The freshness guard bites</h3>
+<div class="callout callout-what"><p><strong>What.</strong> <code>--check</code> re-derives every artifact
+from the manifest and fails (<code>rc=1</code>) if any committed file
+differs. It’s wired into the transform runner’s freshness gate, so a
+drifted commit fails the nightly build <strong>fast</strong>, before dbt
+touches the lake.</p></div>
+<div class="callout callout-why"><p><strong>Why it matters.</strong> This is the crucial distinction from
+a parity test. A parity test compares two hand-maintained lists
+<em>after</em> they’ve diverged. This polices <strong>one generator
+against one source</strong> — there is no second list. The fix for drift
+is never a hand-patch; it’s regenerate-and-commit.</p></div>
+<div class="callout callout-term"><p><strong>Term to know:</strong> <em>freshness guard</em> vs <em>parity
+test</em>; <em>fail-fast</em>.</p></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python docs/demos/flat-reference-dims/_driver.py guard</span></code></pre></div>
+<pre class="output"><code>
+The freshness guard bites — a drifted commit fails the build fast
+=================================================================
+`--check` (the same check_all() wired into run_transform.py&#39;s freshness gate)
+re-derives every artifact from the manifest and fails rc=1 on ANY drift. It
+polices ONE generator against ONE source — not two hand-lists reconciled later.
+
+clean tree:
+  reference dims fresh.  (rc=0)
+
+after a hand-edit to dim_agency.sql:
+  STALE: dims/dim_agency.sql
+  reference dims are <span class="warn">stale</span> — run `chimpy-lake gen-reference-dims` and commit.
+  (rc=1)
+
+The fix is never a hand-patch — it&#39;s regenerate-and-commit. The template is law.</code></pre>
 <h3 id="the-enforced-contract">7 · The enforced contract</h3>
 <div class="callout callout-what"><p><strong>What.</strong> Each generated dim ships an
 <strong>enforced</strong> dbt contract that pins every column name and
@@ -450,7 +483,7 @@ true) that pins every column name + type. If a build ever produces a different
 shape, dbt aborts with `data type mismatch`, exit 1 — the same way itype&#39;s
 contract already caught a real type drift. The managed _dims.yml block:
 
-# GENERATED FROM chimpy_lake.reference v0.1.0 — do not edit
+# GENERATED FROM chimpy_lake.reference v0.2.0 — do not edit
 # flat-dictionary dims (managed block)
   - name: dim_item_status
     description: &quot;Conformed Sierra item_status dimension (one row per item_status_code). Type-1 current, latest-per-code-ever-seen.&quot;
@@ -505,6 +538,273 @@ contract already caught a real type drift. The managed _dims.yml block:
       - name: display_order
         data_type: integer
         tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_billing_location
+    description: &quot;Conformed Sierra billing_location dimension (one row per billing_location_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: billing_location_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: billing_location_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_temp_location
+    description: &quot;Conformed Sierra temp_location dimension (one row per temp_location_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: temp_location_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: temp_location_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_receiving_location
+    description: &quot;Conformed Sierra receiving_location dimension (one row per receiving_location_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: receiving_location_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: receiving_location_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_receiving_action
+    description: &quot;Conformed Sierra receiving_action dimension (one row per receiving_action_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: receiving_action_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: receiving_action_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_bib_level
+    description: &quot;Conformed Sierra bib_level dimension (one row per bib_level_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: bib_level_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: bib_level_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_form
+    description: &quot;Conformed Sierra form dimension (one row per form_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: form_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: form_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_mblock
+    description: &quot;Conformed Sierra mblock dimension (one row per mblock_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: mblock_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: mblock_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_notification_medium
+    description: &quot;Conformed Sierra notification_medium dimension (one row per notification_medium_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: notification_medium_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: notification_medium_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_claim_action
+    description: &quot;Conformed Sierra claim_action dimension (one row per claim_action_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: claim_action_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: claim_action_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_acq_type
+    description: &quot;Conformed Sierra acq_type dimension (one row per acq_type_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: acq_type_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: acq_type_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_material
+    description: &quot;Conformed Sierra material dimension (one row per material_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: material_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: material_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: display_order
+        data_type: integer
+        tests: [not_null]
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_branch
+    description: &quot;Conformed Sierra branch dimension (one row per branch_code_num). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: branch_code_num
+        data_type: integer
+        tests: [not_null, unique]
+      - name: branch_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_location
+    description: &quot;Conformed Sierra location dimension (one row per location_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: location_code
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: location_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: branch_code_num
+        data_type: integer
+      - name: parent_location_code
+        data_type: varchar
+      - name: is_public
+        data_type: boolean
+      - name: is_requestable
+        data_type: boolean
+      - name: observed_at
+        data_type: varchar
+      - name: provenance
+        data_type: varchar
+  - name: dim_statistic_group
+    description: &quot;Conformed Sierra statistic_group dimension (one row per statistic_group_code). Type-1 current, latest-per-code-ever-seen.&quot;
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: statistic_group_code
+        data_type: integer
+        tests: [not_null, unique]
+      - name: statistic_group_name
+        data_type: varchar
+        description: &quot;English (iii_language_id=1) label; NULL when unresolved (kept).&quot;
+      - name: location_code
+        data_type: varchar
       - name: observed_at
         data_type: varchar
       - name: provenance
@@ -570,56 +870,62 @@ manifest) ship as a guard test:</p>
 <ul>
 <li><strong>Code→label dimension</strong> — a lookup table mapping a raw
 Sierra code to a human name (<code>! → ON HOLDSHELF</code>). (Beats 1,
-6)</li>
+5)</li>
 <li><strong>Single source of truth / DRY</strong> — one authoritative
 declaration that all consumers import, instead of parallel
 hand-maintained copies. (Beat 2)</li>
 <li><strong>Medallion (bronze/silver/gold)</strong> — layered refinement
 from raw to query-ready. Bronze is verbatim; silver conforms; gold
-aggregates. (Beats 3, 6)</li>
+aggregates. (Beats 3, 5)</li>
 <li><strong>Schema-on-read / SCD Type 0</strong> — store raw now, impose
 structure at query time; a landed snapshot is never edited. (Beat
 3)</li>
 <li><strong>Code generation / provenance</strong> — the dbt models are
 emitted from the manifest and stamped with their origin, not written by
 hand. (Beat 4)</li>
+<li><strong>SCD Type 1 / grain</strong> — keep the current value per
+key; the grain is one row per code. (Beat 5)</li>
 <li><strong>Freshness guard vs parity test</strong> — a guard polices
 one generator against one source; a parity test reconciles two lists
-after they diverge. We use the guard. (Beat 5)</li>
-<li><strong>SCD Type 1 / grain</strong> — keep the current value per
-key; the grain is one row per code. (Beat 6)</li>
+after they diverge. We use the guard. (Beat 6)</li>
 <li><strong>Data contract</strong> — an enforced declaration of a
 model’s columns + types; a drifting build fails loud. (Beat 7)</li>
 </ul>
+<h2 id="adding-the-next-dimension-is-one-row">Adding the next dimension
+is one row</h2>
+<p>You already watched this happen. Back in <strong>beat 4</strong>, one
+manifest row produced an entire model set — two staging models, a
+one-call dim, and the spliced contract blocks — all provenance-stamped,
+from a single <code>CodeTable</code> entry. That <em>is</em> the payoff:
+<strong>adding a Sierra code→label dimension is one row plus a
+regenerate.</strong> No new SQL, no second list to update, no per-dim
+machinery. The macro holds the logic once; the freshness guard keeps
+every generated file honest against the manifest; the contract keeps
+every built dim honest against its shape.</p>
+<p>And it isn’t hypothetical. This walkthrough follows three tables;
+<strong>since it first shipped, the manifest has grown to seventeen flat
+rows</strong> — <code>bib_level</code>, <code>form</code>,
+<code>material</code>, the location family, and more — each added as a
+single <code>CodeTable</code> row, with no new SQL and no second list to
+keep in sync. The one-row thesis, proven in production.</p>
 <h2 id="where-this-goes-next-backlog-not-commitments">Where this goes
 next — backlog, not commitments</h2>
-<p>The generator deliberately ships a <strong>narrow</strong> proving
-set. What it unlocks, posed as direction rather than done work:</p>
+<p>Beyond the flat dictionaries, posed as direction rather than done
+work:</p>
 <ul>
-<li><strong>The rest of the eligible family, one row each.</strong> A
-dozen more flat dictionaries (<code>bib_level</code>, <code>form</code>,
-<code>material</code>, <code>language</code>, <code>country</code>, …)
-are catalogued in the manifest as backlog. Each is a one-line
-<code>CodeTable</code> addition plus a regenerate — no new
-machinery.</li>
-<li><strong>The conformed reference <em>hierarchy</em> (sub-project
-#2).</strong> <code>branch</code> / <code>location</code> /
-<code>statistic_group</code> / <code>itype</code> are a snowflake with
-name-path structure and data-quality landmines; they stay hand-built
-here and get their own treatment later.</li>
-<li><strong>A reference data-quality layer (sub-project #3).</strong>
+<li><strong>A reference data-quality layer.</strong>
 Referential-integrity, naming-convention, and retired-placeholder
 detection (the en-dash names, the “DO NOT USE” rows, an orphaned
-<code>statistic_group</code>) — surfaced in discovery, not yet
-built.</li>
-<li><strong><code>display_order</code> backport.</strong> Now that it’s
-standard, the four existing hand-built dims can gain the curated sort
-key they dropped.</li>
+<code>statistic_group</code>) — surfaced in discovery, still ahead.</li>
+<li><strong>Richer hierarchy modelling.</strong> The <code>branch</code>
+/ <code>location</code> / <code>statistic_group</code> snowflake has
+name-path rollups and data-quality landmines beyond the flat code→label
+shape shown here.</li>
 </ul>
 <p><strong>The claim isn’t cleverness — it’s the opposite.</strong> One
 manifest, one macro, one guard, and the whole flat family conforms
 itself. Everything above re-runs on demand.</p>
 <hr>
-<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">&larr; <a href="../">all walkthroughs</a> &middot; Rendered from <code>81546b1</code> on 2026-07-06 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:#6b6b6b">&larr; <a href="../">all walkthroughs</a> &middot; Rendered from <code>ff1fb5a</code> on 2026-07-08 &middot; <code>showboat verify</code>: reproduces. A living artifact &mdash; the version ledger is git.</p>
 </body>
 </html>
