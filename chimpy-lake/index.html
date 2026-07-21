@@ -40,6 +40,20 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <p class=lede>Narrated, <em>reproducible</em> walkthroughs of working code from the chimpy-lake data platform. Each one shows real commands and their captured output; each is a living artifact — always the current render of current code.</p>
 <h2>Walkthroughs</h2>
 <div class=item>
+<div class=t><a href="declare-to-publish-simple/">Declare to publish (Simple English)</a> <span class=status>published &middot; 2026-07-20</span></div>
+<div class=sub>the open-tier PII rule, in Simple English Wikipedia style — short sentences, every hard word explained</div>
+<div class=rel>Related: <a href="declare-to-publish/">Declare to publish</a></div>
+<div class=sum>A Simple English retelling of the &#x27;declare to publish&#x27; walkthrough: the library keeps private reader facts out of open reports because a report may show a column only if a person wrote it on a list first. Same real, reproducible steps; plain words.</div>
+<div><span class="kw">Simple English</span><span class="kw">default-deny</span><span class="kw">PII governance</span><span class="kw">allowlist</span><span class="kw">plain language</span><span class="kw">accessibility</span><span class="kw">sensitivity tiers</span><span class="kw">dry run</span></div>
+</div>
+<div class=item>
+<div class=t><a href="declare-to-publish/">Declare to publish</a> <span class=status>published &middot; 2026-07-20</span></div>
+<div class=sub>how the open mart tier proves it carries no PII — by refusing what a manifest didn&#x27;t declare</div>
+<div class=rel>Related: <a href="declare-to-publish-simple/">Declare to publish (Simple English)</a> &middot; <a href="by-the-book/">chimpy-lake, by the book</a> &middot; <a href="scaffold-a-tenant/">Scaffolding a tenant: from cookiecutter to conformance</a></div>
+<div class=sum>Follows one mart through the open-tier governance choke point — where publishing is default-deny by declaration, not by scanning — then to the merged-but-gated machinery that will carry it to the ils-reports host, and an honest map of what&#x27;s left.</div>
+<div><span class="kw">default-deny</span><span class="kw">PII governance</span><span class="kw">data contracts</span><span class="kw">allowlist</span><span class="kw">sensitivity tiers</span><span class="kw">fail-open</span><span class="kw">fail-closed</span><span class="kw">Datasette</span><span class="kw">dry run</span><span class="kw">mart tiering</span></div>
+</div>
+<div class=item>
 <div class=t><a href="data-consistency/">The consistency report</a> <span class=status>published &middot; 2026-07-07</span></div>
 <div class=sub>making reference-data drift visible — never fatal, never silent</div>
 <div class=rel>Related: <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a> &middot; <a href="by-the-book/">chimpy-lake, by the book</a></div>
@@ -110,12 +124,16 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dl class=kwindex>
 <dt>abstain</dt>
 <dd>Withholding an estimate when the model&#x27;s runs disagree too much — &#x27;don&#x27;t know&#x27; is an honest answer. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a></span></dd>
+<dt>accessibility</dt>
+<dd><a href="declare-to-publish-simple/">Declare to publish (Simple English)</a></dd>
 <dt>acquisition list</dt>
 <dd>The titles we&#x27;ve confirmed the library does NOT own — a ready-made shopping list. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>adjudication</dt>
 <dd>A librarian&#x27;s explicit accept of one match candidate the machine couldn&#x27;t confidently resolve. <span class=refs>&rarr; <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span></dd>
 <dt>AI estimate</dt>
 <dd>A grade band a local model infers when no catalogued measure exists — always marked visually distinct. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a></span></dd>
+<dt>allowlist</dt>
+<dd><a href="declare-to-publish-simple/">Declare to publish (Simple English)</a>, <a href="declare-to-publish/">Declare to publish</a></dd>
 <dt>append-only</dt>
 <dd><a href="data-consistency/">The consistency report</a></dd>
 <dt>ATOS</dt>
@@ -155,15 +173,17 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dt>data consistency</dt>
 <dd><a href="data-consistency/">The consistency report</a></dd>
 <dt>data contracts</dt>
-<dd>A declared, validated shape a data source must satisfy before it can join the lake. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="control-plane/">One lake, many tenants: the control plane</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_contract" rel=noopener>Wikipedia: Data contract &#8599;</a></div></dd>
+<dd>A declared, validated shape a data source must satisfy before it can join the lake. <span class=refs>&rarr; <a href="declare-to-publish/">Declare to publish</a>, <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="control-plane/">One lake, many tenants: the control plane</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_contract" rel=noopener>Wikipedia: Data contract &#8599;</a></div></dd>
 <dt>data quality</dt>
 <dd>Automated assertions on every load — row counts, nulls, uniqueness, schema drift. <span class=refs>&rarr; <a href="data-consistency/">The consistency report</a>, <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="parse-fidelity/">Did we keep your catalog intact?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_quality" rel=noopener>Wikipedia: Data quality &#8599;</a></div></dd>
 <dt>Datasette</dt>
-<dd>A tool that publishes a database as a browsable, queryable website. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span><div class=cite>Further reading: <a href="https://datasette.io" rel=noopener>Datasette &#8599;</a></div></dd>
+<dd>A tool that publishes a database as a browsable, queryable website. <span class=refs>&rarr; <a href="declare-to-publish/">Declare to publish</a>, <a href="browse-by-level/">Find books at the right level</a>, <a href="reading-lists-match/">From a curated list to the books on our shelves</a></span><div class=cite>Further reading: <a href="https://datasette.io" rel=noopener>Datasette &#8599;</a></div></dd>
 <dt>dbt</dt>
 <dd>A tool that builds SQL transformations as a tested, ordered dependency graph. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Data_build_tool" rel=noopener>Wikipedia: Data build tool &#8599;</a> &middot; <a href="https://docs.getdbt.com/docs/introduction" rel=noopener>dbt docs: Introduction &#8599;</a></div></dd>
 <dt>declarative checks</dt>
 <dd><a href="data-consistency/">The consistency report</a></dd>
+<dt>default-deny</dt>
+<dd><a href="declare-to-publish-simple/">Declare to publish (Simple English)</a>, <a href="declare-to-publish/">Declare to publish</a></dd>
 <dt>demand-scoped</dt>
 <dd>Processing only the titles a curated list references, not the whole catalog. <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a></span></dd>
 <dt>desired-state reconciliation</dt>
@@ -172,6 +192,8 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>Comparing tonight&#x27;s snapshot to the prior state row-by-row — new, changed, deleted, or unchanged. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
 <dt>DRY</dt>
 <dd>Don&#x27;t Repeat Yourself — every piece of knowledge lives in exactly one place. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" rel=noopener>Wikipedia: Don&#x27;t repeat yourself &#8599;</a></div></dd>
+<dt>dry run</dt>
+<dd><a href="declare-to-publish-simple/">Declare to publish (Simple English)</a>, <a href="declare-to-publish/">Declare to publish</a></dd>
 <dt>DuckDB</dt>
 <dd>An in-process analytical SQL database — like SQLite, but built for analytics. <span class=refs>&rarr; <a href="data-consistency/">The consistency report</a>, <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="time-travel/">What did the catalog say last Tuesday?</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/DuckDB" rel=noopener>Wikipedia: DuckDB &#8599;</a> &middot; <a href="https://duckdb.org/why_duckdb" rel=noopener>DuckDB: Why DuckDB &#8599;</a></div></dd>
 <dt>ELT</dt>
@@ -180,8 +202,10 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>An integer stamped on each nightly ingest run, used to open/close rows and order history. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
 <dt>faceted browse</dt>
 <dd>Narrowing a list by picking a category from a sidebar — here, a grade band. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a></span></dd>
+<dt>fail-closed</dt>
+<dd><a href="declare-to-publish/">Declare to publish</a></dd>
 <dt>fail-open</dt>
-<dd><a href="data-consistency/">The consistency report</a></dd>
+<dd><a href="declare-to-publish/">Declare to publish</a>, <a href="data-consistency/">The consistency report</a></dd>
 <dt>failure domains</dt>
 <dd><a href="data-consistency/">The consistency report</a></dd>
 <dt>Fountas and Pinnell</dt>
@@ -228,6 +252,8 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>The dominant library record format — a binary envelope of bibliographic fields (245 title, 020 ISBN…). <span class=refs>&rarr; <a href="parse-fidelity/">Did we keep your catalog intact?</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/MARC_standards" rel=noopener>Wikipedia: MARC standards &#8599;</a></div></dd>
 <dt>MARC field</dt>
 <dd>A named slot in a MARC record (e.g. 245 title, 526 reading program, 521 target audience). <span class=refs>&rarr; <a href="reading-levels/">What grade is this book?</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/MARC_standards" rel=noopener>Wikipedia: MARC standards &#8599;</a></div></dd>
+<dt>mart tiering</dt>
+<dd><a href="declare-to-publish/">Declare to publish</a></dd>
 <dt>medallion</dt>
 <dd>Layered refinement: raw (bronze) → cleaned &amp; typed (silver) → query-ready (gold). <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://www.databricks.com/glossary/medallion-architecture" rel=noopener>Databricks: Medallion Architecture &#8599;</a></div></dd>
 <dt>monotonic epochs</dt>
@@ -242,6 +268,10 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>The platform records every run and computes its own health from that ledger. <span class=refs>&rarr; <a href="data-consistency/">The consistency report</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Observability_(software)" rel=noopener>Wikipedia: Observability (software) &#8599;</a></div></dd>
 <dt>parse fidelity</dt>
 <dd>A standing guarantee that every stored record is byte-for-byte what the source sent. <span class=refs>&rarr; <a href="parse-fidelity/">Did we keep your catalog intact?</a></span></dd>
+<dt>PII governance</dt>
+<dd><a href="declare-to-publish-simple/">Declare to publish (Simple English)</a>, <a href="declare-to-publish/">Declare to publish</a></dd>
+<dt>plain language</dt>
+<dd><a href="declare-to-publish-simple/">Declare to publish (Simple English)</a></dd>
 <dt>plugin contract</dt>
 <dd>The rules a tenant container must satisfy to run inside an instance (manifest + lifecycle + telemetry). <span class=refs>&rarr; <a href="scaffold-a-tenant/">Scaffolding a tenant: from cookiecutter to conformance</a></span></dd>
 <dt>provenance</dt>
@@ -268,8 +298,12 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <dd>Store data exactly as it arrives; impose structure only when you query it. <span class=refs>&rarr; <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a>, <a href="by-the-book/">chimpy-lake, by the book</a></span></dd>
 <dt>self-consistency</dt>
 <dd>Run the model several times and only accept an answer when the runs agree. <span class=refs>&rarr; <a href="browse-by-level/">Find books at the right level</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Prompt_engineering" rel=noopener>Wikipedia: Prompt engineering &#8599;</a></div></dd>
+<dt>sensitivity tiers</dt>
+<dd><a href="declare-to-publish-simple/">Declare to publish (Simple English)</a>, <a href="declare-to-publish/">Declare to publish</a></dd>
 <dt>sierra-snapshot</dt>
 <dd>The tenant that ingests the Sierra ILS catalog nightly and stores it as bitemporal bronze. <span class=refs>&rarr; <a href="time-travel/">What did the catalog say last Tuesday?</a></span></dd>
+<dt>Simple English</dt>
+<dd><a href="declare-to-publish-simple/">Declare to publish (Simple English)</a></dd>
 <dt>single source of truth</dt>
 <dd>One authoritative declaration that every consumer imports, instead of parallel copies kept in sync by hand. <span class=refs>&rarr; <a href="data-consistency/">The consistency report</a>, <a href="flat-reference-dims/">Flat reference dimensions — one manifest, generated dims</a></span><div class=cite>Further reading: <a href="https://en.wikipedia.org/wiki/Single_source_of_truth" rel=noopener>Wikipedia: Single source of truth &#8599;</a></div></dd>
 <dt>snapshot</dt>
@@ -298,5 +332,5 @@ footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--rule
 <div class=t><a href="/2026-05/issue_2_our-data-our-lake/">Our Data, Our Lake</a> <span class=kw>zine</span></div>
 <div class=sum>A printable zine on owning the library&#x27;s data — the lake, in plain language.</div>
 </div>
-<footer>Generated 2026-07-08 from 10 published showboats · the version ledger is git, not a version number.</footer>
+<footer>Generated 2026-07-21 from 12 published showboats · the version ledger is git, not a version number.</footer>
 </body></html>
