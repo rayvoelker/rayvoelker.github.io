@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample Reports — Ray Voelker</title>
+<meta name="description" content="Sample and experimental static reports generated from library data — reproducible, self-contained HTML built from the chimpy-lake data platform.">
+<link rel="stylesheet" href="../handout-academic.css">
+<style>
+  .intro{color:var(--fg-muted);max-width:66ch}
+  .featured{display:grid;gap:1.25rem;grid-template-columns:1fr;margin:1.5rem 0 2.5rem}
+  @media(min-width:640px){.featured{grid-template-columns:1fr 1fr}}
+  .card{border:1px solid var(--rule);border-radius:8px;padding:1rem 1.15rem;background:var(--bg-paper)}
+  .card h3{margin:0 0 .35rem;font-size:1.05rem}
+  .card h3 a{text-decoration:none}
+  .card p{margin:0 0 .5rem;color:var(--fg-muted);font-size:.95rem}
+  .card .meta{font-size:.78rem;color:var(--fg-faint);font-variant:small-caps;letter-spacing:.03em}
+  .note{border-left:3px solid var(--rule);padding:.15rem 0 .15rem 1rem;margin:1.5rem 0;
+        color:var(--fg-muted);font-size:.95rem;max-width:66ch}
+  footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);
+         font-size:.9rem;color:var(--fg-muted)}
+</style>
+</head>
+<body>
+<p><a href="../">← Ray Voelker</a></p>
+
+<h1>Sample Reports</h1>
+<p class="intro">Static reports generated from library data — each one a single
+self-contained HTML file, built by a script rather than assembled by hand. These
+are samples and experiments: the point is the method, the shape of the output,
+and what the underlying data can actually answer.</p>
+
+<div class="featured">
+  <div class="card">
+    <h3><a href="2026-08-07-delhi-township-rescue-last-copy.html">Rescue Last Copy — Delhi Township Branch</a></h3>
+    <p>When a branch closes or moves, which titles leave the circulating
+    collection entirely? Not the busy ones — the ones this branch holds
+    <em>every</em> copy of. 767 titles, 1.93% of what the branch shelves.</p>
+    <p class="meta">2026-08-07 · method &amp; aggregates</p>
+  </div>
+</div>
+
+<div class="note">
+  <p><strong>On what these contain.</strong> These are published as
+  <em>method and aggregates</em>. The per-title worklists the reports produce
+  internally — call numbers, shelf locations, per-title circulation — are
+  collection-services work products and are not part of the public version. No
+  patron data appears in any of them.</p>
+</div>
+
+<h2>How they are built</h2>
+<p class="intro">Each report is one run of a parameterized generator against
+<a href="../chimpy-lake/">chimpy-lake</a>, the library-owned data platform: a
+read-only query builds a dataset, a renderer turns it into Markdown, pandoc
+renders that to a single self-contained file, and a verification pass checks the
+result — including a headless-browser layout check — before it ships. Every
+figure quoted in a report is computed by the generator; none are typed in by
+hand.</p>
+
+<footer>
+  <a href="https://github.com/rayvoelker">github.com/rayvoelker</a>
+</footer>
+</body>
+</html>

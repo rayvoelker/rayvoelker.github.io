@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+
+<html lang="" xml:lang="" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8"/>
+<meta content="pandoc" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport"/>
+<meta content="Ray Voelker" name="author"/>
+<meta content="collection management, weeding, branch
+closure, last copy, collection pressure, Sierra, CHPL" name="keywords"/>
+<meta content="Titles for which Delhi Township holds every circulating copy in the system — the set that would leave the collection entirely if the branch went offline." name="description"/>
+<title>Rescue Last Copy — Delhi Township Branch</title>
+<style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+<style type="text/css">
+
+*, *::before, *::after {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+:root {
+--bg-page: #fbfaf6; 
+--bg-paper: #ffffff; 
+--bg-code: #f3efe6; 
+--bg-pre: #f7f3e9; 
+--bg-callout: #f8eed8; 
+--bg-thead: #f0ece1; 
+--fg-body: #1d1c1a; 
+--fg-muted: #5b574f; 
+--fg-faint: #8a857a; 
+--rule: #d8d2c2; 
+--rule-strong: #a89f87;
+--accent: #2c5e8f; 
+--accent-soft: #5b88b5;
+--accent-bg: #e8efd7; 
+--warn: #8a4a1c; 
+--font-body: "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+--font-display: "Inter", system-ui, sans-serif;
+--font-serif: "Source Serif 4", "Source Serif Pro", "Iowan Old Style", "Charter", Georgia, "Times New Roman", serif;
+--font-mono: "JetBrains Mono", "IBM Plex Mono", "Cascadia Code", "Fira Code", Consolas, monospace;
+--measure: 68ch;
+--leading: 1.6;
+--leading-tight: 1.3;
+}
+
+html {
+font-size: 16px;
+-webkit-text-size-adjust: 100%;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+text-rendering: optimizeLegibility;
+}
+body {
+background: var(--bg-page);
+color: var(--fg-body);
+font-family: var(--font-body);
+font-feature-settings: "kern", "liga", "calt", "ss01";
+line-height: var(--leading);
+max-width: var(--measure);
+margin: 3rem auto 4rem;
+padding: 0 1.5rem;
+}
+
+header#title-block-header,
+.title,
+h1.title {
+font-family: var(--font-display);
+font-weight: 700;
+font-size: 2rem;
+line-height: 1.15;
+letter-spacing: -0.01em;
+color: var(--fg-body);
+margin: 0 0 0.25rem 0;
+}
+.subtitle {
+display: block;
+font-family: var(--font-serif);
+font-style: italic;
+font-weight: 400;
+font-size: 1.05rem;
+color: var(--fg-muted);
+margin: 0.25rem 0 0;
+}
+.date,
+.author {
+font-family: var(--font-body);
+font-size: 0.85rem;
+color: var(--fg-faint);
+letter-spacing: 0.02em;
+}
+header#title-block-header {
+border-bottom: 1px solid var(--rule);
+padding-bottom: 1.25rem;
+margin-bottom: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-family: var(--font-display);
+font-weight: 600;
+line-height: var(--leading-tight);
+color: var(--fg-body);
+margin-top: 2.25rem;
+margin-bottom: 0.75rem;
+letter-spacing: -0.005em;
+}
+h1 {
+font-size: 1.65rem;
+padding-bottom: 0.4rem;
+border-bottom: 2px solid var(--accent);
+}
+h2 {
+font-size: 1.25rem;
+color: var(--accent);
+}
+h3 {
+font-size: 1.05rem;
+font-weight: 600;
+font-style: italic;
+color: var(--fg-body);
+margin-top: 1.75rem;
+}
+h4, h5, h6 {
+font-size: 0.95rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+color: var(--fg-muted);
+}
+
+p {
+margin: 0 0 1rem;
+hyphens: auto;
+}
+p + p { margin-top: 0; }
+strong { font-weight: 600; color: var(--fg-body); }
+em { font-style: italic; }
+a {
+color: var(--accent);
+text-decoration: none;
+border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+transition: border-color 120ms ease, color 120ms ease;
+}
+a:hover {
+color: var(--accent-soft);
+border-bottom-color: var(--accent-soft);
+}
+
+ul, ol {
+margin: 0 0 1rem 1.5rem;
+padding: 0;
+}
+li { margin-bottom: 0.35rem; }
+li > p { margin-bottom: 0.35rem; }
+
+blockquote {
+position: relative;
+background: var(--bg-callout);
+border-left: 3px solid var(--warn);
+padding: 0.85rem 1.1rem;
+margin: 1.5rem 0;
+color: var(--warn);
+font-family: var(--font-serif);
+font-style: italic;
+border-radius: 2px;
+}
+blockquote p { margin: 0; }
+blockquote strong { color: var(--warn); }
+
+code {
+font-family: var(--font-mono);
+font-size: 0.88em;
+background: var(--bg-code);
+color: var(--fg-body);
+padding: 0.08em 0.35em;
+border-radius: 3px;
+border: 1px solid color-mix(in srgb, var(--rule) 60%, transparent);
+}
+pre {
+background: var(--bg-pre);
+border: 1px solid var(--rule);
+border-radius: 4px;
+padding: 0.9rem 1rem;
+margin: 1.25rem 0;
+overflow-x: auto;
+font-family: var(--font-mono);
+font-size: 0.85rem;
+line-height: 1.5;
+color: var(--fg-body);
+}
+pre code {
+background: transparent;
+border: none;
+padding: 0;
+font-size: inherit;
+border-radius: 0;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+margin: 1.25rem 0;
+font-size: 0.92rem;
+font-variant-numeric: tabular-nums;
+}
+thead th {
+background: var(--bg-thead);
+font-family: var(--font-display);
+font-weight: 600;
+text-align: left;
+padding: 0.55rem 0.7rem;
+border-bottom: 2px solid var(--rule-strong);
+color: var(--fg-body);
+}
+tbody td {
+padding: 0.45rem 0.7rem;
+border-bottom: 1px solid var(--rule);
+vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+
+hr {
+border: none;
+border-top: 1px solid var(--rule);
+margin: 2rem 0;
+}
+
+p:last-of-type em,
+p > em:only-child {
+color: var(--fg-muted);
+}
+
+@page {
+margin: 0.85in 0.9in;
+}
+@media print {
+html, body {
+background: var(--bg-paper);
+color: #000;
+font-size: 11pt;
+}
+body {
+margin: 0 auto;
+max-width: none;
+padding: 0;
+}
+a {
+color: var(--accent);
+border-bottom: none;
+}
+a[href^="http"]::after {
+content: " (" attr(href) ")";
+font-size: 0.85em;
+color: var(--fg-faint);
+}
+pre, blockquote, table { page-break-inside: avoid; }
+h1, h2, h3 { page-break-after: avoid; }
+
+div.newpage,
+.pagebreak,
+hr.pagebreak {
+page-break-before: always;
+border: none;
+height: 0;
+margin: 0;
+}
+}
+</style>
+<style id="semantic-marks">:root {
+  --sw-physical_format-document: #007a3d;
+  --sw-physical_format-audio: #6a3fb0;
+  --sw-physical_format-downloadable: #1baf7a;
+  --sw-physical_format-equipment: #c9a227;
+  --sw-physical_format-visual: #c0398f;
+  --sw-physical_format-periodical: #eb6834;
+  --sw-physical_format-microform: #0a8ea0;
+  --sw-physical_format-access_print: #6a8e2a;
+  --sw-physical_format-book: #2a78d6;
+  --sw-physical_format-video: #d03b3b;
+  --sw-audience_class-adult: #2f6bb0;
+  --sw-audience_class-juvenile: #e0902e;
+  --sw-audience_class-teen: #b23a3a;
+  --sw-audience_class-easy: #3f9c5f;
+  --sw-audience_class-unknown: #a8adb5;
+  --sw-status-available: #2d8a4e;
+  --sw-status-use_only: #009090;
+  --sw-status-in_transit: #d99a00;
+  --sw-status-long_intransit: #b5651d;
+  --sw-status-lost: #c0392b;
+  --sw-status-processing: #3d52c4;
+  --sw-status-withdrawn: #8a857a;
+  --sw-status-hold: #9a3ab0;
+  --sw-status-online: #0a95c2;
+  --sw-status-too_long: #a83812;
+  --sw-reconciliation-unflagged: #3f7183;
+  --sw-location_family-main: #2a5f95;
+  --sw-location_family-outreach: #bd6820;
+  --sw-location_family-partner: #a83a7a;
+  --sw-location_family-branch: #3f9c5f;
+  --sw-sentinel: #b8b2a4;
+}
+.sw-mark { display: inline-flex; align-items: center; gap: .3em; padding: .05em .5em; border: 1.5px solid; font-weight: 600; line-height: 1.35; white-space: nowrap; }
+.sw-mark svg { width: .9em; height: .9em; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.sw-mark.axis-status { border-radius: 999px; }
+.sw-mark.axis-reconciliation { border-radius: 999px; }
+.sw-mark.axis-audience_class { border-radius: 9px; }
+.sw-mark.axis-physical_format { border-radius: 5px; }
+.sw-physical_format-document { background: #d9ebe2; border-color: #007a3d; color: #00552b; }
+.sw-physical_format-audio { background: #e9e2f3; border-color: #6a3fb0; color: #6a3fb0; }
+.sw-physical_format-downloadable { background: #ddf3eb; border-color: #1baf7a; color: #137a55; }
+.sw-physical_format-equipment { background: #f7f1df; border-color: #c9a227; color: #836919; }
+.sw-physical_format-visual { background: #f6e1ee; border-color: #c0398f; color: #862864; }
+.sw-physical_format-periodical { background: #fce8e1; border-color: #eb6834; color: #a44924; }
+.sw-physical_format-microform { background: #daeef1; border-color: #0a8ea0; color: #076370; }
+.sw-physical_format-access_print { background: #e9eedf; border-color: #6a8e2a; color: #4a631d; }
+.sw-physical_format-book { background: #dfebf9; border-color: #2a78d6; color: #1d5496; }
+.sw-physical_format-video { background: #f8e2e2; border-color: #d03b3b; color: #922929; }
+.sw-audience_class-adult { background: #e0e9f3; border-color: #2f6bb0; color: #214b7b; }
+.sw-audience_class-juvenile { background: #faeee0; border-color: #e0902e; color: #925e1e; }
+.sw-audience_class-teen { background: #f3e1e1; border-color: #b23a3a; color: #b23a3a; }
+.sw-audience_class-easy { background: #e2f0e7; border-color: #3f9c5f; color: #2c6d42; }
+.sw-audience_class-unknown { background: #f2f3f4; border-color: #a8adb5; color: #65686d; }
+.sw-status-available { background: #e0ede4; border-color: #2d8a4e; color: #206137; }
+.sw-status-use_only { background: #d9eeee; border-color: #009090; color: #006565; }
+.sw-status-in_transit { background: #f9f0d9; border-color: #d99a00; color: #8d6400; }
+.sw-status-long_intransit { background: #f4e8dd; border-color: #b5651d; color: #7f4714; }
+.sw-status-lost { background: #f6e1df; border-color: #c0392b; color: #86281e; }
+.sw-status-processing { background: #e2e5f6; border-color: #3d52c4; color: #3d52c4; }
+.sw-status-withdrawn { background: #ededeb; border-color: #8a857a; color: #615d55; }
+.sw-status-hold { background: #f0e1f3; border-color: #9a3ab0; color: #9a3ab0; }
+.sw-status-online { background: #daeff6; border-color: #0a95c2; color: #076888; }
+.sw-status-too_long { background: #f2e1db; border-color: #a83812; color: #a83812; }
+.sw-reconciliation-unflagged { background: #e2eaec; border-color: #3f7183; color: #2c4f5c; }
+.sw-sentinel { background: #f4f3f1; border: 1.5px dashed #b8b2a4; color: #6e6b62; border-radius: 5px; }
+.fam-main { border-left: 3px solid var(--sw-location_family-main); padding-left: .4em; }
+.fam-outreach { border-left: 3px solid var(--sw-location_family-outreach); padding-left: .4em; }
+.fam-partner { border-left: 3px solid var(--sw-location_family-partner); padding-left: .4em; }
+.fam-branch { border-left: 3px solid var(--sw-location_family-branch); padding-left: .4em; }
+.semantic-legend { margin-top: 2.5rem; padding: .9rem 1.1rem; border: 1px solid var(--sw-sentinel); border-radius: 6px; background: rgba(0,0,0,.02); font-size: .85rem; line-height: 1.9; }
+.semantic-legend h3 { margin: 0 0 .5rem; font-size: .9rem; }
+.legend-row { margin: .2rem 0; }
+.legend-row strong { display: inline-block; min-width: 5.5em; }
+.legend-row span { margin-right: .7rem; white-space: nowrap; }
+</style><style id="report-chrome">
+/* ---- report chrome (NOT semantic: no data value is encoded by these colours) ---- */
+
+/* The house stylesheet sets a ~692px prose measure. Wide tables (the audience x
+   shelf-area grid is 14 columns) must NOT inherit it: unconstrained they push the
+   whole document sideways. `.wide` breaks out of the measure, centred, capped to
+   the viewport; `.tscroll` then keeps any residual overflow inside its own box so
+   the page itself never scrolls horizontally. Both are needed — breakout alone
+   still overflows on a narrow window. */
+.wide { width:min(96vw,1500px); margin-left:calc(50% - min(48vw,750px)); }
+.tscroll { overflow-x:auto; max-width:100%; -webkit-overflow-scrolling:touch; }
+
+.controls { display:flex; gap:.5rem; margin:1rem 0; }
+.controls button { font:inherit; font-size:.85rem; padding:.3em .9em; border:1px solid #b9b3a4;
+  background:#f3f0e7; border-radius:4px; cursor:pointer; color:#3a3730; }
+.controls button:hover { background:#e8e3d6; }
+
+details.aud, details.shelf { border:1px solid #ddd7c8; border-radius:6px; margin:.55rem 0;
+  background:#fffdf8; }
+details.aud { border-color:#c8c1ae; }
+details.aud > summary { padding:.6rem .85rem; font-size:1.02rem; }
+details.shelf { margin:.4rem .6rem; background:#fbf9f2; }
+details.shelf > summary { padding:.45rem .8rem; font-size:.93rem; }
+summary { cursor:pointer; display:flex; align-items:center; gap:.6rem; flex-wrap:wrap;
+  list-style:none; user-select:none; }
+summary::-webkit-details-marker { display:none; }
+summary::before { content:"▸"; color:#8d8677; font-size:.8em; transition:transform .12s; }
+details[open] > summary::before { content:"▾"; }
+details[open] > summary { border-bottom:1px solid #e7e1d2; }
+.s-shelf { font-weight:600; }
+.s-sub { color:#787163; font-size:.86em; }
+.s-n { font-variant-numeric:tabular-nums; font-weight:600; color:#3a3730;
+  background:#ece7d9; border-radius:10px; padding:.05em .6em; font-size:.85em; }
+.s-meta { color:#787163; font-size:.82em; margin-left:auto; }
+
+table.items, table.rollup { width:100%; border-collapse:collapse; font-size:.83rem; margin:0; }
+table.rollup { margin:1rem 0; font-size:.86rem; }
+table.items th, table.rollup th { text-align:left; font-size:.72rem; letter-spacing:.04em;
+  text-transform:uppercase; color:#787163; font-weight:600; padding:.4em .6em;
+  border-bottom:1px solid #ddd7c8; white-space:nowrap; }
+table.items td, table.rollup td { padding:.32em .6em; border-bottom:1px solid #efeade;
+  vertical-align:top; }
+table.items tbody tr:hover { background:#f6f2e6; }
+td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+td.total, tr.grand td { font-weight:700; }
+tr.grand td { border-top:1px solid #c8c1ae; }
+td.cn { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.92em;
+  white-space:nowrap; color:#4a453c; }
+/* Titles and authors are long and highly variable; without a cap one 90-char
+   subtitle sets the column width for the whole table and every other row wraps
+   to four lines. Cap and ellipsize — the full author stays in the title attr. */
+td.ti { font-weight:600; max-width:34rem; }
+td.au { color:#6d675b; max-width:16rem; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; }
+td.sh { color:#6d675b; white-space:nowrap; }
+td.pri { text-align:center; font-size:.74rem; font-weight:700; font-variant-numeric:tabular-nums; }
+.pri-1 { color:#2b2822; } .pri-2 { color:#4c4740; } .pri-3 { color:#6d675b; }
+.pri-4 { color:#918a7c; } .pri-5 { color:#b0a897; }
+.tr-up { color:#4a6b52; } .tr-dn { color:#8a5a52; } .tr-flat, .tr-new { color:#8d8677; }
+.tr-new { font-style:italic; }
+
+/* A chip in a header cell must not inherit the uppercase/tracking treatment. */
+table.rollup th.th-chip { text-transform:none; letter-spacing:0; padding-bottom:.5em; }
+table.facts { max-width:34rem; }
+table.facts td.sub { padding-left:1.4em; color:#6d675b; }
+.semantic-legend { margin-top:2.5rem; padding:1rem 1.1rem; background:#f6f3ea;
+  border:1px solid #ddd7c8; border-radius:6px; font-size:.85rem; }
+.semantic-legend h3 { margin:0 0 .6rem; font-size:.95rem; }
+.legend-row { margin:.35rem 0; display:flex; flex-wrap:wrap; gap:.35rem; align-items:center; }
+
+@media (max-width:900px) {
+  .wide { width:100%; margin-left:0; }
+  .s-meta { margin-left:0; flex-basis:100%; }
+  td.ti { max-width:20rem; }
+}
+@media print {
+  details { break-inside:avoid; }
+  .controls { display:none; }
+  .wide { width:100%; margin-left:0; }
+  .tscroll { overflow-x:visible; }
+}
+</style></head>
+<body><svg aria-hidden="true" fill="none" id="sw-icon-sprite" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="display:none"><symbol id="icon-file" viewbox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+<path d="M14 2v4a2 2 0 0 0 2 2h4"></path></symbol><symbol id="icon-headphones" viewbox="0 0 24 24"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></symbol><symbol id="icon-cloud" viewbox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></symbol><symbol id="icon-tool" viewbox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></symbol><symbol id="icon-image" viewbox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect>
+<circle cx="9" cy="9" r="2"></circle>
+<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></symbol><symbol id="icon-news" viewbox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
+<path d="M18 14h-8"></path>
+<path d="M15 18h-5"></path>
+<path d="M10 6h8v4h-8V6Z"></path></symbol><symbol id="icon-film" viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="3"></rect>
+<path d="M7 3v18"></path>
+<path d="M3 7.5h4"></path>
+<path d="M3 12h18"></path>
+<path d="M3 16.5h4"></path>
+<path d="M17 3v18"></path>
+<path d="M17 7.5h4"></path>
+<path d="M17 16.5h4"></path></symbol><symbol id="icon-type" viewbox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"></polyline>
+<line x1="9" x2="15" y1="20" y2="20"></line>
+<line x1="12" x2="12" y1="4" y2="20"></line></symbol><symbol id="icon-book" viewbox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></symbol><symbol id="icon-disc" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle>
+<circle cx="12" cy="12" r="2"></circle></symbol><symbol id="icon-user" viewbox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+<circle cx="12" cy="7" r="4"></circle></symbol><symbol id="icon-child" viewbox="0 0 24 24"><path d="M9 12h.01"></path>
+<path d="M15 12h.01"></path>
+<path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"></path>
+<path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"></path></symbol><symbol id="icon-users" viewbox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+<circle cx="9" cy="7" r="4"></circle>
+<path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+<path d="M16 3.13a4 4 0 0 1 0 7.75"></path></symbol><symbol id="icon-star" viewbox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></symbol><symbol id="icon-help" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle>
+<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+<path d="M12 17h.01"></path></symbol><symbol id="icon-check" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></symbol><symbol id="icon-lock" viewbox="0 0 24 24"><rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path></symbol><symbol id="icon-truck" viewbox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path>
+<path d="M15 18H9"></path>
+<path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path>
+<circle cx="17" cy="18" r="2"></circle>
+<circle cx="7" cy="18" r="2"></circle></symbol><symbol id="icon-van" viewbox="0 0 24 24"><rect height="4" width="4" x="2" y="9"></rect>
+<rect height="10" width="4" x="10" y="9"></rect>
+<path d="M18 19V9a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v8a2 2 0 0 0 2 2h2"></path>
+<circle cx="8" cy="19" r="2"></circle>
+<path d="M10 19h12v-2"></path></symbol><symbol id="icon-alert" viewbox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
+<path d="M12 9v4"></path>
+<path d="M12 17h.01"></path></symbol><symbol id="icon-gear" viewbox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+<circle cx="12" cy="12" r="3"></circle></symbol><symbol id="icon-trash" viewbox="0 0 24 24"><path d="M3 6h18"></path>
+<path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+<path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+<line x1="10" x2="10" y1="11" y2="17"></line>
+<line x1="14" x2="14" y1="11" y2="17"></line></symbol><symbol id="icon-bell" viewbox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></symbol><symbol id="icon-globe" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle>
+<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+<path d="M2 12h20"></path></symbol><symbol id="icon-building" viewbox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
+<path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
+<path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
+<path d="M10 6h4"></path>
+<path d="M10 10h4"></path>
+<path d="M10 14h4"></path>
+<path d="M10 18h4"></path></symbol><symbol id="icon-landmark" viewbox="0 0 24 24"><line x1="3" x2="21" y1="22" y2="22"></line>
+<line x1="6" x2="6" y1="18" y2="11"></line>
+<line x1="10" x2="10" y1="18" y2="11"></line>
+<line x1="14" x2="14" y1="18" y2="11"></line>
+<line x1="18" x2="18" y1="18" y2="11"></line>
+<polygon points="12 2 20 7 4 7"></polygon></symbol><symbol id="icon-home" viewbox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
+<path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></symbol><symbol id="icon-dash" viewbox="0 0 24 24"><path d="M5 12h14"></path></symbol></svg>
+<header id="title-block-header">
+<h1 class="title">Rescue Last Copy — Delhi Township Branch</h1>
+<p class="author">Ray Voelker</p>
+<p class="date">2026-08-07 01:13 EDT · active · sample report — method
+and aggregates</p>
+</header>
+<h2 id="scope">Scope</h2>
+<p>Announced move, not a hypothetical.</p>
+<ul>
+<li>Branch closes end of day <strong>Saturday, August 29,
+2026</strong>.</li>
+<li>Service relocates to <strong>5125 Foley Road</strong>, expected to
+open 7–10 working days after closure; exact date to be announced.</li>
+<li>A new branch building will be constructed under the Facilities
+Master Plan.</li>
+<li>Goodbye event Saturday, August 22, 10 a.m.</li>
+</ul>
+<p>The announcement does not state what happens to the collection during
+the move.</p>
+<p><em>Source: <a href="https://chpl.org/blogs/post/delhi-township-branch-library-moving-to-temporary-location/">CHPL
+announcement</a>.</em></p>
+<p><strong>Included:</strong> titles where Delhi Township holds
+<em>every</em> active copy in the system. If these shelves go offline,
+the title leaves the circulating collection. <strong>Excluded:</strong>
+titles held at Delhi Township that another location also holds.</p>
+<div class="tscroll">
+<table class="rollup facts">
+<tbody>
+<tr>
+<td>
+Delhi Township-exclusive titles
+</td>
+<td class="num total">
+767
+</td>
+</tr>
+<tr>
+<td class="sub">
+— single physical item, system-wide
+</td>
+<td class="num">
+747
+</td>
+</tr>
+<tr>
+<td class="sub">
+— multiple copies, all at this branch
+</td>
+<td class="num">
+20
+</td>
+</tr>
+<tr>
+<td>
+Titles held at Delhi Township (all)
+</td>
+<td class="num">
+39,726
+</td>
+</tr>
+<tr>
+<td>
+Exclusive share
+</td>
+<td class="num total">
+1.93%
+</td>
+</tr>
+<tr>
+<td>
+Shelf locations at this branch
+</td>
+<td class="num">
+56
+</td>
+</tr>
+<tr>
+<td>
+Source mint
+</td>
+<td class="num">
+2026-08
+</td>
+</tr>
+<tr>
+<td>
+Data queried
+</td>
+<td class="num">
+2026-08-07 00:21 EDT
+</td>
+</tr>
+<tr>
+<td>
+Report generated
+</td>
+<td class="num">
+2026-08-07 01:13 EDT
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="by-audience-and-shelf-area">By audience and shelf area</h2>
+<div class="tscroll">
+<table class="rollup">
+<thead>
+<tr>
+<th>
+Shelf area
+</th>
+<th class="th-chip">
+<span class="sw-mark axis-audience_class sw-audience_class-adult"><svg aria-hidden="true" class="sw-ico"><use href="#icon-user"></use></svg>Adult</span>
+</th>
+<th class="th-chip">
+<span class="sw-mark axis-audience_class sw-audience_class-teen"><svg aria-hidden="true" class="sw-ico"><use href="#icon-users"></use></svg>Teen</span>
+</th>
+<th class="th-chip">
+<span class="sw-mark axis-audience_class sw-audience_class-juvenile"><svg aria-hidden="true" class="sw-ico"><use href="#icon-child"></use></svg>Juvenile</span>
+</th>
+<th class="th-chip">
+<span class="sw-mark axis-audience_class sw-audience_class-easy"><svg aria-hidden="true" class="sw-ico"><use href="#icon-star"></use></svg>Easy</span>
+</th>
+<th>
+Total
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Fiction
+</td>
+<td class="num">
+113
+</td>
+<td class="num">
+25
+</td>
+<td class="num">
+26
+</td>
+<td class="num">
+</td>
+<td class="num total">
+164
+</td>
+</tr>
+<tr>
+<td>
+Nonfiction
+</td>
+<td class="num">
+174
+</td>
+<td class="num">
+8
+</td>
+<td class="num">
+30
+</td>
+<td class="num">
+</td>
+<td class="num total">
+212
+</td>
+</tr>
+<tr>
+<td>
+Graphic Novels &amp; Manga
+</td>
+<td class="num">
+13
+</td>
+<td class="num">
+7
+</td>
+<td class="num">
+6
+</td>
+<td class="num">
+</td>
+<td class="num total">
+26
+</td>
+</tr>
+<tr>
+<td>
+Picture Books &amp; Early Readers
+</td>
+<td class="num">
+</td>
+<td class="num">
+</td>
+<td class="num">
+21
+</td>
+<td class="num">
+40
+</td>
+<td class="num total">
+61
+</td>
+</tr>
+<tr>
+<td>
+Large Print
+</td>
+<td class="num">
+26
+</td>
+<td class="num">
+</td>
+<td class="num">
+</td>
+<td class="num">
+</td>
+<td class="num total">
+26
+</td>
+</tr>
+<tr>
+<td>
+Audiobooks
+</td>
+<td class="num">
+53
+</td>
+<td class="num">
+8
+</td>
+<td class="num">
+56
+</td>
+<td class="num">
+</td>
+<td class="num total">
+117
+</td>
+</tr>
+<tr>
+<td>
+Music
+</td>
+<td class="num">
+62
+</td>
+<td class="num">
+</td>
+<td class="num">
+9
+</td>
+<td class="num">
+</td>
+<td class="num total">
+71
+</td>
+</tr>
+<tr>
+<td>
+Video
+</td>
+<td class="num">
+58
+</td>
+<td class="num">
+</td>
+<td class="num">
+19
+</td>
+<td class="num">
+</td>
+<td class="num total">
+77
+</td>
+</tr>
+<tr>
+<td>
+Magazines
+</td>
+<td class="num">
+1
+</td>
+<td class="num">
+1
+</td>
+<td class="num">
+</td>
+<td class="num">
+</td>
+<td class="num total">
+2
+</td>
+</tr>
+<tr>
+<td>
+Holiday &amp; Seasonal
+</td>
+<td class="num">
+2
+</td>
+<td class="num">
+</td>
+<td class="num">
+3
+</td>
+<td class="num">
+</td>
+<td class="num total">
+5
+</td>
+</tr>
+<tr>
+<td>
+World Languages
+</td>
+<td class="num">
+</td>
+<td class="num">
+</td>
+<td class="num">
+2
+</td>
+<td class="num">
+</td>
+<td class="num total">
+2
+</td>
+</tr>
+<tr>
+<td>
+New &amp; Featured
+</td>
+<td class="num">
+4
+</td>
+<td class="num">
+</td>
+<td class="num">
+</td>
+<td class="num">
+</td>
+<td class="num total">
+4
+</td>
+</tr>
+<tr class="grand">
+<td>
+All
+</td>
+<td class="num">
+506
+</td>
+<td class="num">
+49
+</td>
+<td class="num">
+172
+</td>
+<td class="num">
+40
+</td>
+<td class="num total">
+767
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="by-format">By format</h2>
+<p>Share of the branch’s holdings in each format that is exclusive,
+against the 1.93% branch baseline.</p>
+<div class="tscroll">
+<table class="rollup">
+<thead>
+<tr>
+<th>
+Format
+</th>
+<th>
+Exclusive
+</th>
+<th>
+Branch total
+</th>
+<th>
+Share
+</th>
+<th>
+vs baseline
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<span class="sw-mark axis-physical_format sw-physical_format-book"><svg aria-hidden="true" class="sw-ico"><use href="#icon-book"></use></svg>Book</span>
+</td>
+<td class="num">
+472
+</td>
+<td class="num">
+30,474
+</td>
+<td class="num">
+1.55%
+</td>
+<td>
+at baseline
+</td>
+</tr>
+<tr>
+<td>
+<span class="sw-mark axis-physical_format sw-physical_format-video"><svg aria-hidden="true" class="sw-ico"><use href="#icon-disc"></use></svg>DVD</span>
+</td>
+<td class="num">
+77
+</td>
+<td class="num">
+4,388
+</td>
+<td class="num">
+1.75%
+</td>
+<td>
+at baseline
+</td>
+</tr>
+<tr>
+<td>
+<span class="sw-mark axis-physical_format sw-physical_format-audio"><svg aria-hidden="true" class="sw-ico"><use href="#icon-headphones"></use></svg>Music
+CD</span>
+</td>
+<td class="num">
+73
+</td>
+<td class="num">
+1,653
+</td>
+<td class="num">
+4.42%
+</td>
+<td>
+2.3×
+</td>
+</tr>
+<tr>
+<td>
+<span class="sw-mark axis-physical_format sw-physical_format-audio"><svg aria-hidden="true" class="sw-ico"><use href="#icon-headphones"></use></svg>Playaway</span>
+</td>
+<td class="num">
+62
+</td>
+<td class="num">
+290
+</td>
+<td class="num">
+21.38%
+</td>
+<td>
+11.1×
+</td>
+</tr>
+<tr>
+<td>
+<span class="sw-mark axis-physical_format sw-physical_format-audio"><svg aria-hidden="true" class="sw-ico"><use href="#icon-headphones"></use></svg>Book
+on CD</span>
+</td>
+<td class="num">
+54
+</td>
+<td class="num">
+793
+</td>
+<td class="num">
+6.81%
+</td>
+<td>
+3.5×
+</td>
+</tr>
+<tr>
+<td>
+<span class="sw-mark axis-physical_format sw-physical_format-access_print"><svg aria-hidden="true" class="sw-ico"><use href="#icon-type"></use></svg>Large
+Print</span>
+</td>
+<td class="num">
+26
+</td>
+<td class="num">
+2,007
+</td>
+<td class="num">
+1.3%
+</td>
+<td>
+below
+</td>
+</tr>
+<tr>
+<td>
+<span class="sw-mark axis-physical_format sw-physical_format-periodical"><svg aria-hidden="true" class="sw-ico"><use href="#icon-news"></use></svg>Magazine</span>
+</td>
+<td class="num">
+2
+</td>
+<td class="num">
+109
+</td>
+<td class="num">
+1.83%
+</td>
+<td>
+at baseline
+</td>
+</tr>
+<tr>
+<td>
+<span class="sw-mark axis-physical_format sw-physical_format-visual"><svg aria-hidden="true" class="sw-ico"><use href="#icon-image"></use></svg>Music
+Score</span>
+</td>
+<td class="num">
+1
+</td>
+<td class="num">
+7
+</td>
+<td class="num">
+14.29%
+</td>
+<td>
+7.4×
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Highest concentration: <strong>Playaway</strong>, 21.38% exclusive
+(11.1× baseline).</p>
+<h2 id="titles">Titles</h2>
+<p>The per-title worklist — 767 rows with call number, shelf location
+and circulation, grouped by audience and shelf area and ordered for
+walking the stacks — is <strong>omitted from this public
+version</strong>. It is an internal collection-services work product;
+the aggregates above and the method below are the parts that
+generalise.</p>
+<h2 id="method">Method</h2>
+<p><strong>Active copy</strong> — Sierra status can satisfy a request:
+on shelf, checked out, on holdshelf, in transit, in processing.
+Withdrawn, lost, missing, library-use-only, on-order and
+consortial-request statuses are excluded. Read live from the
+<code>circulating_status</code> seed used by the
+<code>collection_pressure</code> mart.</p>
+<p><strong>Exclusive</strong> — active copies across the branch’s 56
+shelf locations equal active copies system-wide. Measured per branch,
+not per shelf: one copy in Fiction plus one in Large Print is still 100%
+held here.</p>
+<p><strong>Demand</strong> — <code>circ_365</code> is checkouts in the
+trailing 365 days; <code>circ_prior</code> is the same window one year
+earlier. Trend is the difference.</p>
+<p><strong>Shelf areas</strong> — derived, not Sierra-native.
+<code>location_grouping.shelf_group</code> is populated only for Main
+Library; at branches it mirrors the audience and <code>main_zone</code>
+is NULL. Areas come from a hand-owned file of ordered keyword rules over
+the shelf name. An unmapped shelf fails the build rather than landing in
+an “Other” bucket.</p>
+<p><strong>Order within an area</strong> — call number, natural-sorted
+(100 → 520 → 741.5).</p>
+<p><strong>Not the published mart.</strong>
+<code>collection_pressure</code> gates on demand ≥6/yr <em>and</em>
+rising year-over-year, which excludes flat-but-busy titles that
+disappear just the same. It covers 207 of these 767; of the 560 omitted,
+87 circulate 12+/yr. Population rebuilt from <code>item.records</code>
+using the mart’s active-status definition.</p>
+<p><strong>Counts</strong> — 770 titles met the exclusivity test; 3
+dropped as suppressed or deleted bibs, leaving 767.</p>
+<p><strong>Sources</strong> — <code>item.records</code>,
+<code>circ_trans.transactions</code>,
+<code>reference.location_grouping</code>, 2026-08 mint. No patron
+data.</p>
+<p><strong>Timestamps</strong> — all times EDT (host local). <em>Data
+queried</em> is when the lake was read and is the report’s currency;
+<em>report generated</em> is when this document was written. They differ
+when a cached dataset is re-rendered.</p>
+<aside class="semantic-legend"><h3>Reading this report</h3><div class="legend-row"><strong>Format: </strong><span class="sw-mark axis-physical_format sw-physical_format-document"><svg class="sw-ico"><use href="#icon-file"></use></svg>Document / Consortium</span><span class="sw-mark axis-physical_format sw-physical_format-audio"><svg class="sw-ico"><use href="#icon-headphones"></use></svg>Audio</span><span class="sw-mark axis-physical_format sw-physical_format-downloadable"><svg class="sw-ico"><use href="#icon-cloud"></use></svg>Downloadable</span><span class="sw-mark axis-physical_format sw-physical_format-equipment"><svg class="sw-ico"><use href="#icon-tool"></use></svg>Equipment / Thing</span><span class="sw-mark axis-physical_format sw-physical_format-visual"><svg class="sw-ico"><use href="#icon-image"></use></svg>Visual / Score</span><span class="sw-mark axis-physical_format sw-physical_format-periodical"><svg class="sw-ico"><use href="#icon-news"></use></svg>Periodical</span><span class="sw-mark axis-physical_format sw-physical_format-microform"><svg class="sw-ico"><use href="#icon-film"></use></svg>Microform</span><span class="sw-mark axis-physical_format sw-physical_format-access_print"><svg class="sw-ico"><use href="#icon-type"></use></svg>Large print / Braille</span><span class="sw-mark axis-physical_format sw-physical_format-book"><svg class="sw-ico"><use href="#icon-book"></use></svg>Book</span><span class="sw-mark axis-physical_format sw-physical_format-video"><svg class="sw-ico"><use href="#icon-disc"></use></svg>Video / DVD</span></div><div class="legend-row"><strong>Audience: </strong><span class="sw-mark axis-audience_class sw-audience_class-adult"><svg class="sw-ico"><use href="#icon-user"></use></svg>Adult</span><span class="sw-mark axis-audience_class sw-audience_class-juvenile"><svg class="sw-ico"><use href="#icon-child"></use></svg>Juvenile</span><span class="sw-mark axis-audience_class sw-audience_class-teen"><svg class="sw-ico"><use href="#icon-users"></use></svg>Teen</span><span class="sw-mark axis-audience_class sw-audience_class-easy"><svg class="sw-ico"><use href="#icon-star"></use></svg>Easy</span><span class="sw-mark axis-audience_class sw-audience_class-unknown"><svg class="sw-ico"><use href="#icon-help"></use></svg>Unknown</span></div></aside><script id="report-js">
+(function(){
+  var d=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
+  var set=function(v){d('details').forEach(function(x){x.open=v;});};
+  var e=document.getElementById('expand-all'), c=document.getElementById('collapse-all');
+  if(e) e.addEventListener('click',function(){set(true);});
+  if(c) c.addEventListener('click',function(){set(false);});
+  window.addEventListener('beforeprint',function(){set(true);});
+})();
+</script></body>
+</html>
