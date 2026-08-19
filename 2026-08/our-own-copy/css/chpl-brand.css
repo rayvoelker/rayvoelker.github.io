@@ -1,0 +1,481 @@
+/*
+ * CHPL-BRANDED theme for Reveal.js — 2026-08-17
+ *
+ * Forked from the IUG 2026 theme (still the layout: split beige/white title
+ * slide with logo; white content body with a beige footer bar) and RE-COLORED
+ * to CHPL's own brand palette at Ray's direction. The layout is IUG's; the
+ * colors are ours.
+ *
+ * ⭐ SOURCE OF TRUTH for the palette: ~/claude/design-system/brand.yml
+ *    (identical to the hexes inside assets/CHPL_Brandmark_Primary.svg).
+ *    Do not hand-pick a "CHPL-ish" color — read it from brand.yml.
+ *
+ *   BRAND HUES        navy #16243a · blue #3291c2 · green #41bb89
+ *                     purple #7d49a9 · red #ea4f49 · gold #f9ae12
+ *
+ * ⚠ MOST BRAND HUES ARE TOO LIGHT FOR TEXT. Measured against white and
+ *   against the beige title ground (#F3E4C5), only navy and purple clear
+ *   4.5:1 unmodified; gold is 1.89:1 on white and unusable as ink. The house
+ *   fix already exists — design-system/validate_palette.py::derive_chip_colors
+ *   darkens a hue until it clears the surface. Text colors below are those
+ *   derived inks, NOT raw hues:
+ *
+ *   USED HERE
+ *     Navy    #16243a  headings, footer/dark grounds   (15.6:1 white · 12.4:1 beige)
+ *     Red-ink #a43733  .accent — emphasis              ( 6.6:1 white ·  5.3:1 beige)
+ *     Blue-ink #236688 links                           ( 6.3:1 white ·  5.0:1 beige)
+ *     Blue    #3291c2  link hover; links on dark grounds (raw hue — fine on navy)
+ *     Charcoal #53575A body text (not a brand hue; inherited, high contrast)
+ *     Beige   #F3E4C5  footer bar + title ground (INHERITED FROM IUG, not CHPL brand)
+ *     Gray    #E8E8E8  subtle backgrounds
+ *
+ * ⚠ brand.yml's own constraint: these are "Chrome/accent use only — never for
+ *   semantic value->mark." The bronze/silver layer colors in the slide diagram
+ *   are SEMANTIC and deliberately stay outside this palette.
+ *
+ * ⚠ The beige ground is the one un-CHPL thing left. It works and the footer
+ *   matches it, but if the deck should be fully brand-native that is the next
+ *   thing to change — and it is a taste call, not a contrast one.
+ */
+
+/* -- Web font fallback (Inter is closest free match to Aptos/BrownStd) -- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+/* -- Base overrides on top of white.css -- */
+
+/*
+ * Font stack priority:
+ *   1. Aptos / Aptos Display — IUG 2026 template font (Windows/Office)
+ *   2. BrownStd — CHPL brand font (licensed, Lineto)
+ *   3. Inter — closest free web match
+ *   4. Arial — CHPL-approved digital fallback
+ *
+ * (Palette is documented once, at the top of this file. Don't restate it here —
+ *  the duplicate block that used to live at this spot drifted out of sync.)
+ */
+
+.reveal {
+  font-family: 'Aptos', 'BrownStd', 'Inter', Arial, sans-serif;
+  font-size: 42px;
+  font-weight: 300;
+  color: #53575A;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: 'Aptos Display', 'Aptos', 'BrownStd', 'Inter', Arial, sans-serif;
+  color: #16243a;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.reveal h1 { font-size: 1.8em; }
+.reveal h2 { font-size: 1.4em; }
+.reveal h3 { font-size: 1.1em; }
+
+.reveal a {
+  color: #236688;
+  text-decoration: none;
+}
+
+.reveal a:hover {
+  color: #3291c2;
+  text-decoration: underline;
+}
+
+/* Accent class for emphasis text */
+.reveal .accent {
+  color: #a43733;
+  font-weight: 700;
+}
+
+.reveal .blue {
+  color: #236688;
+}
+
+.reveal .navy {
+  color: #16243a;
+}
+
+/* =============================================
+   NAVIGATION CONTROLS — move above footer bar
+   ============================================= */
+
+.reveal .controls {
+  bottom: 110px !important;
+}
+
+/* Slide number: top-right, e.g. "3/16" */
+.reveal .slide-number {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  bottom: auto;
+  left: auto;
+  font-size: 0.5em;
+  color: #808285;
+  background: none;
+}
+
+/* =============================================
+   TITLE / CLOSING SLIDES — split layout
+   Left: white panel with logo
+   Right: beige background (via data-background)
+   ============================================= */
+
+.reveal .title-slide {
+  text-align: left;
+  padding: 0 !important;
+}
+
+/* White logo panel — lives OUTSIDE .reveal in the DOM
+   so CSS transforms don't break position: fixed centering */
+.title-logo-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28%;
+  height: 100vh;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.title-logo-panel img {
+  width: 80%;
+  max-width: 300px;
+}
+
+/* Title content positioned on the right */
+.reveal .title-slide .title-content {
+  margin-left: 30%;
+  padding: 0 2em;
+  text-align: left;
+  z-index: 51;
+  position: relative;
+}
+
+.reveal .title-slide .title-content h1 {
+  font-size: 1.6em;
+  color: #16243a;
+  margin: 0 0 0.15em 0;
+  line-height: 1.2;
+}
+
+.reveal .title-slide .title-content h2 {
+  font-size: 0.7em;
+  color: #16243a;
+  font-weight: 400;
+  margin: 0 0 1em 0;
+  opacity: 0.75;
+}
+
+.reveal .title-slide .title-content p {
+  font-size: 0.5em;
+  color: #53575A;
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* CHPL logo on title/closing slides */
+.reveal .title-slide .chpl-logo {
+  max-width: 200px;
+  margin-top: 1.2em;
+}
+
+/* =============================================
+   CONTENT SLIDES — beige footer bar with logo
+   ============================================= */
+
+/* Persistent footer bar on all non-title slides
+   Template: 14.4% of slide height, logo is 86% of bar height */
+.reveal .footer-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: #F3E4C5;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  box-sizing: border-box;
+  z-index: 100;
+}
+
+.reveal .footer-bar img {
+  height: 86px;
+  width: auto;
+}
+
+.reveal .footer-bar .footer-chpl-logo {
+  height: 52px;
+  margin-right: auto;
+  margin-left: 12px;
+}
+
+/* Ensure slide content doesn't overlap the footer */
+/* Space reserved for the footer bar.
+   ⚠ The footer bar is position:fixed at 100px — UNSCALED window chrome — while
+   this padding lives INSIDE the scaled canvas, so the two can only agree at one
+   scale. 110 canvas px against the 1280x720 canvas is the compromise: it clears
+   the bar at the scales this deck is actually shown at. Do not raise it to "be
+   safe" — every px here comes straight out of the slide's content budget. */
+.reveal .slides section {
+  padding-bottom: 110px;
+}
+
+/* Title slides don't need footer padding */
+.reveal .slides section.title-slide {
+  padding-bottom: 0;
+}
+
+/* Dark background slides (navy) */
+.reveal section[data-background-color="#16243a"] h1,
+.reveal section[data-background-color="#16243a"] h2,
+.reveal section[data-background-color="#16243a"] h3,
+.reveal section[data-background-color="#16243a"] p,
+.reveal section[data-background-color="#16243a"] li,
+.reveal section[data-background-color="#0E2841"] h1,
+.reveal section[data-background-color="#0E2841"] h2,
+.reveal section[data-background-color="#0E2841"] h3,
+.reveal section[data-background-color="#0E2841"] p,
+.reveal section[data-background-color="#0E2841"] li {
+  color: #FFFFFF;
+}
+
+.reveal section[data-background-color="#16243a"] a,
+.reveal section[data-background-color="#0E2841"] a {
+  color: #3291c2;
+}
+
+/* Lists */
+.reveal ul,
+.reveal ol {
+  text-align: left;
+  margin-left: 1em;
+}
+
+.reveal li {
+  margin-bottom: 0.4em;
+  font-size: 0.85em;
+}
+
+/* Code blocks */
+.reveal pre {
+  font-size: 0.55em;
+  box-shadow: none;
+  border: 1px solid #E8E8E8;
+  border-radius: 4px;
+}
+
+.reveal code {
+  font-family: 'Fira Code', 'JetBrains Mono', 'Source Code Pro', monospace;
+}
+
+.reveal p code,
+.reveal li code {
+  background: #E8E8E8;
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Images */
+.reveal img {
+  border: none;
+  box-shadow: none;
+}
+
+/* Two-column layout helper */
+.reveal .columns {
+  display: flex;
+  gap: 2em;
+}
+
+.reveal .columns .col {
+  flex: 1;
+}
+
+/* Screenshot styling */
+.reveal .screenshot {
+  border: 2px solid #E8E8E8;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Tables */
+.reveal table {
+  border-collapse: collapse;
+}
+
+.reveal table th {
+  background: #16243a;
+  color: #FFFFFF;
+  padding: 0.4em 0.6em;
+  font-weight: 600;
+}
+
+.reveal table td {
+  border-bottom: 1px solid #E8E8E8;
+  padding: 0.3em 0.6em;
+}
+
+.reveal table tr:nth-child(even) td {
+  background: #f9f7f3;
+}
+
+/* =============================================
+   MOBILE / SMALL SCREENS
+   ============================================= */
+
+@media screen and (max-width: 800px) {
+  .reveal {
+    font-size: 28px;
+  }
+
+  /* Stack title slide vertically instead of split layout */
+  .title-logo-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 50;
+  }
+
+  .title-logo-panel img {
+    width: auto;
+    max-width: none;
+    max-height: 60px;
+  }
+
+  .reveal .title-slide .title-content {
+    margin-left: 0;
+    margin-top: 60px;
+    padding: 0.5em 1em;
+    text-align: center;
+  }
+
+  .reveal .title-slide .title-content h1 {
+    font-size: 1.2em;
+  }
+
+  .reveal .title-slide .title-content h2 {
+    font-size: 0.6em;
+  }
+
+  /* Smaller footer */
+  .reveal .footer-bar {
+    height: 60px;
+  }
+
+  .reveal .footer-bar img {
+    height: 50px;
+  }
+
+  .reveal .controls {
+    bottom: 65px !important;
+  }
+
+  .reveal .slides section {
+    padding-bottom: 70px;
+  }
+
+  .reveal li {
+    font-size: 0.75em;
+  }
+
+  .reveal pre {
+    font-size: 0.45em;
+  }
+}
+
+/* =============================================
+   TITLE SLIDE — VERSION STAMP + QR
+   Added 2026-08-18. The deck is published publicly at
+   rayvoelker.github.io/2026-08/our-own-copy/, so slide 1 carries its own
+   version stamp and a scannable link to the canonical copy.
+
+   ⚠ The version <p> lives inside .title-content, whose `p` rule is
+   (0,3,1) — a plain .deck-version selector LOSES to it. The
+   `.title-content p.deck-version` form below is deliberate; do not
+   "simplify" it or the size and margin silently revert.
+   ============================================= */
+
+.reveal .title-slide .title-meta {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5em;
+  flex-wrap: wrap;
+}
+
+.reveal .title-slide .title-byline {
+  flex: 1 1 auto;
+}
+
+.reveal .title-slide .title-content p.deck-version {
+  margin-top: 0.85em;
+  font-size: 0.42em;
+  letter-spacing: 0.08em;
+  /* ⚠ NO text-transform: uppercase here. It renders the semver "v" as "V1.0.0",
+     which is not how a version is written. The string is digits either way, so
+     the transform bought nothing and cost correctness. */
+  color: #16243a;
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+.reveal .title-slide .title-qr {
+  flex: 0 0 auto;
+  margin: 0;
+  text-align: center;
+}
+
+/* ⚠ reveal's white theme gives every `section img` a border + box-shadow.
+   Both are cleared here: a framed QR reads as a picture of a QR, and the
+   shadow eats into the quiet zone that scanners need. */
+.reveal .title-slide .title-qr img {
+  display: block;
+  width: 150px;
+  height: 150px;
+  padding: 8px;
+  margin: 0;
+  background: #FFFFFF;
+  border: 0;
+  box-shadow: none;
+  border-radius: 3px;
+}
+
+.reveal .title-slide .title-qr figcaption {
+  margin-top: 0.45em;
+  font-size: 0.32em;
+  line-height: 1.35;
+  color: #53575A;
+}
+
+/* Mobile: the byline/QR row stacks and centres with the rest of the title.
+   Matters more now than it used to — scanning the QR opens the deck on a
+   phone, so the title slide's small-screen form is a real reading surface. */
+@media screen and (max-width: 800px) {
+  .reveal .title-slide .title-meta {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  .reveal .title-slide .title-qr img {
+    width: 120px;
+    height: 120px;
+  }
+}
