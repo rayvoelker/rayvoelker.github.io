@@ -749,6 +749,20 @@ that are ours.
 			}
 			Reveal.on('slidechanged', event => updateChrome(event.currentSlide));
 			Reveal.on('ready', event => updateChrome(event.currentSlide));
+
+			// Publish reveal's canvas scale to CSS as --rv-scale.
+			// WHY: the footer bar is fixed window chrome (unscaled px) but the space
+			// reserved for it is padding INSIDE the scaled canvas, so on a short
+			// window the reservation shrinks below the bar and the bar eats the last
+			// line of the slide. Ray hit this on a laptop display, slide 7, 2026-08-19.
+			// With the bar sized in calc(px * var(--rv-scale)) the two move together
+			// and can never disagree, at any window shape.
+			function publishScale() {
+				document.documentElement.style.setProperty('--rv-scale', Reveal.getScale());
+			}
+			Reveal.on('ready', publishScale);
+			Reveal.on('resize', publishScale);
+			window.addEventListener('resize', publishScale);
 		</script>
 	</body>
 </html>

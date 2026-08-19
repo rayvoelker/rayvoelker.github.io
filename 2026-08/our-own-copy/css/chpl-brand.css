@@ -38,8 +38,93 @@
  *   thing to change — and it is a taste call, not a contrast one.
  */
 
-/* -- Web font fallback (Inter is closest free match to Aptos/BrownStd) -- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+/* -- Web font fallback (Inter is closest free match to Aptos/BrownStd) --
+ * VENDORED 2026-08-19, deliberately. This used to be an @import from
+ * fonts.googleapis.com, which quietly made the deck need the internet: with no
+ * network the whole thing fell back to Arial (-> Liberation Sans on this host),
+ * different metrics from the ones check-fit.py measured. The files now live in
+ * ../fonts/ and ship with the deck, so offline and online render identically.
+ * Inter is SIL Open Font License 1.1 -- see ../fonts/LICENSE.txt.
+ * Regenerate: see ../fonts/README.md.
+ *
+ * NOTE ON BRAND: Inter is NOT a CHPL-sanctioned typeface. The brand guidelines
+ * (~/Documents/CHPL_BrandGuidelines/, p.22) name BrownStd (licensed, Lineto) as
+ * the primary face and *Arial* as the approved digital alternate. Inter sits in
+ * the stack as the closest free match to BrownStd; Arial remains behind it.
+ */
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 
 /* -- Base overrides on top of white.css -- */
 
@@ -107,7 +192,7 @@
    ============================================= */
 
 .reveal .controls {
-  bottom: 110px !important;
+  bottom: calc(100px * var(--rv-scale, 1) + 10px) !important;
 }
 
 /* Slide number: top-right, e.g. "3/16" */
@@ -151,6 +236,15 @@
 .title-logo-panel img {
   width: 80%;
   max-width: 300px;
+  /* OPTICAL centring, not geometric. The panel already centres the image BOX
+     exactly (measured: equal gaps at 16:9, 16:10 and 3:2), but the brandmark is
+     bottom-heavy — the airy "Hamilton County" arc is at the top and the dense
+     wordmark sits under it, putting the mark's ink centroid 23.2px below the
+     box centre on a 440px-tall asset, i.e. 5.3% of its own height. Centring the
+     box therefore READS as sitting low. Shift by that measured 5.3%; the unit is
+     % of the element's own height, so it holds at every scale.
+     Re-measure if the asset is ever replaced. */
+  transform: translateY(-5.3%);
 }
 
 /* Title content positioned on the right */
@@ -201,34 +295,44 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100px;
+  /* Sized in CANVAS px scaled by --rv-scale (published by the deck's JS from
+     Reveal.getScale()), because the space reserved for this bar is padding
+     inside the scaled canvas. Fixed 100px chrome against a shrinking
+     reservation is what let the bar eat the last line of slide 7 on a short
+     laptop window. Now both move together: bar 100 canvas px, reservation 110,
+     so there is always 10 canvas px of daylight at every window shape.
+     --rv-scale falls back to 1, which is the old behaviour, if JS never runs. */
+  height: calc(100px * var(--rv-scale, 1));
   background: #F3E4C5;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 8px;
+  padding-right: calc(8px * var(--rv-scale, 1));
   box-sizing: border-box;
   z-index: 100;
 }
 
 .reveal .footer-bar img {
-  height: 86px;
+  height: calc(86px * var(--rv-scale, 1));
   width: auto;
 }
 
 .reveal .footer-bar .footer-chpl-logo {
-  height: 52px;
+  height: calc(52px * var(--rv-scale, 1));
   margin-right: auto;
-  margin-left: 12px;
+  margin-left: calc(12px * var(--rv-scale, 1));
 }
 
 /* Ensure slide content doesn't overlap the footer */
-/* Space reserved for the footer bar.
-   ⚠ The footer bar is position:fixed at 100px — UNSCALED window chrome — while
-   this padding lives INSIDE the scaled canvas, so the two can only agree at one
-   scale. 110 canvas px against the 1280x720 canvas is the compromise: it clears
-   the bar at the scales this deck is actually shown at. Do not raise it to "be
-   safe" — every px here comes straight out of the slide's content budget. */
+/* Space reserved for the footer bar, in canvas px.
+   The bar itself is now sized as calc(100px * var(--rv-scale)) — see .footer-bar
+   — so bar and reservation scale together and this 110 is a true 10px of
+   clearance at EVERY window shape, not just the one the deck was tuned on.
+   (Before 2026-08-19 the bar was fixed 100px window chrome while this padding
+   scaled with the canvas: on a short laptop window the reservation fell to
+   ~81px against a 100px bar and the bar covered the last line of the slide.)
+   Do not raise it to "be safe" — every px here comes straight out of the
+   slide's content budget. */
 .reveal .slides section {
   padding-bottom: 110px;
 }
@@ -356,6 +460,7 @@
     width: auto;
     max-width: none;
     max-height: 60px;
+    transform: none;  /* top bar, not a centred panel — nothing to optically centre */
   }
 
   .reveal .title-slide .title-content {
@@ -375,11 +480,11 @@
 
   /* Smaller footer */
   .reveal .footer-bar {
-    height: 60px;
+    height: calc(60px * var(--rv-scale, 1));
   }
 
   .reveal .footer-bar img {
-    height: 50px;
+    height: calc(50px * var(--rv-scale, 1));
   }
 
   .reveal .controls {
@@ -413,7 +518,10 @@
 
 .reveal .title-slide .title-meta {
   display: flex;
-  align-items: flex-end;
+  /* flex-start, not flex-end: the byline's first line ("Ray Voelker") tops out
+     level with the QR panel. Bottom-aligning instead hung the name 60px below
+     the QR's top edge, which read as two unrelated blocks. */
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1.5em;
   flex-wrap: wrap;
@@ -421,6 +529,12 @@
 
 .reveal .title-slide .title-byline {
   flex: 1 1 auto;
+}
+
+/* Kill reveal's inherited top margin on the first byline paragraph so the flex
+   top edge really is the top of the text, not the top of a margin above it. */
+.reveal .title-slide .title-byline > p:first-child {
+  margin-top: 0;
 }
 
 .reveal .title-slide .title-content p.deck-version {
