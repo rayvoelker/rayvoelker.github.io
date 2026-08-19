@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<!-- ⚠ DELIBERATE DEVIATION FROM REVEAL'S OWN STARTER, 2026-08-19.
+		     Upstream's index.html ships `maximum-scale=1.0, user-scalable=no`,
+		     which is right for a deck you drive from a lectern and wrong for a
+		     page someone reads on a phone after scanning the QR: it takes away
+		     pinch-zoom, the reader's only recourse when type is too small
+		     (WCAG 1.4.4). This copy IS read on phones — that is the whole point
+		     of the QR — so zoom stays. Do not paste the upstream meta back. -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<meta name="description" content="CHPL Lake, the boring parts — a datalake for our specific public library institution. CHPL senior leadership briefing, 2026.">
+		<meta name="keywords" content="Ray Voelker, Cincinnati & Hamilton County Public Library, library data, governed capability, retention, privacy, Sierra">
+		<meta name="author" content="Ray Voelker">
+
+		<meta name="version" content="v1.1.0 (2026-08-19)">
+
+
+		<title>CHPL Lake — the boring parts - Ray Voelker</title>
+
+		<link rel="stylesheet" href="revealjs/reset.css">
+		<link rel="stylesheet" href="revealjs/reveal.css">
+		<link rel="stylesheet" href="revealjs/theme/white.css" id="theme">
+		<link rel="stylesheet" href="css/chpl-brand.css">
+
+		<!-- Syntax highlighting -->
+		<link rel="stylesheet" href="revealjs/plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<!-- Logo panel for title/closing slides — OUTSIDE .reveal so CSS transforms don't affect it -->
+		<div class="title-logo-panel" style="display: none;">
+			<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library">
+		</div>
+
+		<div class="reveal">
+			<!-- Persistent footer bar (beige bar + CHPL logo) -->
+			<div class="footer-bar">
+				<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library" class="footer-chpl-logo">
+			</div>
+
+			<div class="slides">
+
+
+
+				<!-- TITLE SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1 style="font-size: 1.6em;">CHPL Lake</h1>
+						<h2>the boring parts<br><span style="display: block; margin-top: 0.55em; font-size: 0.55em; font-weight: 400; color: #53575A;">a datalake for <span style="color: #a43733; font-weight: 700;">our</span> specific public library institution</span></h2>
+						<div class="title-meta">
+							<div class="title-byline">
+								<p>
+									Ray Voelker<br>
+									Cincinnati &amp; Hamilton County Public Library<br>
+									<a href="mailto:ray.voelker@chpl.org">ray.voelker@chpl.org</a>
+								</p>
+
+								<p class="deck-version">v1.1.0 &middot; 2026-08-19</p>
+
+							</div>
+
+							<figure class="title-qr">
+								<img src="assets/qr-deck.svg" alt="QR code linking to https://rayvoelker.github.io/2026-08/our-own-copy/">
+								<figcaption>rayvoelker.github.io<br>/2026-08/our-own-copy/</figcaption>
+							</figure>
+
+						</div>
+					</div>
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Our Lake, Our Governance</h2>
+
+
+
+
+					<ol>
+
+						<li><strong>The shape of a lakehouse architecture</strong></li>
+
+						<li><strong>The shape of <i>our</i> lake</strong> (and how faithfully we follow it)</li>
+
+						<li><strong>Examples</strong> and what it has answered</li>
+
+					</ol>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						<span class="accent">Please hold all big questions for the examples / showcase at the end.</span>
+					</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section data-background-color="#16243a">
+
+					<div style="text-align: left; margin: 1.4em 0 0 8%; max-width: 86%;">
+  <div style="display: grid; grid-template-columns: max-content 1fr;
+              column-gap: 1.1em; row-gap: 0.5em; font-size: 0.8em;
+              color: #F3E4C5; line-height: 1.35;">
+    <span style="opacity: 0.6;">A lake</span><span>keeps everything as it arrived.</span>
+    <span style="opacity: 0.6;">A warehouse</span><span>keeps it tidied up.</span>
+    <span style="grid-column: 1 / -1; border-top: 1px solid #F3E4C5;
+                 opacity: 0.28; margin: 0.35em 0;"></span>
+    <span style="opacity: 0.6;">A lakehouse</span><span>wants both.</span>
+  </div>
+  <p style="font-size: 1.12em; color: #E97132; margin-top: 1.5em; line-height: 1.25; white-space: nowrap;">
+    So what&rsquo;s it actually supposed to give you?
+  </p>
+</div>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The shape of a lakehouse architecture</h2>
+
+
+					<p style="font-size: 0.7em;">Six common patterns around data lakes</p>
+
+
+
+					<ol>
+
+						<li><strong>Land data raw / medallion architecture</strong>: bronze is append-only. Silver and gold are for transformations and report consumers.</li>
+
+						<li><strong>Open data formats</strong>: the Parquet file format &mdash; a non-proprietary storage container that allows fast reads, compact storage, and flexibility in what is stored and how that data is described.</li>
+
+						<li><strong>Cheap</strong>: storage and computing decoupled. Runs on a single machine or many &mdash; it scales easily, on few resources.</li>
+
+					</ol>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The shape of a lakehouse architecture (cont.)</h2>
+
+
+					<p style="font-size: 0.7em;">The other three are about what it gives back.</p>
+
+
+
+					<ol start="4">
+
+						<li><strong>It remembers</strong>: every version of every record, as of any date you like.</li>
+
+						<li><strong>One copy, many uses</strong>: everything reads the same files.</li>
+
+						<li><strong>New sources land easily</strong>: no rebuild to add the next one.</li>
+
+					</ol>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						(Typically sold alongside these: live streaming data, and machine-learning features.)
+					</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The system forgets. The lake remembers.</h2>
+
+
+					<p style="font-size: 0.7em;">It updates records in place, and vendors do not keep the past for us.</p>
+
+
+
+					<ul>
+
+						<li><strong>Records change in place</strong>: transit legs, item status and location, the card numbers behind e-resource use. The new value overwrites the old, and nothing wrote down that it changed.</li>
+
+						<li><strong>Many small sources</strong>, not one firehose &mdash; all of it on a single server.</li>
+
+						<li><strong>No subscription, no license</strong> &mdash; the running cost is close to zero.</li>
+
+						<li><span class="accent"><strong>Strong data protection</strong> &mdash; the data never leaves our control unless we send it.</span></li>
+
+					</ul>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>What we took, what we skipped, what we added</h2>
+
+
+
+
+					<ul>
+
+						<li><strong>Took, faithfully</strong>: land raw data, remember every version, add new sources cheaply.</li>
+
+						<li><strong>Took by being small</strong>: one machine we already own.</li>
+
+						<li><strong>Declined on purpose</strong>: warehouse-scale, many engines, streaming, a place to train models later.</li>
+
+						<li><strong>Added</strong>: privacy, which is not on their list and is a very big point of ours.</li>
+
+					</ul>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						What we kept is what matters here: <span class="accent">it remembers, and it protects.</span>
+					</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section data-background-color="#16243a">
+
+					<div style="text-align: left; margin: 1.6em 0 0 8%; max-width: 86%;">
+  <p style="font-size: 1.15em; color: #F3E4C5;">Everything so far was what we chose.</p>
+  <p style="font-size: 1.3em; color: #E97132; margin-top: 0.8em;">Now: what it actually is.</p>
+</div>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>What it costs, and who owns it</h2>
+
+
+
+
+					<ul>
+
+						<li>It runs on one machine we already own. There is no cloud bill for the data, and it is easier to secure and monitor.</li>
+
+						<li>The files are a plain, open format. Any tool can read them — there is no vendor to leave, because there is no vendor.</li>
+
+						<li>215 GB today, across 24 registered sources, each one reporting what it did, every run.</li>
+
+						<li>Encrypted at rest, backed up for disaster recovery, and destroyable on purpose — part of the design, not bolted on.</li>
+
+					</ul>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<h2>What is actually in each layer</h2>
+<p style="font-size: 0.58em; margin-bottom: 0.7em;">
+  Three stages, and the same rule at every step: never edit what came before.
+</p>
+<div style="display: flex; gap: 1.1em; font-size: 0.5em; text-align: left; align-items: stretch;">
+      <div style="flex: 1; border-top: 6px solid #97572B; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #97572B; margin-bottom: 0.35em;">BRONZE <span style="font-weight: 400; letter-spacing: 0.5px; color: #53575A;">&#183; raw</span></div>
+        <div style="color: #53575A; margin-bottom: 0.7em; font-style: italic;">exactly what we were handed, encrypted, never edited</div>
+        <ul style="margin: 0; padding-left: 1.1em;">
+          <li>every item record, versioned</li>
+          <li>47.2 million circulation transactions</li>
+          <li>2.09 million catalog records</li>
+          <li>staff work locations, daily</li>
+        </ul>
+      </div>
+      <div style="flex: 1; border-top: 6px solid #8E979F; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #6B747C; margin-bottom: 0.35em;">SILVER <span style="font-weight: 400; letter-spacing: 0.5px; color: #53575A;">&#183; readable</span></div>
+        <div style="color: #53575A; margin-bottom: 0.7em; font-style: italic;">no borrower attached &mdash; nothing personal leaves by accident</div>
+        <ul style="margin: 0; padding-left: 1.1em;">
+          <li>items, with no patron attached</li>
+          <li>transit notes parsed into from, to, and when</li>
+          <li>branches and item types, kept current</li>
+        </ul>
+      </div>
+      <div style="flex: 1; border-top: 6px solid #a43733; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #a43733; margin-bottom: 0.35em;">GOLD <span style="font-weight: 400; letter-spacing: 0.5px; color: #53575A;">&#183; finished</span></div>
+        <div style="color: #53575A; margin-bottom: 0.7em; font-style: italic;">the answers themselves &mdash; rebuilt on a schedule, never hand-edited</div>
+        <ul style="margin: 0; padding-left: 1.1em;">
+          <li>last copies, by branch</li>
+          <li>the transit backlog &mdash; 3,829 items surfaced a month</li>
+          <li>collection pressure by location</li>
+        </ul>
+      </div>
+</div>
+<p style="font-size: 0.5em; margin-top: 0.7em; color: #53575A;">
+  Bronze is captured hourly to daily; silver and gold rebuild overnight. Every run reports what it did &mdash; and this morning they all ran.
+</p>
+<p style="font-size: 0.66em; margin-top: 0.6em;">
+  <span class="accent">You can always walk backwards.</span>
+</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<h2>It remembers, and it protects.</h2>
+<p style="font-size: 0.6em; margin-bottom: 0.2em;">
+  The raw copy is encrypted; the readable copy has no borrower attached.
+</p>
+<svg viewBox="0 0 980 325" style="width: 100%; height: auto; max-height: 280px;"
+     role="img" aria-label="A single encrypted blob holding the whole raw Sierra item record — barcode, location, and the borrower and checkout fields — is decrypted once, has its personal details dropped, and is projected into two readable tables that carry the item identifier and the observation time forward">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#16243a"></path>
+    </marker>
+  </defs>
+
+  <!-- SCD-2 version stack: oldest drawn first so z-order is automatic.
+       Fan is asymmetric (dx=8, dy=14): the 14px vertical step is what
+       exposes a strip tall enough to hold a version number, while the
+       narrow horizontal step buys width for the field tree. The three
+       cards together still occupy exactly the old single-rect footprint
+       (x 8..244, y 42..296), so the stack's centre stays on y=169 and
+       the connector/fork need no adjustment. -->
+  <rect x="24" y="70" width="220" height="226" rx="10" fill="#6E3E24" stroke="#FBFAF8" stroke-opacity="0.5" stroke-width="1.5"></rect>
+  <text x="236" y="293" text-anchor="end" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="12">v1</text>
+  <rect x="16" y="56" width="220" height="226" rx="10" fill="#82492A" stroke="#FBFAF8" stroke-opacity="0.5" stroke-width="1.5"></rect>
+  <text x="228" y="279" text-anchor="end" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="12">v2</text>
+  <rect x="8" y="42" width="220" height="226" rx="10" fill="#97572B" stroke="#FBFAF8" stroke-opacity="0.5" stroke-width="1.5"></rect>
+  <text x="26" y="65" fill="#FFFFFF" fill-opacity="0.72"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="11"
+        font-weight="700" letter-spacing="1.2">BRONZE &#183; KEPT FOREVER</text>
+  <text x="26" y="86" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="16">item.records_full</text>
+  <line x1="26" y1="95" x2="200" y2="95" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="1"></line>
+  <text x="26" y="113" fill="#F3E4C5"
+        font-family="Fira Code, monospace" font-size="12">item_id &#183; observed_at</text>
+  <text x="26" y="131" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="12">ciphertext [BLOB]</text>
+  <text x="34" y="148" fill="#FFFFFF" fill-opacity="0.72"
+        font-family="Fira Code, monospace" font-size="11">&#9492;&#9472; the whole Sierra item</text>
+  <text x="42" y="164" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="11">&#9500;&#9472; bibIds &#183; [79] Location</text>
+  <text x="42" y="180" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="11">&#9500;&#9472; status.code &#183; barcode</text>
+  <text x="42" y="196" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="11">&#9500;&#9472; [66] Patron No.</text>
+  <text x="42" y="212" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="11">&#9500;&#9472; [67] Last Patron</text>
+  <text x="42" y="228" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="11">&#9500;&#9472; [78] Last Checkout</text>
+  <text x="42" y="244" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="11">&#9492;&#9472; varField m (transit)</text>
+  <text x="26" y="261" fill="#FFFFFF" fill-opacity="0.6"
+        font-family="Fira Code, monospace" font-size="11">&#8230; +8 more columns</text>
+  <text x="220" y="261" text-anchor="end" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="12" font-weight="700">v3</text>
+  <text x="337" y="132" text-anchor="middle" fill="#16243a"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="16" font-weight="700">decrypt &#183; drop the</text>
+  <text x="337" y="152" text-anchor="middle" fill="#16243a"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="16" font-weight="700">personal details</text>
+  <line x1="252" y1="169" x2="430" y2="169" stroke="#16243a" stroke-width="3"></line>
+  <line x1="430" y1="96" x2="430" y2="242" stroke="#16243a" stroke-width="3"></line>
+  <line x1="430" y1="96" x2="476" y2="96" stroke="#16243a" stroke-width="3"
+        marker-end="url(#arw)"></line>
+  <line x1="430" y1="242" x2="476" y2="242" stroke="#16243a" stroke-width="3"
+        marker-end="url(#arw)"></line>
+  <text x="337" y="196" text-anchor="middle" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="13" font-style="italic">item_id + observed_at</text>
+  <text x="337" y="213" text-anchor="middle" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="13" font-style="italic">carried forward</text>
+
+  <rect x="482" y="26" width="286" height="140" rx="10" fill="#8E979F"></rect>
+  <text x="500" y="48" fill="#FFFFFF" fill-opacity="0.78"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="12"
+        font-weight="700" letter-spacing="1.6">SILVER</text>
+  <text x="500" y="70" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="16">item.records</text>
+  <line x1="500" y1="79" x2="750" y2="79" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="1"></line>
+  <text x="500" y="98" fill="#F3E4C5"
+        font-family="Fira Code, monospace" font-size="13">item_id &#183; observed_at</text>
+  <text x="500" y="116" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="13">bib_id &#183; location_code</text>
+  <text x="500" y="134" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="13">status_code</text>
+  <text x="500" y="152" fill="#FFFFFF" fill-opacity="0.6"
+        font-family="Fira Code, monospace" font-size="12">&#8230; +8 more</text>
+
+  <rect x="482" y="172" width="286" height="140" rx="10" fill="#8E979F"></rect>
+  <text x="500" y="194" fill="#FFFFFF" fill-opacity="0.78"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="12"
+        font-weight="700" letter-spacing="1.6">SILVER</text>
+  <text x="500" y="216" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="16">item.transit</text>
+  <line x1="500" y1="225" x2="750" y2="225" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="1"></line>
+  <text x="500" y="241" fill="#F3E4C5"
+        font-family="Fira Code, monospace" font-size="13">item_id &#183; observed_at</text>
+  <text x="500" y="258" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="13">transit_to_loc</text>
+  <text x="500" y="275" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="13">transit_from_login</text>
+  <text x="500" y="292" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="13">transit_from_class</text>
+  <text x="500" y="308" fill="#FFFFFF" fill-opacity="0.6"
+        font-family="Fira Code, monospace" font-size="12">&#8230; +4 more</text>
+
+  <text x="784" y="88" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="17">the last-copy question</text>
+  <text x="784" y="112" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="17">reads this</text>
+  <text x="784" y="234" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="17">the transit question</text>
+  <text x="784" y="258" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="17">reads this</text>
+</svg>
+<p style="font-size: 0.6em; margin-top: 0.5em;">
+  A transit note is written by a person. The readable copy keeps their
+  login; the published answer keeps
+  <span class="accent">a place, not a person</span>.
+</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The reason it does not rot</h2>
+
+
+					<p style="font-size: 0.7em;">The standing failure of these projects is a pile nobody trusts.</p>
+
+
+
+					<ul>
+
+						<li><strong>Every run reports what it did</strong> — what it read, what it wrote, and whether it actually worked.</li>
+
+						<li><strong>Every source passes the same checks</strong> before it is allowed to run at all.</li>
+
+						<li><span class="accent"><strong>A test that always passes is not a test.</strong> Ours can fail &mdash; and sometimes do.</span></li>
+
+					</ul>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						The least interesting part of the system, and the reason the rest of it is still true in three years.
+					</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section data-background-color="#16243a">
+
+					<div style="text-align: left; margin: 1.6em 0 0 8%; max-width: 86%;">
+  <p style="font-size: 1.15em; color: #F3E4C5;">You were asked to hold your questions.</p>
+  <p style="font-size: 1.3em; color: #E97132; margin-top: 0.8em;">Now is the time.</p>
+  <p style="font-size: 0.6em; color: #F3E4C5; opacity: 0.72; margin-top: 1.5em;">Everything after this is something it has already answered.</p>
+</div>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<h2>What it has answered</h2>
+<p style="font-size: 0.58em; margin-bottom: 0.7em;">
+  All of these are real, all of them are dated, and most of them are from
+  the last few weeks. <span class="accent">Pick one and we will open it.</span>
+</p>
+<div style="display: flex; gap: 1.6em; font-size: 0.52em; text-align: left;">
+  <ul style="flex: 1; margin: 0; padding-left: 1.1em; line-height: 1.65;">
+    <li><strong>Delhi Township closes Aug 29.</strong> 751 titles where that branch holds every active copy — 733 of them the only physical item we own.</li>
+    <li><strong>Northern Kentucky borrowing ends Jan 3.</strong> Roughly 10,363 cardholders to reach — and we found out early that Sierra alone cannot cleanly identify them.</li>
+    <li><strong>Temporary cards.</strong> 5,276 on file; 2,394 already past expiry. Whether they convert or get abandoned becomes measurable in September.</li>
+    <li><strong>Items stuck in transit.</strong> 3,829 surfaced a month, with a printable pull sheet for each branch.</li>
+  </ul>
+  <ul style="flex: 1; margin: 0; padding-left: 1.1em; line-height: 1.65;">
+    <li><strong>Loan rules vs. published policy.</strong> Where what we tell the public and what the system does disagree.</li>
+    <li><strong>Collection pressure by location.</strong> Which shelves are carrying more than their share. Which shelves are bare.</li>
+    <li><strong>Reading lists on the public web.</strong> Live, rebuilt nightly.</li>
+    <li><strong>Vendor delivery verification.</strong> Proving a file actually arrived when no log survived to say so.</li>
+    <li><strong>Holdings maintenance.</strong> With OCLC, moving from manual to scheduled.</li>
+  </ul>
+</div>
+<p style="font-size: 0.55em; margin-top: 0.9em; font-style: italic; color: #53575A;">
+  Every one of these is the same machinery, pointed at a different question.
+</p>
+
+
+
+				</section>
+
+
+
+
+
+				<section>
+
+
+				<!-- CLOSING SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1 style="font-size: 1.4em;">Choose Boring Technology</h1>
+						<p style="font-size: 0.65em; margin-bottom: 1em;">
+							Almost nothing in here is new &mdash; and that is the achievement.
+<span style="display:block; margin:0.35em auto 0.3em; padding:0.05em 0 0.05em 0.8em;
+             border-left:4px solid #a43733; max-width:26em; text-align:left;
+             font-style:italic; color:#16243a; line-height:1.28;">
+  &ldquo;Let&rsquo;s say every company gets about three innovation tokens. You can
+  spend these however you want, but the supply is fixed for a long while.&rdquo;
+  <span style="display:block; margin-top:0.3em; font-style:normal;
+               font-size:0.7em; line-height:1.25; color:#53575A;">
+    Dan McKinley, <em>Choose Boring Technology</em> (2015)<br>
+    <a href="https://mcfunley.com/choose-boring-technology"
+       style="color:#236688;">mcfunley.com/choose-boring-technology</a>
+  </span>
+</span>
+Everything here is ordinary, durable technology, pointed at questions
+that are ours.
+
+						</p>
+						<p>
+							Ray Voelker<br>
+							<a href="mailto:ray.voelker@chpl.org">ray.voelker@chpl.org</a>
+						</p>
+					</div>
+				</section>
+
+
+
+
+				<section>
+
+					<h2>What we built on</h2>
+
+
+
+
+					<p style="font-size: 0.5em; color: #53575A; margin: 0 0 0.5em 0;">
+  Oldest first. Every date is a public fact you can check.
+</p>
+<table style="font-size: 0.4em; margin: 0 auto; text-align: left; width: 96%;">
+  <thead>
+    <tr>
+      <th style="width: 30%;">What it is</th>
+      <th style="width: 26%;">Since</th>
+      <th>Where it stands</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Debian</strong> &mdash; the operating system</td>
+        <td>1993 &middot; 33 years</td>
+        <td>we run 12 &ldquo;bookworm&rdquo;; <strong>security support to June 2028</strong></td></tr>
+    <tr><td><strong>Postgres</strong> &mdash; the database</td>
+        <td>1996 &middot; 30 years</td>
+        <td>#1 database; 55.6% of professional developers</td></tr>
+    <tr><td><strong>systemd</strong> &mdash; starts things on a schedule</td>
+        <td>2010 &middot; 16 years</td>
+        <td>the default on every major Linux</td></tr>
+    <tr><td><strong>Parquet</strong> &mdash; the file format</td>
+        <td>2013 &middot; Apache 2015</td>
+        <td>the interchange default</td></tr>
+    <tr><td><strong>Datasette</strong> &mdash; the data browser</td>
+        <td>2017</td>
+        <td><strong>still 1.0-alpha</strong>, and we run it in production on purpose</td></tr>
+    <tr><td><strong>Podman</strong> &mdash; runs things in containers</td>
+        <td>2018 &middot; Quadlet 2023</td>
+        <td>ships natively in Red Hat 9.1 and 10</td></tr>
+    <tr><td><strong>dbt</strong> &mdash; the transformation tool</td>
+        <td>Dec 2021</td>
+        <td>the de-facto standard</td></tr>
+    <tr><td><span class="accent"><strong>DuckDB</strong> &mdash; the query engine</span></td>
+        <td><span class="accent">June 2024</span></td>
+        <td><span class="accent">&#9664; the one bet</span></td></tr>
+    <tr><td><span class="accent"><strong>DuckLake</strong> &mdash; the table format</span></td>
+        <td><span class="accent">April 2026</span></td>
+        <td><span class="accent">&#9664; the one bet</span> &middot; v1.1 due Sept 2026</td></tr>
+  </tbody>
+</table>
+<p style="font-size: 0.46em; color: #53575A; margin: 0.7em 0 0 0; font-style: italic;">
+  Three of these are younger than the problem they solve &mdash; DuckLake, Quadlet
+  and Datasette. That is the bet, named.
+</p>
+
+
+
+
+				</section>
+
+				</section>
+
+
+			</div>
+		</div>
+
+		<script src="revealjs/reveal.js"></script>
+		<script src="revealjs/plugin/notes/notes.js"></script>
+		<script src="revealjs/plugin/markdown/markdown.js"></script>
+		<script src="revealjs/plugin/highlight/highlight.js"></script>
+
+		<script>
+			Reveal.initialize({
+				hash: true,
+				slideNumber: 'c/t',
+				// SIZING (changed 2026-08-17 — Ray: "much larger fonts at the viewport").
+				// reveal authors every slide inside a fixed width x height canvas and
+				// then scales that canvas to fit the window. So there are two knobs:
+				//   - width/height: SMALLER canvas => same content scaled up MORE =>
+				//     bigger apparent text at any viewport. Was the 960x700 default.
+				//   - maxScale: the ceiling on that scaling. Was 1.5, which capped the
+				//     deck well below full size on anything larger than ~1080p.
+				// Content is authored against this canvas, so shrinking it is the knob
+				// that can overflow a dense slide vertically. Check slides 7 and 10.
+				// ⭐ CANVAS IS 16:9 ON PURPOSE. The old 960x700 / 820x620 canvases were
+				// ~1.33 — pillarboxed on a 16:9 display, wasting ~26% of the width.
+				// Matching the display aspect reclaims that at no cost to legibility.
+				// With the aspect matched, ONE knob controls apparent text size:
+				//   height (width must stay height * 16/9). Smaller => bigger text.
+				//   540 -> 480 is another +12%; 480 is about the floor before the
+				//   dense slides (7, 10) overflow vertically.
+				// ⭐ 2026-08-18 — CANVAS RESTORED TO REVEAL'S OWN RATIO.
+				// The bug: on 2026-08-17 the canvas was cut 960x700 -> 960x540 to get
+				// bigger text, but the base font stayed at reveal's 42px. Reveal's
+				// contract is that font-size and canvas are a MATCHED PAIR (its
+				// defaults are 960x700 @ 42px = 0.060). 42/540 = 0.078 is 30% oversized,
+				// and with 120px reserved for the footer only 420 of 540 was usable —
+				// 60% of reveal's standard space for the same content. Result: 10 of 12
+				// content slides ran off the bottom of the screen, WORSE on bigger
+				// windows (more upscaling = more spill). Measured headless, 2026-08-18.
+				// 1280x720 keeps Ray's deliberate 16:9, restores the ratio (42/720 =
+				// 0.058), and the extra 320px of width means lines wrap less, which
+				// shortens every slide again.
+				// ⚠ IF YOU CHANGE height, CHANGE THE FONT WITH IT. Run
+				//   scripts/check-fit.py — it renders every slide and fails on overflow.
+				width: 1280,
+				height: 720,
+				minScale: 0.2,
+				maxScale: 4.0,
+				margin: 0.02,
+				// SCROLL VIEW — reveal's own answer to "read this on a phone"
+				// (5.0 feature). It flattens the deck into one linear scrolling
+				// page. It already switched itself on below reveal's default
+				// 435px; 820 widens that to every phone in landscape, every
+				// tablet in portrait and every half-width laptop window, all of
+				// which otherwise got the postage-stamp treatment: a 1280x720
+				// canvas scaled into a strip with ~75% of the screen empty.
+				// ⚠ 820 MUST EQUAL the breakpoint in css/chpl-brand.css.
+				// ⚠ scrollLayout is left at reveal's default 'full' ON PURPOSE.
+				//   'compact' sizes each scroll page to the canvas ASPECT, not
+				//   to its content, so with a landscape canvas on a portrait
+				//   phone slides overlapped and collided. Measured 2026-08-19.
+				// ⚠ Setting scrollActivationWidth to a number disables reveal's
+				//   toggleScrollView() API (upstream issue #3688). We don't call
+				//   it; if you ever want a "read as slides" button, that's the
+				//   constraint you'll hit.
+				scrollActivationWidth: 820,
+				scrollProgress: true,
+
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+
+			// PORTRAIT CANVAS ON SMALL SCREENS — the apparent-text-size knob.
+			// Reveal scales the whole authoring canvas to fit the viewport, so on
+			// a 390px phone a 1280-wide canvas is scaled to 0.30 and 21px list
+			// text lands at 6.3px on screen. Nothing in CSS fixes that from
+			// inside the canvas; the canvas itself is the lever. A portrait
+			// canvas is scaled ~2x less, so the same content reads at 19px.
+			//
+			// 620x980 IS A MEASURED CHOICE, not a guess:
+			//   620x880  -> 2 slides overflow ("The shape of a lakehouse
+			//               architecture" by 91px, "What it has answered" by 29)
+			//   620x980  -> all 16 pages fit, vertically and horizontally
+			//   420x980  -> the navy "A lake / A warehouse" grid runs 19px wide
+			// check-fit.py checks BOTH canvases; run it after any content edit.
+			//
+			// Reveal.configure() is public API. The presenting deck is untouched
+			// above the breakpoint — desktop measured identical before and after.
+			(function mobileCanvas() {
+			  const NARROW = 820;  // == scrollActivationWidth == the CSS breakpoint
+			  let applied = null;
+			  function apply() {
+			    const narrow = window.innerWidth <= NARROW;
+			    if (narrow === applied) return;  // only on an actual crossing
+			    applied = narrow;
+			    Reveal.configure(narrow
+			      ? { width: 620,  height: 1100, margin: 0.04 }
+			      : { width: 1280, height: 720, margin: 0.02 });
+			  }
+			  Reveal.on('ready', apply);
+			  window.addEventListener('resize', apply);
+			})();
+
+			// Toggle footer bar and logo panel based on slide type / dark backgrounds
+			function updateChrome(slide) {
+				const footer = document.querySelector('.footer-bar');
+				const logoPanel = document.querySelector('.title-logo-panel');
+				const isTitle = slide.classList.contains('title-slide');
+				const dark = ['#16243A', '#0C2340', '#00223D', '#0E2841'];
+				const hasDarkBg = dark.includes((slide.dataset.backgroundColor || '').toUpperCase());
+				footer.style.display = (isTitle || hasDarkBg) ? 'none' : 'flex';
+				logoPanel.style.display = isTitle ? 'flex' : 'none';
+			}
+			Reveal.on('slidechanged', event => updateChrome(event.currentSlide));
+			Reveal.on('ready', event => updateChrome(event.currentSlide));
+
+			// Publish reveal's canvas scale to CSS as --rv-scale.
+			// WHY: the footer bar is fixed window chrome (unscaled px) but the space
+			// reserved for it is padding INSIDE the scaled canvas, so on a short
+			// window the reservation shrinks below the bar and the bar eats the last
+			// line of the slide. Ray hit this on a laptop display, slide 7, 2026-08-19.
+			// With the bar sized in calc(px * var(--rv-scale)) the two move together
+			// and can never disagree, at any window shape.
+			function publishScale() {
+				document.documentElement.style.setProperty('--rv-scale', Reveal.getScale());
+			}
+			Reveal.on('ready', publishScale);
+			Reveal.on('resize', publishScale);
+			window.addEventListener('resize', publishScale);
+		</script>
+	</body>
+</html>
