@@ -2,13 +2,20 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<!-- ⚠ DELIBERATE DEVIATION FROM REVEAL'S OWN STARTER, 2026-08-19.
+		     Upstream's index.html ships `maximum-scale=1.0, user-scalable=no`,
+		     which is right for a deck you drive from a lectern and wrong for a
+		     page someone reads on a phone after scanning the QR: it takes away
+		     pinch-zoom, the reader's only recourse when type is too small
+		     (WCAG 1.4.4). This copy IS read on phones — that is the whole point
+		     of the QR — so zoom stays. Do not paste the upstream meta back. -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<meta name="description" content="CHPL Lake, the boring parts — a datalake for our specific public library institution. CHPL senior leadership briefing, 2026.">
 		<meta name="keywords" content="Ray Voelker, Cincinnati & Hamilton County Public Library, library data, governed capability, retention, privacy, Sierra">
 		<meta name="author" content="Ray Voelker">
 
-		<meta name="version" content="v1.0.0 (2026-08-19)">
+		<meta name="version" content="v1.1.0 (2026-08-19)">
 
 
 		<title>CHPL Lake — the boring parts - Ray Voelker</title>
@@ -50,7 +57,7 @@
 									<a href="mailto:ray.voelker@chpl.org">ray.voelker@chpl.org</a>
 								</p>
 
-								<p class="deck-version">v1.0.0 &middot; 2026-08-19</p>
+								<p class="deck-version">v1.1.0 &middot; 2026-08-19</p>
 
 							</div>
 
@@ -733,9 +740,58 @@ that are ours.
 				minScale: 0.2,
 				maxScale: 4.0,
 				margin: 0.02,
+				// SCROLL VIEW — reveal's own answer to "read this on a phone"
+				// (5.0 feature). It flattens the deck into one linear scrolling
+				// page. It already switched itself on below reveal's default
+				// 435px; 820 widens that to every phone in landscape, every
+				// tablet in portrait and every half-width laptop window, all of
+				// which otherwise got the postage-stamp treatment: a 1280x720
+				// canvas scaled into a strip with ~75% of the screen empty.
+				// ⚠ 820 MUST EQUAL the breakpoint in css/chpl-brand.css.
+				// ⚠ scrollLayout is left at reveal's default 'full' ON PURPOSE.
+				//   'compact' sizes each scroll page to the canvas ASPECT, not
+				//   to its content, so with a landscape canvas on a portrait
+				//   phone slides overlapped and collided. Measured 2026-08-19.
+				// ⚠ Setting scrollActivationWidth to a number disables reveal's
+				//   toggleScrollView() API (upstream issue #3688). We don't call
+				//   it; if you ever want a "read as slides" button, that's the
+				//   constraint you'll hit.
+				scrollActivationWidth: 820,
+				scrollProgress: true,
 
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
+
+			// PORTRAIT CANVAS ON SMALL SCREENS — the apparent-text-size knob.
+			// Reveal scales the whole authoring canvas to fit the viewport, so on
+			// a 390px phone a 1280-wide canvas is scaled to 0.30 and 21px list
+			// text lands at 6.3px on screen. Nothing in CSS fixes that from
+			// inside the canvas; the canvas itself is the lever. A portrait
+			// canvas is scaled ~2x less, so the same content reads at 19px.
+			//
+			// 620x980 IS A MEASURED CHOICE, not a guess:
+			//   620x880  -> 2 slides overflow ("The shape of a lakehouse
+			//               architecture" by 91px, "What it has answered" by 29)
+			//   620x980  -> all 16 pages fit, vertically and horizontally
+			//   420x980  -> the navy "A lake / A warehouse" grid runs 19px wide
+			// check-fit.py checks BOTH canvases; run it after any content edit.
+			//
+			// Reveal.configure() is public API. The presenting deck is untouched
+			// above the breakpoint — desktop measured identical before and after.
+			(function mobileCanvas() {
+			  const NARROW = 820;  // == scrollActivationWidth == the CSS breakpoint
+			  let applied = null;
+			  function apply() {
+			    const narrow = window.innerWidth <= NARROW;
+			    if (narrow === applied) return;  // only on an actual crossing
+			    applied = narrow;
+			    Reveal.configure(narrow
+			      ? { width: 620,  height: 1100, margin: 0.04 }
+			      : { width: 1280, height: 720, margin: 0.02 });
+			  }
+			  Reveal.on('ready', apply);
+			  window.addEventListener('resize', apply);
+			})();
 
 			// Toggle footer bar and logo panel based on slide type / dark backgrounds
 			function updateChrome(slide) {
