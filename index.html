@@ -19,6 +19,15 @@
   .card h3 a{text-decoration:none}
   .card p{margin:0;color:var(--fg-muted);font-size:.95rem}
   .card .ext{font-size:.78rem;color:var(--fg-faint);font-variant:small-caps;letter-spacing:.03em}
+  .lineage{display:grid;gap:1.25rem;grid-template-columns:1fr;margin:1rem 0 2.5rem}
+  @media(min-width:900px){.lineage{grid-template-columns:repeat(3,1fr)}}
+  .lineage .card{display:flex;flex-direction:column}
+  .step{font-size:.72rem;font-variant:small-caps;letter-spacing:.06em;color:var(--fg-faint);margin-bottom:.3rem}
+  .step .n{color:var(--accent);font-weight:700}
+  .badge{display:inline-block;margin-left:.4rem;padding:.05rem .4rem;border:1px solid var(--accent-soft);
+         border-radius:3px;color:var(--accent);font-variant:small-caps;letter-spacing:.05em}
+  .lineage-note{color:var(--fg-muted);max-width:60ch;margin:.25rem 0 0}
+  h3.section{margin:2rem 0 .2rem;font-size:1rem;font-variant:small-caps;letter-spacing:.04em}
   .archive h3{margin:1.5rem 0 .4rem;font-size:.95rem;font-variant:small-caps;letter-spacing:.03em;color:var(--fg-muted)}
   .archive ul{margin:0;padding-left:1.1rem}
   .archive li{margin:.25rem 0}
@@ -41,13 +50,26 @@
     <h3><a href="chimpy-lake/">chimpy-lake showboats</a></h3>
     <p>Narrated, reproducible walkthroughs of working code — the data-engineering canon shown running, and curated reading lists matched to the catalog.</p>
   </div>
+</div>
+
+<h3 class="section">The lake, told three times</h3>
+<p class="lineage-note">The same subject in three rooms over two years — from early experiments, to
+explaining it in plain language, to what it is now that it runs.</p>
+<div class="lineage">
   <div class="card">
+    <p class="step"><span class="n">1</span> · IUG 2026 · the beginning</p>
     <h3><a href="iug2026/talk-datalake-building-a-data-lake.html">Building a Data Lake</a></h3>
-    <p>The IUG 2026 talk — early experiments at CHPL with library-owned data infrastructure.</p>
+    <p>Early experiments at CHPL with library-owned data infrastructure — the case for keeping our own copy, before there was one.</p>
   </div>
   <div class="card">
+    <p class="step"><span class="n">2</span> · May 2026</p>
     <h3><a href="2026-05/issue_2_our-data-our-lake/">Our Data, Our Lake</a></h3>
-    <p>A printable zine on owning the library's data — the lake, in plain language.</p>
+    <p>The lake in plain language, with a printable zine: own your data, and treat cataloging it as a capability.</p>
+  </div>
+  <div class="card">
+    <p class="step"><span class="n">3</span> · August 2026 <span class="badge">latest</span></p>
+    <h3><a href="2026-08/our-own-copy/">CHPL Lake — the boring parts</a></h3>
+    <p>A senior-leadership briefing on the lake now that it runs, and the two things it buys us that actually matter: it remembers, and it protects. Deck and a one-page handout.</p>
   </div>
 </div>
 
@@ -67,16 +89,12 @@
 <h2>Featured</h2>
 <div class="featured">
   <div class="card">
-    <h3><a href="2026-08/our-own-copy/">CHPL Lake — the boring parts</a></h3>
-    <p>A senior-leadership briefing on the library's data lake, and the two things it buys us that actually matter: it remembers, and it protects. Deck, one-page handout, and what it has answered — <a href="2026-08/">August 2026 talks</a>.</p>
-  </div>
-  <div class="card">
     <h3><a href="2026-06/">Concept Zines — June 2026</a></h3>
     <p>A five-part concept-zine series on the library's data work: dbt, chimpy-reader, the medallion layers, the roadmap, and what's in the lake.</p>
   </div>
   <div class="card">
-    <h3><a href="2026-05/">Talks &amp; Zines — May 2026</a></h3>
-    <p>Two recent talks, each with a printable zine: Suggest a Purchase …And More! and Our Data, Our Lake.</p>
+    <h3><a href="2026-05/">Suggest a Purchase …And More!</a></h3>
+    <p>How purchase suggestions actually flow, with a printable zine — one of two talks in the May 2026 set.</p>
   </div>
   <div class="card">
     <h3><a href="iug2026-shared/">IUG 2026 Conference Notes</a></h3>
@@ -112,6 +130,7 @@
   </ul>
   <h3>Talks &amp; presentations</h3>
   <ul>
+    <li><a href="2026-08/">CHPL senior leadership — August 2026</a></li>
     <li><a href="iug2026/">IUG 2026 — all presentations</a></li>
     <li><a href="iug2023/">IUG 2023</a></li>
     <li><a href="iug2022/">IUG 2022</a></li>
