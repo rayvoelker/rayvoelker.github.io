@@ -1,0 +1,1219 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<!-- ⚠ DELIBERATE DEVIATION FROM REVEAL'S OWN STARTER, 2026-08-19.
+		     Upstream's index.html ships `maximum-scale=1.0, user-scalable=no`,
+		     which is right for a deck you drive from a lectern and wrong for a
+		     page someone reads on a phone after scanning the QR: it takes away
+		     pinch-zoom, the reader's only recourse when type is too small
+		     (WCAG 1.4.4). This copy IS read on phones — that is the whole point
+		     of the QR — so zoom stays. Do not paste the upstream meta back. -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<meta name="description" content="CHPL Lake, the boring parts — keeping our own copy of the library's data, securely, on one machine we already own. OH-IUG 2026, Columbus Metropolitan Library.">
+		<meta name="keywords" content="Ray Voelker, Cincinnati & Hamilton County Public Library, OH-IUG, Sierra, library data, data lake, transit, collection pressure, privacy">
+		<meta name="author" content="Ray Voelker">
+
+		<meta name="version" content="v2.1.0 (2026-10-09)">
+
+
+		<title>CHPL Lake — the boring parts - Ray Voelker</title>
+
+		<link rel="stylesheet" href="revealjs/reset.css">
+		<link rel="stylesheet" href="revealjs/reveal.css">
+		<link rel="stylesheet" href="revealjs/theme/white.css" id="theme">
+		<link rel="stylesheet" href="css/chpl-brand.css">
+
+		<!-- Syntax highlighting -->
+		<link rel="stylesheet" href="revealjs/plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<!-- Logo panel for title/closing slides — OUTSIDE .reveal so CSS transforms don't affect it -->
+		<div class="title-logo-panel" style="display: none;">
+			<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library">
+		</div>
+
+		<div class="reveal">
+			<!-- Persistent footer bar (beige bar + CHPL logo) -->
+			<div class="footer-bar">
+				<img src="assets/CHPL_Brandmark_Primary.png" alt="Cincinnati & Hamilton County Public Library" class="footer-chpl-logo">
+			</div>
+
+			<div class="slides">
+
+
+
+				<!-- TITLE SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1 style="font-size: 1.6em;">CHPL Lake</h1>
+						<h2>the boring parts<br><span style="display: block; margin-top: 0.55em; font-size: 0.55em; font-weight: 400; color: #53575A;"><span style="color: #a43733; font-weight: 700;">our</span> library&rsquo;s datalake, built on a medallion architecture</span><span style="display: block; margin-top: 0.4em; font-size: 0.42em; font-weight: 400; color: #53575A;">OH-IUG 2026 &middot; Columbus Metropolitan Library</span></h2>
+						<div class="title-meta">
+							<div class="title-byline">
+								<p>
+									Ray Voelker<br>
+									Cincinnati &amp; Hamilton County Public Library<br>
+									<a href="mailto:ray.voelker@chpl.org">ray.voelker@chpl.org</a>
+								</p>
+
+								<p class="deck-version">v2.1.0 &middot; 2026-10-09</p>
+
+							</div>
+
+							<figure class="title-qr">
+								<img src="assets/qr-deck.svg" alt="QR code linking to https://rayvoelker.github.io/2026-10/boring-parts/">
+								<figcaption>rayvoelker.github.io<br>/2026-10/boring-parts/</figcaption>
+							</figure>
+
+						</div>
+					</div>
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Reciprocal borrowing for Northern Kentucky</h2>
+
+
+
+
+					<ul>
+
+						<li>Ending, partly over eBook costs. <strong>How much eBook use is Kentucky&rsquo;s?</strong></li>
+
+						<li>OverDrive has the <strong>barcode</strong>. Sierra has the <strong>patron</strong> and address.</li>
+
+						<li>Barcodes change: <strong>4,854 patrons</strong> got new ones in eight weeks.</li>
+
+						<li>So: whose barcode was it <em>on the day of the checkout</em>? An <strong>as-of query</strong>.</li>
+
+					</ul>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						<span class="accent">Joining two vendors&rsquo; data as of the day it happened.</span>
+					</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section data-background-color="#16243a">
+
+					<div style="text-align: left; margin: 0.6em 0 0 8%; max-width: 86%; color: #F3E4C5;">
+  <p style="font-size: 0.7em; opacity: 0.75; margin-bottom: 0.9em;">Since August 2023, our circulation history covers</p>
+  <div style="display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: 0.8em; row-gap: 0.6em; align-items: start; line-height: 1.05;">
+    <span style="font-size: 1.5em; font-weight: 700;">53.4M</span><span style="font-size: 0.75em; padding-top: 0.22em;">circulation transactions</span>
+    <span style="font-size: 1.5em; font-weight: 700;">2.99M</span><span style="font-size: 0.75em; padding-top: 0.22em;">distinct items</span>
+    <span style="font-size: 1.5em; font-weight: 700; color: #E97132;">544k</span><span style="font-size: 0.75em; padding-top: 0.22em; color: #E97132;">of those items are no longer in the catalog: nearly 1 in 5</span>
+  </div>
+  <p style="font-size: 0.7em; margin-top: 0.9em;">All of it in about <strong>16 GB</strong>, on one machine we already own.</p>
+  <p style="font-size: 0.62em; margin-top: 1.2em; line-height: 1.35;">
+    Sierra is built to run the library <em>right now</em>. It keeps the current state and doesn&rsquo;t track changes.
+    That is correct behaviour for running a library. Keeping the history is a different job.
+  </p>
+</div>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>Our Lake, Our Governance</h2>
+
+
+
+
+					<ol>
+
+						<li><strong>The shape of a lakehouse architecture</strong></li>
+
+						<li><strong>The shape of <i>our</i> lake</strong> (and how faithfully we follow it)</li>
+
+						<li><strong>Two questions Sierra cannot answer</strong>: how long transit really takes, and where collection pressure is building</li>
+
+						<li><strong>Everything else</strong> it has answered</li>
+
+					</ol>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section data-background-color="#16243a">
+
+					<div style="text-align: left; margin: 1.4em 0 0 8%; max-width: 86%;">
+  <div style="display: grid; grid-template-columns: max-content 1fr;
+              column-gap: 1.1em; row-gap: 0.5em; font-size: 0.8em;
+              color: #F3E4C5; line-height: 1.35;">
+    <span style="opacity: 0.6;">A lake</span><span>keeps everything as it arrived.</span>
+    <span style="opacity: 0.6;">A warehouse</span><span>keeps it tidied up.</span>
+    <span style="grid-column: 1 / -1; border-top: 1px solid #F3E4C5;
+                 opacity: 0.28; margin: 0.35em 0;"></span>
+    <span style="opacity: 0.6;">A lakehouse</span><span>wants both.</span>
+  </div>
+  <p style="font-size: 1.12em; color: #E97132; margin-top: 1.5em; line-height: 1.25; white-space: nowrap;">
+    So what&rsquo;s it actually supposed to give you?
+  </p>
+</div>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The shape of a lakehouse architecture</h2>
+
+
+					<p style="font-size: 0.7em;">Six common patterns around data lakes</p>
+
+
+
+					<ol>
+
+						<li><strong>Land data raw / medallion architecture</strong>: bronze is append-only. Silver and gold are for transformations and report consumers.</li>
+
+						<li><strong>Open data formats</strong>: the Parquet file format &mdash; a non-proprietary storage container that allows fast reads, compact storage, and flexibility in what is stored and how that data is described.</li>
+
+						<li><strong>Cheap</strong>: storage and computing decoupled. Runs on a single machine or many &mdash; it scales easily, on few resources.</li>
+
+					</ol>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The shape of a lakehouse architecture (cont.)</h2>
+
+
+					<p style="font-size: 0.7em;">The other three are about what it gives back.</p>
+
+
+
+					<ol start="4">
+
+						<li><strong>It remembers</strong>: every version of every record, as of any date you like.</li>
+
+						<li><strong>One copy, many uses</strong>: everything reads the same files.</li>
+
+						<li><strong>New sources land easily</strong>: no rebuild to add the next one.</li>
+
+					</ol>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						(Typically sold alongside these: live streaming data, and machine-learning features.)
+					</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The lake helps in many practical ways</h2>
+
+
+					<p style="font-size: 0.7em;">Sierra keeps the current state, and vendors do not keep the past for us.</p>
+
+
+
+					<ul>
+
+						<li><strong>Records change in place</strong>: transit notes, item status and location, the logins behind a transit, the card numbers behind e-resource use. The new value overwrites the old, leaving no record it changed.</li>
+
+						<li><strong>Small data, many sources</strong>: the hard part is joining them, not storing them.</li>
+
+						<li><strong>No subscription, no license</strong> &mdash; the running cost is close to zero.</li>
+
+						<li><span class="accent"><strong>Strong data protection</strong> &mdash; the data never leaves our control unless we send it.</span></li>
+
+					</ul>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>What we took, what we skipped, what we added</h2>
+
+
+
+
+					<ul>
+
+						<li><strong>Took, faithfully</strong>: land raw data, remember every version, add new sources cheaply.</li>
+
+						<li><strong>Took by being small</strong>: one machine we already own.</li>
+
+						<li><strong>Declined on purpose</strong>: not warehouse-scale, no streaming, no AI integration (yet).</li>
+
+						<li><strong>Added</strong>: <strong class="accent">privacy</strong>, which is not on their list and is a very big point of ours.</li>
+
+					</ul>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						What we kept is what matters here: <span class="accent">it remembers, and it protects.</span>
+					</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section data-background-color="#16243a">
+
+					<div style="text-align: left; margin: 1.6em 0 0 8%; max-width: 86%;">
+  <p style="font-size: 1.15em; color: #F3E4C5;">Everything so far was what we chose.</p>
+  <p style="font-size: 1.3em; color: #E97132; margin-top: 0.8em;">Now: what it actually is.</p>
+</div>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<h2>Where our data comes from: Sierra</h2>
+<p style="font-size: 0.58em; margin-bottom: 0.7em;">
+  Records saved as snapshots on a regular schedule.
+</p>
+<div style="display: flex; gap: 1.1em; font-size: 0.5em; text-align: left; align-items: stretch;">
+      <div style="flex: 1; border-top: 6px solid #a43733; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #a43733; margin-bottom: 0.5em;">EVERY HOUR</div>
+        <ul style="margin: 0; padding-left: 1.1em;">
+          <li>item records: status, location, transit notes</li>
+          <li>holds, including the ones Sierra will purge</li>
+          <li>volume records</li>
+          <li>patron records, encrypted the moment they land</li>
+        </ul>
+      </div>
+      <div style="flex: 1; border-top: 6px solid #6B747C; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #6B747C; margin-bottom: 0.5em;">EVERY NIGHT</div>
+        <ul style="margin: 0; padding-left: 1.1em;">
+          <li>circulation transactions</li>
+          <li>bib records and the full MARC</li>
+          <li>orders: placed, paid, received</li>
+          <li>record links, and staff logins</li>
+        </ul>
+      </div>
+      <div style="flex: 1; border-top: 6px solid #97572B; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #97572B; margin-bottom: 0.5em;">EVERY WEEK</div>
+        <ul style="margin: 0; padding-left: 1.1em;">
+          <li>the code tables: locations, item types, patron types, statuses</li>
+          <li>so last year&rsquo;s report can still use last year&rsquo;s names</li>
+        </ul>
+      </div>
+</div>
+<p style="font-size: 0.52em; margin-top: 0.9em; color: #53575A;">
+  Each one is its own scheduled job: a <strong>systemd timer</strong>, Linux&rsquo;s standard way to schedule and run tasks.
+</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<h2>&hellip;and beyond Sierra</h2>
+<p style="font-size: 0.58em; margin-bottom: 0.7em;">
+  Vendor data only makes sense next to our own. The lake is where they meet.
+</p>
+<div style="display: flex; gap: 1.1em; font-size: 0.5em; text-align: left; align-items: stretch;">
+      <div style="flex: 1; border-top: 6px solid #a43733; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #a43733; margin-bottom: 0.5em;">VENDORS</div>
+        <ul style="margin: 0; padding-left: 1.1em;">
+          <li><strong>OverDrive / Libby</strong>: e-checkouts, twice a day, in the only windows OverDrive publishes</li>
+          <li><strong>SenSource</strong>: the door counters (visits, occupancy, time spent), nightly</li>
+          <li><strong>Purchase suggestions</strong> from patrons, every five minutes</li>
+        </ul>
+      </div>
+      <div style="flex: 1; border-top: 6px solid #6B747C; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #6B747C; margin-bottom: 0.5em;">OPEN DATA</div>
+        <ul style="margin: 0; padding-left: 1.1em;">
+          <li><strong>Open Library</strong> and <strong>Wikidata</strong>: which editions are the same work</li>
+          <li><strong>Reading levels</strong>, gathered from the record and from open sources</li>
+          <li><strong>Award and bestseller lists</strong>: Newbery, the New York Times</li>
+        </ul>
+      </div>
+</div>
+<p style="font-size: 0.5em; margin-top: 0.9em; color: #53575A;">
+  <strong>Started:</strong> grouping every edition, eBook and audiobook of a book into one <strong>work</strong> (FRBR). 2.19 million records, 1.94 million works so far.
+</p>
+<p style="font-size: 0.66em; margin-top: 0.5em;">
+  <span class="accent">A new source is a new job, not a new system.</span>
+</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>What it costs, and who owns it</h2>
+
+
+
+
+					<ul>
+
+						<li><strong>One machine we already own.</strong> No cloud bill. Easier to secure and watch.</li>
+
+						<li><strong>Plain, open files.</strong> Any tool can read them. No vendor to leave.</li>
+
+						<li><strong>About 50 GB exists nowhere else.</strong> Growing about 10 GB a month, before any retention policy.</li>
+
+						<li><strong>Encrypted, backed up, destroyable on purpose.</strong> By design, not bolted on.</li>
+
+					</ul>
+
+
+
+
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<h2>What is actually in each layer</h2>
+<p style="font-size: 0.58em; margin-bottom: 0.7em;">
+  Three stages, and the same rule at every step: never edit what came before.
+</p>
+<div style="display: flex; gap: 1.2em; font-size: 0.62em; text-align: left; align-items: stretch;">
+      <div style="flex: 1; border-top: 6px solid #97572B; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #97572B; margin-bottom: 0.35em;">BRONZE <span style="letter-spacing: 0.5px; color: #16243a;">&#183; raw</span></div>
+        <div style="color: #16243a; margin-bottom: 0.55em; font-weight: 500;">what we were handed, encrypted, never edited</div>
+        <ul style="margin: 0; padding-left: 1.1em; color: #16243a;">
+          <li>every item record, versioned</li>
+          <li>53.4 million circulation transactions</li>
+          <li>2.19 million catalog records</li>
+          <li>staff work locations, daily</li>
+        </ul>
+      </div>
+      <div style="flex: 1; border-top: 6px solid #8E979F; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #6B747C; margin-bottom: 0.35em;">SILVER <span style="letter-spacing: 0.5px; color: #16243a;">&#183; readable</span></div>
+        <div style="color: #16243a; margin-bottom: 0.55em; font-weight: 500;">the borrower removed on the way in</div>
+        <ul style="margin: 0; padding-left: 1.1em; color: #16243a;">
+          <li>items, with no patron attached</li>
+          <li>transit notes parsed: from, to, when</li>
+          <li>branches and item types, current</li>
+        </ul>
+      </div>
+      <div style="flex: 1; border-top: 6px solid #a43733; padding-top: 0.6em;">
+        <div style="font-weight: 700; letter-spacing: 1.4px; color: #a43733; margin-bottom: 0.35em;">GOLD <span style="letter-spacing: 0.5px; color: #16243a;">&#183; finished</span></div>
+        <div style="color: #16243a; margin-bottom: 0.55em; font-weight: 500;">the answers, rebuilt on a schedule</div>
+        <ul style="margin: 0; padding-left: 1.1em; color: #16243a;">
+          <li>last copies, by branch</li>
+          <li>transit journeys, door to door</li>
+          <li>collection pressure by location</li>
+        </ul>
+      </div>
+</div>
+<p style="font-size: 0.56em; margin-top: 0.8em; color: #53575A;">
+  Captured hourly to daily, rebuilt overnight. Every run reports what it did, and this morning they all ran.
+</p>
+<p style="font-size: 0.66em; margin-top: 0.6em;">
+  <span class="accent">You can always walk backwards.</span>
+</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<h2>It remembers, and it protects.</h2>
+<p style="font-size: 0.6em; margin-bottom: 0.2em;">
+  The raw copy is encrypted; the readable copy has no borrower attached.
+</p>
+<svg viewBox="0 0 930 325" style="width: 100%; height: auto; max-height: 375px;"
+     role="img" aria-label="A single encrypted blob holding the whole raw Sierra item record — barcode, location, and the borrower and checkout fields — is decrypted once, has its personal details dropped, and is projected into two readable tables that carry the item identifier and the observation time forward">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#16243a"></path>
+    </marker>
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="3" flood-color="#16243a" flood-opacity="0.22"></feDropShadow>
+    </filter>
+  </defs>
+
+  <!-- SCD-2 version stack: oldest drawn first so z-order is automatic.
+       Fan is asymmetric (dx=8, dy=14): the 14px vertical step is what
+       exposes a strip tall enough to hold a version number, while the
+       narrow horizontal step buys width for the field tree. The three
+       cards together still occupy exactly the old single-rect footprint
+       (x 8..244, y 42..296), so the stack's centre stays on y=169 and
+       the connector/fork need no adjustment. -->
+  <rect x="24" y="70" width="220" height="226" rx="10" fill="#6E3E24" filter="url(#card-shadow)" stroke="#FBFAF8" stroke-opacity="0.5" stroke-width="1.5"></rect>
+  <text x="236" y="293" text-anchor="end" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="12">v1</text>
+  <rect x="16" y="56" width="220" height="226" rx="10" fill="#82492A" filter="url(#card-shadow)" stroke="#FBFAF8" stroke-opacity="0.5" stroke-width="1.5"></rect>
+  <text x="228" y="279" text-anchor="end" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="12">v2</text>
+  <rect x="8" y="42" width="220" height="226" rx="10" fill="#97572B" filter="url(#card-shadow)" stroke="#FBFAF8" stroke-opacity="0.5" stroke-width="1.5"></rect>
+  <!-- padlock: the raw copy is encrypted (added 2026-10-08, Ray) -->
+  <path d="M 29.5 59.5 v -2.5 a 3.5 3.5 0 0 1 7 0 v 2.5" fill="none"
+        stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"></path>
+  <rect x="26.5" y="59.5" width="13" height="9.5" rx="1.6" fill="#FFFFFF"></rect>
+  <circle cx="33" cy="63.8" r="1.3" fill="#97572B"></circle>
+  <text x="46" y="65" fill="#FFFFFF" fill-opacity="0.72"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="11"
+        font-weight="700" letter-spacing="1.2">BRONZE &#183; RAW</text>
+  <text x="26" y="86" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="16">item.records_full</text>
+  <line x1="26" y1="95" x2="200" y2="95" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="1"></line>
+  <text x="26" y="113" fill="#F3E4C5"
+        font-family="Fira Code, monospace" font-size="12">item_id &#183; observed_at</text>
+  <text x="26" y="131" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="12">ciphertext [BLOB]</text>
+  <text x="34" y="148" fill="#FFFFFF" fill-opacity="0.72"
+        font-family="Fira Code, monospace" font-size="11">&#9492;&#9472; the whole Sierra item</text>
+  <text x="42" y="164" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="11">&#9500;&#9472; bibIds &#183; [79] Location</text>
+  <text x="42" y="180" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="11">&#9500;&#9472; status.code &#183; barcode</text>
+  <text x="42" y="196" fill="#FFB3AC" font-weight="700"
+        font-family="Fira Code, monospace" font-size="11">&#9500;&#9472; [66] Patron No.</text>
+  <text x="42" y="212" fill="#FFB3AC" font-weight="700"
+        font-family="Fira Code, monospace" font-size="11">&#9500;&#9472; [67] Last Patron</text>
+  <text x="42" y="228" fill="#FFB3AC" font-weight="700"
+        font-family="Fira Code, monospace" font-size="11">&#9500;&#9472; [78] Last Checkout</text>
+  <text x="42" y="244" fill="#FFFFFF" fill-opacity="0.9"
+        font-family="Fira Code, monospace" font-size="11">&#9492;&#9472; varField m (transit)</text>
+  <text x="26" y="261" fill="#FFFFFF" fill-opacity="0.6"
+        font-family="Fira Code, monospace" font-size="11">&#8230; +8 more columns</text>
+  <text x="220" y="261" text-anchor="end" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="12" font-weight="700">v3</text>
+  <text x="126" y="318" text-anchor="middle" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="13" font-style="italic">a new version every time it changed</text>
+  <!-- key: this step decrypts (added 2026-10-08, Ray) -->
+  <circle cx="320" cy="108" r="7" fill="none" stroke="#16243a" stroke-width="3.2"></circle>
+  <line x1="327" y1="108" x2="358" y2="108" stroke="#16243a" stroke-width="3.2" stroke-linecap="round"></line>
+  <line x1="349" y1="108" x2="349" y2="115" stroke="#16243a" stroke-width="3.2" stroke-linecap="round"></line>
+  <line x1="357" y1="108" x2="357" y2="117" stroke="#16243a" stroke-width="3.2" stroke-linecap="round"></line>
+  <text x="337" y="132" text-anchor="middle" fill="#16243a"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="16" font-weight="700">decrypt &#183; drop the</text>
+  <text x="337" y="152" text-anchor="middle" fill="#a43733"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="16" font-weight="700">personal details</text>
+  <line x1="252" y1="169" x2="430" y2="169" stroke="#16243a" stroke-width="3"></line>
+  <line x1="430" y1="96" x2="430" y2="242" stroke="#16243a" stroke-width="3"></line>
+  <line x1="430" y1="96" x2="476" y2="96" stroke="#16243a" stroke-width="3"
+        marker-end="url(#arw)"></line>
+  <line x1="430" y1="242" x2="476" y2="242" stroke="#16243a" stroke-width="3"
+        marker-end="url(#arw)"></line>
+  <text x="337" y="196" text-anchor="middle" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="13" font-style="italic">item_id + observed_at</text>
+  <text x="337" y="213" text-anchor="middle" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="13" font-style="italic">carried forward</text>
+
+  <rect x="482" y="26" width="286" height="140" rx="10" fill="#8E979F" filter="url(#card-shadow)"></rect>
+  <text x="500" y="48" fill="#FFFFFF" fill-opacity="0.78"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="12"
+        font-weight="700" letter-spacing="1.6">SILVER &#183; READABLE</text>
+  <text x="500" y="70" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="16">item.records</text>
+  <line x1="500" y1="79" x2="750" y2="79" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="1"></line>
+  <text x="500" y="98" fill="#F3E4C5"
+        font-family="Fira Code, monospace" font-size="13">item_id &#183; observed_at</text>
+  <text x="500" y="116" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="13">bib_id &#183; location_code</text>
+  <text x="500" y="134" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="13">status_code</text>
+  <text x="500" y="152" fill="#FFFFFF" fill-opacity="0.6"
+        font-family="Fira Code, monospace" font-size="12">&#8230; +8 more</text>
+
+  <rect x="482" y="172" width="286" height="140" rx="10" fill="#8E979F" filter="url(#card-shadow)"></rect>
+  <text x="500" y="194" fill="#FFFFFF" fill-opacity="0.78"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="12"
+        font-weight="700" letter-spacing="1.6">SILVER &#183; READABLE</text>
+  <text x="500" y="216" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="16">item.transit</text>
+  <line x1="500" y1="225" x2="750" y2="225" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="1"></line>
+  <text x="500" y="241" fill="#F3E4C5"
+        font-family="Fira Code, monospace" font-size="13">item_id &#183; observed_at</text>
+  <text x="500" y="258" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="13">transit_to_loc</text>
+  <text x="500" y="275" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="13">transit_from_login</text>
+  <text x="500" y="292" fill="#FFFFFF"
+        font-family="Fira Code, monospace" font-size="13">transit_from_class</text>
+  <text x="500" y="308" fill="#FFFFFF" fill-opacity="0.6"
+        font-family="Fira Code, monospace" font-size="12">&#8230; +4 more</text>
+
+  <!-- Lead-ins, in the words of slides 20 and 19 (changed 2026-10-08, Ray):
+       those two slide titles are the callback. -->
+  <text x="784" y="78" fill="#16243a" font-style="italic"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="15">Where is collection</text>
+  <text x="784" y="97" fill="#16243a" font-style="italic"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="15">pressure building?</text>
+  <text x="784" y="120" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="15">starts here</text>
+  <text x="784" y="226" fill="#16243a" font-style="italic"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="15">How long are items</text>
+  <text x="784" y="245" fill="#16243a" font-style="italic"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="15">really in transit?</text>
+  <text x="784" y="268" fill="#53575A"
+        font-family="Aptos, Inter, Arial, sans-serif" font-size="15">starts here</text>
+</svg>
+<p style="font-size: 0.6em; margin-top: 0.5em;">
+  Bronze is <span class="accent">append-only</span>. Silver is <span class="accent">a projection</span>
+  of it, from any one version or many, as of any date.
+</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+
+					<h2>The reason it does not rot</h2>
+
+
+					<p style="font-size: 0.7em;">The standing failure of these projects is a pile nobody trusts.</p>
+
+
+
+					<ul>
+
+						<li><strong class="accent">Provenance</strong> for every number. Which run made it, from what, and when.</li>
+
+						<li><strong class="accent">The same checks</strong> for every source. Freshness, counts, keys. Inherited, not rewritten.</li>
+
+						<li><strong class="accent">Checks that can fail.</strong> A test that always passes is not a test. Ours can, and sometimes do.</li>
+
+						<li><strong class="accent">Someone gets told.</strong> Stale, failed, or an odd count: it sends a message.</li>
+
+					</ul>
+
+
+
+
+
+					<p style="font-size: 0.7em; margin-top: 1em;">
+						The least interesting part of the system, and the reason the rest of it is still true in three years.
+					</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<h2>What a run writes down</h2>
+<p style="font-size: 0.55em; margin-bottom: 0.6em;">
+  Two nights of the people-counter harvest, exactly as the record has them.
+</p>
+<div style="display: flex; gap: 1.2em; font-size: 0.4em; text-align: left; font-family: 'Fira Code', monospace; line-height: 1.6;">
+  <div style="flex: 1; border-top: 6px solid #a43733; background: #FBFAF8; padding: 0.7em 1em;">
+    <div style="font-family: Aptos, Inter, Arial, sans-serif; font-weight: 700; letter-spacing: 1.2px; color: #a43733; margin-bottom: 0.4em;">FRI NIGHT &middot; FAILED</div>
+    run_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2f661e18&hellip;<br>
+    source&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sensource<br>
+    max_age&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;24 hours<br>
+    triggered_by timer<br>
+    started&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026-10-03 00:40:09<br>
+    finished&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026-10-03 00:41:53<br>
+    window&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09-29 &rarr; 10-03<br>
+    status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="accent">failed</span><br>
+    error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="accent">ReadTimeout</span><br>
+    records&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&mdash;
+  </div>
+  <div style="flex: 1; border-top: 6px solid #2E6B4A; background: #FBFAF8; padding: 0.7em 1em;">
+    <div style="font-family: Aptos, Inter, Arial, sans-serif; font-weight: 700; letter-spacing: 1.2px; color: #2E6B4A; margin-bottom: 0.4em;">SAT NIGHT &middot; SUCCEEDED</div>
+    run_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;553f331a&hellip;<br>
+    source&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sensource<br>
+    max_age&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;24 hours<br>
+    triggered_by timer<br>
+    started&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026-10-04 00:40:13<br>
+    finished&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026-10-04 00:40:37<br>
+    window&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09-30 &rarr; 10-04<br>
+    status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;succeeded<br>
+    records&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;15,441<br>
+    checks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;volume &#10003; &middot; keys present &#10003; &middot; keys unique &#10003;
+  </div>
+</div>
+<p style="font-size: 0.55em; margin-top: 0.8em;">
+  Each night asks for the last four days, so a missed night is covered by the next.<br>
+  <span class="accent">Reported at 3 a.m. Repaired by the next night.</span>
+</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section data-background-color="#16243a">
+
+					<div style="text-align: left; margin: 1.6em 0 0 8%; max-width: 86%;">
+  <p style="font-size: 1.15em; color: #F3E4C5;">Two questions the live catalog structurally cannot answer.</p>
+  <p style="font-size: 1.3em; color: #E97132; margin-top: 0.8em;">Not won&rsquo;t. Can&rsquo;t.</p>
+</div>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<h2>How long are items really in transit?</h2>
+<p style="font-size: 0.58em; margin-bottom: 0.3em;">
+  Sierra knows an item is in transit. It does not know the journey.
+</p>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" style="width: 100%; height: auto; max-height: 400px;" role="img" aria-label="Median transit time by day sent. Monday to Thursday about 37 to 41 hours; Friday 69 hours, with the extra time after the sorter; Saturday 68 hours, with the extra time before it." font-family="Aptos, Inter, Arial, sans-serif">
+<rect x="150" y="14" width="16" height="16" rx="3" fill="#3a6ea5"/>
+<text x="174.0" y="28.0" font-size="20" fill="#53575A" text-anchor="start" font-weight="400" >branch → sorter</text>
+<rect x="340" y="14" width="16" height="16" rx="3" fill="#a43733"/>
+<text x="364.0" y="28.0" font-size="20" fill="#53575A" text-anchor="start" font-weight="400" >sorter → destination</text>
+<text x="1180.0" y="28.0" font-size="18" fill="#8E979F" text-anchor="end" font-weight="400" >median hours, door to door</text>
+<line x1="150.0" y1="62" x2="150.0" y2="434" stroke="#E6E3DD" stroke-width="1"/>
+<text x="150.0" y="458.0" font-size="18" fill="#8E979F" text-anchor="middle" font-weight="400" >0</text>
+<line x1="386.7" y1="62" x2="386.7" y2="434" stroke="#E6E3DD" stroke-width="1"/>
+<text x="386.7" y="458.0" font-size="18" fill="#8E979F" text-anchor="middle" font-weight="400" >1 day</text>
+<line x1="623.3" y1="62" x2="623.3" y2="434" stroke="#E6E3DD" stroke-width="1"/>
+<text x="623.3" y="458.0" font-size="18" fill="#8E979F" text-anchor="middle" font-weight="400" >2 days</text>
+<line x1="860.0" y1="62" x2="860.0" y2="434" stroke="#E6E3DD" stroke-width="1"/>
+<text x="860.0" y="458.0" font-size="18" fill="#8E979F" text-anchor="middle" font-weight="400" >3 days</text>
+<text x="136.0" y="91.0" font-size="21" fill="#53575A" text-anchor="end" font-weight="400" >Monday</text>
+<g><title>Monday: branch → sorter, median 20h (112,369 two-leg journeys)</title><rect x="150.0" y="70.0" width="197.5" height="30" rx="0" fill="#3a6ea5"/></g>
+<g><title>Monday: sorter → destination, median 21h (112,369 two-leg journeys)</title><rect x="349.5" y="70.0" width="204.8" height="30" rx="4" fill="#a43733"/><rect x="349.5" y="70.0" width="4.0" height="30" fill="#a43733"/></g>
+<text x="564.3" y="91.0" font-size="21" fill="#16243a" text-anchor="start" font-weight="400" >40h</text>
+<text x="136.0" y="143.0" font-size="21" fill="#53575A" text-anchor="end" font-weight="400" >Tuesday</text>
+<g><title>Tuesday: branch → sorter, median 19h (90,097 two-leg journeys)</title><rect x="150.0" y="122.0" width="187.8" height="30" rx="0" fill="#3a6ea5"/></g>
+<g><title>Tuesday: sorter → destination, median 21h (90,097 two-leg journeys)</title><rect x="339.8" y="122.0" width="205.3" height="30" rx="4" fill="#a43733"/><rect x="339.8" y="122.0" width="4.0" height="30" fill="#a43733"/></g>
+<text x="555.1" y="143.0" font-size="21" fill="#16243a" text-anchor="start" font-weight="400" >39h</text>
+<text x="136.0" y="195.0" font-size="21" fill="#53575A" text-anchor="end" font-weight="400" >Wednesday</text>
+<g><title>Wednesday: branch → sorter, median 18h (87,251 two-leg journeys)</title><rect x="150.0" y="174.0" width="177.7" height="30" rx="0" fill="#3a6ea5"/></g>
+<g><title>Wednesday: sorter → destination, median 22h (87,251 two-leg journeys)</title><rect x="329.7" y="174.0" width="214.4" height="30" rx="4" fill="#a43733"/><rect x="329.7" y="174.0" width="4.0" height="30" fill="#a43733"/></g>
+<text x="554.2" y="195.0" font-size="21" fill="#16243a" text-anchor="start" font-weight="400" >37h</text>
+<text x="136.0" y="247.0" font-size="21" fill="#53575A" text-anchor="end" font-weight="400" >Thursday</text>
+<g><title>Thursday: branch → sorter, median 19h (83,940 two-leg journeys)</title><rect x="150.0" y="226.0" width="187.3" height="30" rx="0" fill="#3a6ea5"/></g>
+<g><title>Thursday: sorter → destination, median 22h (83,940 two-leg journeys)</title><rect x="339.3" y="226.0" width="215.2" height="30" rx="4" fill="#a43733"/><rect x="339.3" y="226.0" width="4.0" height="30" fill="#a43733"/></g>
+<text x="564.5" y="247.0" font-size="21" fill="#16243a" text-anchor="start" font-weight="400" >41h</text>
+<text x="136.0" y="299.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="700" >Friday</text>
+<g><title>Friday: branch → sorter, median 22h (77,909 two-leg journeys)</title><rect x="150.0" y="278.0" width="216.9" height="30" rx="0" fill="#3a6ea5"/></g>
+<g><title>Friday: sorter → destination, median 44h (77,909 two-leg journeys)</title><rect x="368.9" y="278.0" width="431.2" height="30" rx="4" fill="#a43733"/><rect x="368.9" y="278.0" width="4.0" height="30" fill="#a43733"/></g>
+<text x="810.1" y="299.0" font-size="21" fill="#16243a" text-anchor="start" font-weight="700" >69h</text>
+<text x="864.1" y="299.0" font-size="19" fill="#53575A" text-anchor="start" font-weight="400" >waits out the weekend at the sorter</text>
+<text x="136.0" y="351.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="700" >Saturday</text>
+<g><title>Saturday: branch → sorter, median 47h (54,553 two-leg journeys)</title><rect x="150.0" y="330.0" width="463.0" height="30" rx="0" fill="#3a6ea5"/></g>
+<g><title>Saturday: sorter → destination, median 22h (54,553 two-leg journeys)</title><rect x="615.0" y="330.0" width="214.7" height="30" rx="4" fill="#a43733"/><rect x="615.0" y="330.0" width="4.0" height="30" fill="#a43733"/></g>
+<text x="839.7" y="351.0" font-size="21" fill="#16243a" text-anchor="start" font-weight="700" >68h</text>
+<text x="893.7" y="351.0" font-size="19" fill="#53575A" text-anchor="start" font-weight="400" >waits at the branch until Monday</text>
+<text x="136.0" y="403.0" font-size="21" fill="#53575A" text-anchor="end" font-weight="400" >Sunday</text>
+<g><title>Sunday: branch → sorter, median 21h (22,252 two-leg journeys)</title><rect x="150.0" y="382.0" width="207.3" height="30" rx="0" fill="#3a6ea5"/></g>
+<g><title>Sunday: sorter → destination, median 20h (22,252 two-leg journeys)</title><rect x="359.3" y="382.0" width="195.8" height="30" rx="4" fill="#a43733"/><rect x="359.3" y="382.0" width="4.0" height="30" fill="#a43733"/></g>
+<text x="565.1" y="403.0" font-size="21" fill="#16243a" text-anchor="start" font-weight="400" >43h</text>
+<text x="150.0" y="486.0" font-size="16" fill="#8E979F" text-anchor="start" font-weight="400" >528,371 two-leg journeys, 2026-07-01 to 2026-10-07. Each half is its own median, so the halves need not add to the total exactly.</text>
+</svg>
+<p style="font-size: 0.58em; margin-top: 0.5em;">
+  816,162 journeys rebuilt since July 2. Median <strong>40 hours</strong> door to door.
+  <span class="accent">Reconstructed, not recorded.</span>
+</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section>
+
+					<h2>Where is collection pressure building?</h2>
+<p style="font-size: 0.58em; margin-bottom: 0.3em;">
+  Sierra knows where every item is today. Direction needs a past.
+</p>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 450" style="width: 100%; height: auto; max-height: 385px;" role="img" aria-label="Change in copies in scope by branch, September to October 2026. Avondale down 71 percent, off the scale; five other branches down 2 to 8 percent; six branches up 2 to 5 percent; 30 branches within 2.5 percent either way." font-family="Aptos, Inter, Arial, sans-serif">
+<line x1="240.0" y1="40" x2="240.0" y2="398" stroke="#E6E3DD" stroke-width="1"/>
+<text x="240.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >-10%</text>
+<line x1="331.0" y1="40" x2="331.0" y2="398" stroke="#E6E3DD" stroke-width="1"/>
+<text x="331.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >-8%</text>
+<line x1="422.0" y1="40" x2="422.0" y2="398" stroke="#E6E3DD" stroke-width="1"/>
+<text x="422.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >-6%</text>
+<line x1="513.0" y1="40" x2="513.0" y2="398" stroke="#E6E3DD" stroke-width="1"/>
+<text x="513.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >-4%</text>
+<line x1="604.0" y1="40" x2="604.0" y2="398" stroke="#E6E3DD" stroke-width="1"/>
+<text x="604.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >-2%</text>
+<line x1="695.0" y1="40" x2="695.0" y2="398" stroke="#53575A" stroke-width="1.5"/>
+<text x="695.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >0</text>
+<line x1="786.0" y1="40" x2="786.0" y2="398" stroke="#E6E3DD" stroke-width="1"/>
+<text x="786.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >+2%</text>
+<line x1="877.0" y1="40" x2="877.0" y2="398" stroke="#E6E3DD" stroke-width="1"/>
+<text x="877.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >+4%</text>
+<line x1="968.0" y1="40" x2="968.0" y2="398" stroke="#E6E3DD" stroke-width="1"/>
+<text x="968.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >+6%</text>
+<line x1="1059.0" y1="40" x2="1059.0" y2="398" stroke="#E6E3DD" stroke-width="1"/>
+<text x="1059.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >+8%</text>
+<line x1="1150.0" y1="40" x2="1150.0" y2="398" stroke="#E6E3DD" stroke-width="1"/>
+<text x="1150.0" y="420.0" font-size="19" fill="#8E979F" text-anchor="middle" font-weight="400" >+10%</text>
+<text x="681.0" y="30.0" font-size="20" fill="#a43733" text-anchor="end" font-weight="700" >draining</text>
+<text x="709.0" y="30.0" font-size="20" fill="#3a6ea5" text-anchor="start" font-weight="700" >filling</text>
+<rect x="240.0" y="48" width="455.0" height="17" rx="4" fill="#a43733"><title>Avondale: 2,334 → 672 copies in scope (-71.2%)</title></rect>
+<rect x="691.0" y="48" width="4" height="17" fill="#a43733"/>
+<path d="M240.0 46 l6 11 l-6 11" stroke="#FFFFFF" stroke-width="3" fill="none"/>
+<text x="222.0" y="62.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="700" >Avondale</text>
+<text x="707.0" y="62.0" font-size="18" fill="#16243a" text-anchor="start" font-weight="700" >-71%, off the scale: 2,334 → 672 copies</text>
+<rect x="343.2" y="75" width="351.8" height="17" rx="4" fill="#a43733"><title>Delhi Township: 10,061 → 9,283 copies in scope (-7.7%)</title></rect>
+<rect x="691.0" y="75" width="4" height="17" fill="#a43733"/>
+<text x="222.0" y="89.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >Delhi Township</text>
+<text x="333.2" y="89.0" font-size="20" fill="#16243a" text-anchor="end" font-weight="400" >-7.7%</text>
+<rect x="438.0" y="102" width="257.0" height="17" rx="4" fill="#a43733"><title>Madeira: 22,945 → 21,649 copies in scope (-5.6%)</title></rect>
+<rect x="691.0" y="102" width="4" height="17" fill="#a43733"/>
+<text x="222.0" y="116.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >Madeira</text>
+<text x="428.0" y="116.0" font-size="20" fill="#16243a" text-anchor="end" font-weight="400" >-5.6%</text>
+<rect x="550.1" y="129" width="144.9" height="17" rx="4" fill="#a43733"><title>Outreach Services: 67,679 → 65,523 copies in scope (-3.2%)</title></rect>
+<rect x="691.0" y="129" width="4" height="17" fill="#a43733"/>
+<text x="222.0" y="143.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >Outreach Services</text>
+<text x="540.1" y="143.0" font-size="20" fill="#16243a" text-anchor="end" font-weight="400" >-3.2%</text>
+<rect x="589.4" y="156" width="105.6" height="17" rx="4" fill="#a43733"><title>Corryville: 7,155 → 6,989 copies in scope (-2.3%)</title></rect>
+<rect x="691.0" y="156" width="4" height="17" fill="#a43733"/>
+<text x="222.0" y="170.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >Corryville</text>
+<text x="579.4" y="170.0" font-size="20" fill="#16243a" text-anchor="end" font-weight="400" >-2.3%</text>
+<rect x="594.1" y="183" width="100.9" height="17" rx="4" fill="#a43733"><title>Monfort Heights: 17,044 → 16,666 copies in scope (-2.2%)</title></rect>
+<rect x="691.0" y="183" width="4" height="17" fill="#a43733"/>
+<text x="222.0" y="197.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >Monfort Heights</text>
+<text x="584.1" y="197.0" font-size="20" fill="#16243a" text-anchor="end" font-weight="400" >-2.2%</text>
+<rect x="445" y="208" width="500" height="24" fill="#FFFFFF"/>
+<text x="695.0" y="224.0" font-size="19" fill="#53575A" text-anchor="middle" font-weight="400" font-style="italic">30 other branches moved less than 2.5% either way</text>
+<rect x="695.0" y="237" width="118.0" height="17" rx="4" fill="#3a6ea5"><title>West End: 3,585 → 3,678 copies in scope (+2.6%)</title></rect>
+<rect x="695.0" y="237" width="4" height="17" fill="#3a6ea5"/>
+<text x="222.0" y="251.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >West End</text>
+<text x="823.0" y="251.0" font-size="20" fill="#16243a" text-anchor="start" font-weight="400" >+2.6%</text>
+<rect x="695.0" y="264" width="140.9" height="17" rx="4" fill="#3a6ea5"><title>Walnut Hills: 7,881 → 8,125 copies in scope (+3.1%)</title></rect>
+<rect x="695.0" y="264" width="4" height="17" fill="#3a6ea5"/>
+<text x="222.0" y="278.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >Walnut Hills</text>
+<text x="845.9" y="278.0" font-size="20" fill="#16243a" text-anchor="start" font-weight="400" >+3.1%</text>
+<rect x="695.0" y="291" width="150.8" height="17" rx="4" fill="#3a6ea5"><title>Greenhills: 4,436 → 4,583 copies in scope (+3.3%)</title></rect>
+<rect x="695.0" y="291" width="4" height="17" fill="#3a6ea5"/>
+<text x="222.0" y="305.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >Greenhills</text>
+<text x="855.8" y="305.0" font-size="20" fill="#16243a" text-anchor="start" font-weight="400" >+3.3%</text>
+<rect x="695.0" y="318" width="166.3" height="17" rx="4" fill="#3a6ea5"><title>Elmwood Place: 2,791 → 2,893 copies in scope (+3.7%)</title></rect>
+<rect x="695.0" y="318" width="4" height="17" fill="#3a6ea5"/>
+<text x="222.0" y="332.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >Elmwood Place</text>
+<text x="871.3" y="332.0" font-size="20" fill="#16243a" text-anchor="start" font-weight="400" >+3.7%</text>
+<rect x="695.0" y="345" width="221.1" height="17" rx="4" fill="#3a6ea5"><title>Oakley: 9,280 → 9,731 copies in scope (+4.9%)</title></rect>
+<rect x="695.0" y="345" width="4" height="17" fill="#3a6ea5"/>
+<text x="222.0" y="359.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >Oakley</text>
+<text x="926.1" y="359.0" font-size="20" fill="#16243a" text-anchor="start" font-weight="400" >+4.9%</text>
+<rect x="695.0" y="372" width="231.1" height="17" rx="4" fill="#3a6ea5"><title>Mariemont: 12,620 → 13,261 copies in scope (+5.1%)</title></rect>
+<rect x="695.0" y="372" width="4" height="17" fill="#3a6ea5"/>
+<text x="222.0" y="386.0" font-size="21" fill="#16243a" text-anchor="end" font-weight="400" >Mariemont</text>
+<text x="936.1" y="386.0" font-size="20" fill="#16243a" text-anchor="start" font-weight="400" >+5.1%</text>
+<text x="40.0" y="444.0" font-size="15" fill="#8E979F" text-anchor="start" font-weight="400" >Change in copies in scope for the pressure mart, September to October mints. 42 branches: 628,119 → 623,809 copies. Measured 2026-10-08.</text>
+</svg>
+<p style="font-size: 0.58em; margin-top: 0.5em;">
+  Avondale&rsquo;s collection went to the Distribution Center.
+  <span class="accent">Visible only because last month was kept.</span>
+</p>
+
+
+
+				</section>
+
+
+
+
+
+
+				<section data-background-color="#16243a">
+
+					<div style="text-align: left; margin: 1.6em 0 0 8%; max-width: 86%;">
+  <p style="font-size: 1.15em; color: #F3E4C5;">Questions?</p>
+  <p style="font-size: 1.3em; color: #E97132; margin-top: 0.8em;">Ask anything.</p>
+  <p style="font-size: 0.6em; color: #F3E4C5; opacity: 0.72; margin-top: 1.5em;">What it has answered sits below the last slide.</p>
+</div>
+
+
+
+				</section>
+
+
+
+
+
+				<section>
+
+
+				<!-- CLOSING SLIDE -->
+				<section class="title-slide" data-background-color="#F3E4C5" data-state="no-footer">
+					<div class="title-content">
+						<h1 style="font-size: 1.4em;">Choose Boring Technology</h1>
+						<p style="font-size: 0.65em; margin-bottom: 1em;">
+							Almost nothing in here is new &mdash; and that is the achievement.
+<span style="display:block; margin:0.35em auto 0.3em; padding:0.05em 0 0.05em 0.8em;
+             border-left:4px solid #a43733; max-width:26em; text-align:left;
+             font-style:italic; color:#16243a; line-height:1.28;">
+  &ldquo;Let&rsquo;s say every company gets about three innovation tokens. You can
+  spend these however you want, but the supply is fixed for a long while.&rdquo;
+  <span style="display:block; margin-top:0.3em; font-style:normal;
+               font-size:0.7em; line-height:1.25; color:#53575A;">
+    Dan McKinley, <em>Choose Boring Technology</em> (2015)<br>
+    <a href="https://mcfunley.com/choose-boring-technology"
+       style="color:#236688;">mcfunley.com/choose-boring-technology</a>
+  </span>
+</span>
+Everything here is ordinary, durable technology, pointed at questions
+that are ours.
+
+						</p>
+						<p>
+							Ray Voelker<br>
+							<a href="mailto:ray.voelker@chpl.org">ray.voelker@chpl.org</a>
+						</p>
+					</div>
+				</section>
+
+
+
+
+				<section>
+
+					<h2>What we built on</h2>
+
+
+
+
+					<p style="font-size: 0.5em; color: #53575A; margin: 0 0 0.5em 0;">
+  Oldest first. Every date is a public fact you can check.
+</p>
+<table style="font-size: 0.4em; margin: 0 auto; text-align: left; width: 96%;">
+  <thead>
+    <tr>
+      <th style="width: 30%;">What it is</th>
+      <th style="width: 26%;">Since</th>
+      <th>Where it stands</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Debian</strong> &mdash; the operating system</td>
+        <td>1993 &middot; 33 years</td>
+        <td>we run 12 &ldquo;bookworm&rdquo;; <strong>security support to June 2028</strong></td></tr>
+    <tr><td><strong>Postgres</strong> &mdash; the database</td>
+        <td>1996 &middot; 30 years</td>
+        <td>#1 database; 55.6% of professional developers</td></tr>
+    <tr><td><strong>systemd</strong> &mdash; starts things on a schedule</td>
+        <td>2010 &middot; 16 years</td>
+        <td>the default on every major Linux</td></tr>
+    <tr><td><strong>Parquet</strong> &mdash; the file format</td>
+        <td>2013 &middot; Apache 2015</td>
+        <td>the interchange default</td></tr>
+    <tr><td><strong>Datasette</strong> &mdash; the data browser</td>
+        <td>2017</td>
+        <td><strong>still 1.0-alpha</strong>, and we run it in production on purpose</td></tr>
+    <tr><td><strong>Podman</strong> &mdash; runs things in containers</td>
+        <td>2018 &middot; Quadlet 2023</td>
+        <td>ships natively in Red Hat 9.1 and 10</td></tr>
+    <tr><td><strong>dbt</strong> &mdash; the transformation tool</td>
+        <td>Dec 2021</td>
+        <td>the de-facto standard</td></tr>
+    <tr><td><span class="accent"><strong>DuckDB</strong> &mdash; the query engine</span></td>
+        <td><span class="accent">June 2024</span></td>
+        <td><span class="accent">&#9664; the one bet</span></td></tr>
+    <tr><td><span class="accent"><strong>DuckLake</strong> &mdash; the table format</span></td>
+        <td><span class="accent">April 2026</span></td>
+        <td><span class="accent">&#9664; the one bet</span> &middot; v1.1 due Sept 2026</td></tr>
+  </tbody>
+</table>
+<p style="font-size: 0.46em; color: #53575A; margin: 0.7em 0 0 0; font-style: italic;">
+  Three of these are younger than the problem they solve &mdash; DuckLake, Quadlet
+  and Datasette. That is the bet, named.
+</p>
+
+
+
+
+				</section>
+
+				<section>
+
+
+
+
+					<h2>What it has answered</h2>
+<p style="font-size: 0.58em; margin-bottom: 0.7em;">
+  All of these are real and all of them are dated.
+</p>
+<div style="display: flex; gap: 1.6em; font-size: 0.5em; text-align: left;">
+  <ul style="flex: 1; margin: 0; padding-left: 1.1em; line-height: 1.6;">
+    <li><strong>A branch closing.</strong> Delhi Township, August: 751 titles where it held every active copy, 733 the only one we owned. This week: 224 of its boxed items have patrons waiting.</li>
+    <li><strong>A branch moving its collection.</strong> Avondale, September: 596 boxed items worth retrieving, 37 true last copies.</li>
+    <li><strong>A branch asking about its shelves.</strong> Forest Park: twelve months of world-language and teen graphic-novel circulation, with the system median beside it.</li>
+    <li><strong>A borrowing agreement ending.</strong> Roughly 10,363 Northern Kentucky cardholders, joined as of the day it happened.</li>
+  </ul>
+  <ul style="flex: 1; margin: 0; padding-left: 1.1em; line-height: 1.6;">
+    <li><strong>Temporary cards.</strong> 5,276 on file in August, 2,394 already expired. Whether they convert needs a past. Now there is one.</li>
+    <li><strong>Loan rules vs. published policy.</strong> Where what we tell the public and what Sierra does disagree.</li>
+    <li><strong>Reading lists on the public web.</strong> Live, rebuilt nightly.</li>
+    <li><strong>Holdings in WorldCat.</strong> Refreshed by the lake every day; the catalog-against-WorldCat cleanup written up in August.</li>
+  </ul>
+</div>
+<p style="font-size: 0.55em; margin-top: 0.9em; font-style: italic; color: #53575A;">
+  Every one of these is the same machinery, pointed at a different question.
+</p>
+
+
+
+
+				</section>
+
+				</section>
+
+
+			</div>
+		</div>
+
+		<script src="revealjs/reveal.js"></script>
+		<script src="revealjs/plugin/notes/notes.js"></script>
+		<script src="revealjs/plugin/markdown/markdown.js"></script>
+		<script src="revealjs/plugin/highlight/highlight.js"></script>
+
+		<script>
+			Reveal.initialize({
+				hash: true,
+				// URL #/N matches the slide number shown on screen (Ray, 2026-10-08)
+				hashOneBasedIndex: true,
+				slideNumber: 'c/t',
+				// SIZING (changed 2026-08-17 — Ray: "much larger fonts at the viewport").
+				// reveal authors every slide inside a fixed width x height canvas and
+				// then scales that canvas to fit the window. So there are two knobs:
+				//   - width/height: SMALLER canvas => same content scaled up MORE =>
+				//     bigger apparent text at any viewport. Was the 960x700 default.
+				//   - maxScale: the ceiling on that scaling. Was 1.5, which capped the
+				//     deck well below full size on anything larger than ~1080p.
+				// Content is authored against this canvas, so shrinking it is the knob
+				// that can overflow a dense slide vertically. Check slides 7 and 10.
+				// ⭐ CANVAS IS 16:9 ON PURPOSE. The old 960x700 / 820x620 canvases were
+				// ~1.33 — pillarboxed on a 16:9 display, wasting ~26% of the width.
+				// Matching the display aspect reclaims that at no cost to legibility.
+				// With the aspect matched, ONE knob controls apparent text size:
+				//   height (width must stay height * 16/9). Smaller => bigger text.
+				//   540 -> 480 is another +12%; 480 is about the floor before the
+				//   dense slides (7, 10) overflow vertically.
+				// ⭐ 2026-08-18 — CANVAS RESTORED TO REVEAL'S OWN RATIO.
+				// The bug: on 2026-08-17 the canvas was cut 960x700 -> 960x540 to get
+				// bigger text, but the base font stayed at reveal's 42px. Reveal's
+				// contract is that font-size and canvas are a MATCHED PAIR (its
+				// defaults are 960x700 @ 42px = 0.060). 42/540 = 0.078 is 30% oversized,
+				// and with 120px reserved for the footer only 420 of 540 was usable —
+				// 60% of reveal's standard space for the same content. Result: 10 of 12
+				// content slides ran off the bottom of the screen, WORSE on bigger
+				// windows (more upscaling = more spill). Measured headless, 2026-08-18.
+				// 1280x720 keeps Ray's deliberate 16:9, restores the ratio (42/720 =
+				// 0.058), and the extra 320px of width means lines wrap less, which
+				// shortens every slide again.
+				// ⚠ IF YOU CHANGE height, CHANGE THE FONT WITH IT. Run
+				//   scripts/check-fit.py — it renders every slide and fails on overflow.
+				width: 1280,
+				height: 720,
+				minScale: 0.2,
+				maxScale: 4.0,
+				margin: 0.02,
+				// SCROLL VIEW — reveal's own answer to "read this on a phone"
+				// (5.0 feature). It flattens the deck into one linear scrolling
+				// page. It already switched itself on below reveal's default
+				// 435px; 820 widens that to every phone in landscape, every
+				// tablet in portrait and every half-width laptop window, all of
+				// which otherwise got the postage-stamp treatment: a 1280x720
+				// canvas scaled into a strip with ~75% of the screen empty.
+				// ⚠ 820 MUST EQUAL the breakpoint in css/chpl-brand.css.
+				// ⚠ scrollLayout is left at reveal's default 'full' ON PURPOSE.
+				//   'compact' sizes each scroll page to the canvas ASPECT, not
+				//   to its content, so with a landscape canvas on a portrait
+				//   phone slides overlapped and collided. Measured 2026-08-19.
+				// ⚠ Setting scrollActivationWidth to a number disables reveal's
+				//   toggleScrollView() API (upstream issue #3688). We don't call
+				//   it; if you ever want a "read as slides" button, that's the
+				//   constraint you'll hit.
+				scrollActivationWidth: 820,
+				scrollProgress: true,
+
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+
+			// PORTRAIT CANVAS ON SMALL SCREENS — the apparent-text-size knob.
+			// Reveal scales the whole authoring canvas to fit the viewport, so on
+			// a 390px phone a 1280-wide canvas is scaled to 0.30 and 21px list
+			// text lands at 6.3px on screen. Nothing in CSS fixes that from
+			// inside the canvas; the canvas itself is the lever. A portrait
+			// canvas is scaled ~2x less, so the same content reads at 19px.
+			//
+			// 620x980 IS A MEASURED CHOICE, not a guess:
+			//   620x880  -> 2 slides overflow ("The shape of a lakehouse
+			//               architecture" by 91px, "What it has answered" by 29)
+			//   620x980  -> all 16 pages fit, vertically and horizontally
+			//   420x980  -> the navy "A lake / A warehouse" grid runs 19px wide
+			// check-fit.py checks BOTH canvases; run it after any content edit.
+			//
+			// Reveal.configure() is public API. The presenting deck is untouched
+			// above the breakpoint — desktop measured identical before and after.
+			(function mobileCanvas() {
+			  const NARROW = 820;  // == scrollActivationWidth == the CSS breakpoint
+			  let applied = null;
+			  function apply() {
+			    const narrow = window.innerWidth <= NARROW;
+			    if (narrow === applied) return;  // only on an actual crossing
+			    applied = narrow;
+			    Reveal.configure(narrow
+			      ? { width: 620,  height: 1100, margin: 0.04 }
+			      : { width: 1280, height: 720, margin: 0.02 });
+			  }
+			  Reveal.on('ready', apply);
+			  window.addEventListener('resize', apply);
+			})();
+
+			// Toggle footer bar and logo panel based on slide type / dark backgrounds
+			function updateChrome(slide) {
+				const footer = document.querySelector('.footer-bar');
+				const logoPanel = document.querySelector('.title-logo-panel');
+				const isTitle = slide.classList.contains('title-slide');
+				const dark = ['#16243A', '#0C2340', '#00223D', '#0E2841'];
+				const hasDarkBg = dark.includes((slide.dataset.backgroundColor || '').toUpperCase());
+				footer.style.display = (isTitle || hasDarkBg) ? 'none' : 'flex';
+				logoPanel.style.display = isTitle ? 'flex' : 'none';
+			}
+			Reveal.on('slidechanged', event => updateChrome(event.currentSlide));
+			Reveal.on('ready', event => updateChrome(event.currentSlide));
+
+			// Publish reveal's canvas scale to CSS as --rv-scale.
+			// WHY: the footer bar is fixed window chrome (unscaled px) but the space
+			// reserved for it is padding INSIDE the scaled canvas, so on a short
+			// window the reservation shrinks below the bar and the bar eats the last
+			// line of the slide. Ray hit this on a laptop display, slide 7, 2026-08-19.
+			// With the bar sized in calc(px * var(--rv-scale)) the two move together
+			// and can never disagree, at any window shape.
+			function publishScale() {
+				document.documentElement.style.setProperty('--rv-scale', Reveal.getScale());
+			}
+			Reveal.on('ready', publishScale);
+			Reveal.on('resize', publishScale);
+			window.addEventListener('resize', publishScale);
+		</script>
+	</body>
+</html>

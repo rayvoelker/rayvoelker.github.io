@@ -1,0 +1,634 @@
+/*
+ * CHPL-BRANDED theme for Reveal.js — 2026-08-17
+ *
+ * Forked from the IUG 2026 theme (still the layout: split beige/white title
+ * slide with logo; white content body with a beige footer bar) and RE-COLORED
+ * to CHPL's own brand palette at Ray's direction. The layout is IUG's; the
+ * colors are ours.
+ *
+ * ⭐ SOURCE OF TRUTH for the palette: ~/claude/design-system/brand.yml
+ *    (identical to the hexes inside assets/CHPL_Brandmark_Primary.svg).
+ *    Do not hand-pick a "CHPL-ish" color — read it from brand.yml.
+ *
+ *   BRAND HUES        navy #16243a · blue #3291c2 · green #41bb89
+ *                     purple #7d49a9 · red #ea4f49 · gold #f9ae12
+ *
+ * ⚠ MOST BRAND HUES ARE TOO LIGHT FOR TEXT. Measured against white and
+ *   against the beige title ground (#F3E4C5), only navy and purple clear
+ *   4.5:1 unmodified; gold is 1.89:1 on white and unusable as ink. The house
+ *   fix already exists — design-system/validate_palette.py::derive_chip_colors
+ *   darkens a hue until it clears the surface. Text colors below are those
+ *   derived inks, NOT raw hues:
+ *
+ *   USED HERE
+ *     Navy    #16243a  headings, footer/dark grounds   (15.6:1 white · 12.4:1 beige)
+ *     Red-ink #a43733  .accent — emphasis              ( 6.6:1 white ·  5.3:1 beige)
+ *     Blue-ink #236688 links                           ( 6.3:1 white ·  5.0:1 beige)
+ *     Blue    #3291c2  link hover; links on dark grounds (raw hue — fine on navy)
+ *     Charcoal #53575A body text (not a brand hue; inherited, high contrast)
+ *     Beige   #F3E4C5  footer bar + title ground (INHERITED FROM IUG, not CHPL brand)
+ *     Gray    #E8E8E8  subtle backgrounds
+ *
+ * ⚠ brand.yml's own constraint: these are "Chrome/accent use only — never for
+ *   semantic value->mark." The bronze/silver layer colors in the slide diagram
+ *   are SEMANTIC and deliberately stay outside this palette.
+ *
+ * ⚠ The beige ground is the one un-CHPL thing left. It works and the footer
+ *   matches it, but if the deck should be fully brand-native that is the next
+ *   thing to change — and it is a taste call, not a contrast one.
+ */
+
+/* -- Web font fallback (Inter is closest free match to Aptos/BrownStd) --
+ * VENDORED 2026-08-19, deliberately. This used to be an @import from
+ * fonts.googleapis.com, which quietly made the deck need the internet: with no
+ * network the whole thing fell back to Arial (-> Liberation Sans on this host),
+ * different metrics from the ones check-fit.py measured. The files now live in
+ * ../fonts/ and ship with the deck, so offline and online render identically.
+ * Inter is SIL Open Font License 1.1 -- see ../fonts/LICENSE.txt.
+ * Regenerate: see ../fonts/README.md.
+ *
+ * NOTE ON BRAND: Inter is NOT a CHPL-sanctioned typeface. The brand guidelines
+ * (~/Documents/CHPL_BrandGuidelines/, p.22) name BrownStd (licensed, Lineto) as
+ * the primary face and *Arial* as the approved digital alternate. Inter sits in
+ * the stack as the closest free match to BrownStd; Arial remains behind it.
+ */
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+/* -- Base overrides on top of white.css -- */
+
+/*
+ * Font stack priority:
+ *   1. Aptos / Aptos Display — IUG 2026 template font (Windows/Office)
+ *   2. BrownStd — CHPL brand font (licensed, Lineto)
+ *   3. Inter — closest free web match
+ *   4. Arial — CHPL-approved digital fallback
+ *
+ * (Palette is documented once, at the top of this file. Don't restate it here —
+ *  the duplicate block that used to live at this spot drifted out of sync.)
+ */
+
+.reveal {
+  font-family: 'Aptos', 'BrownStd', 'Inter', Arial, sans-serif;
+  font-size: 42px;
+  font-weight: 300;
+  color: #53575A;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: 'Aptos Display', 'Aptos', 'BrownStd', 'Inter', Arial, sans-serif;
+  color: #16243a;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.reveal h1 { font-size: 1.8em; }
+.reveal h2 { font-size: 1.4em; }
+.reveal h3 { font-size: 1.1em; }
+
+.reveal a {
+  color: #236688;
+  text-decoration: none;
+}
+
+.reveal a:hover {
+  color: #3291c2;
+  text-decoration: underline;
+}
+
+/* Accent class for emphasis text */
+.reveal .accent {
+  color: #a43733;
+  font-weight: 700;
+}
+
+.reveal .blue {
+  color: #236688;
+}
+
+.reveal .navy {
+  color: #16243a;
+}
+
+/* =============================================
+   NAVIGATION CONTROLS — move above footer bar
+   ============================================= */
+
+.reveal .controls {
+  bottom: calc(100px * var(--rv-scale, 1) + 10px) !important;
+}
+
+/* Slide number: top-right, e.g. "3/16" */
+.reveal .slide-number {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  bottom: auto;
+  left: auto;
+  font-size: 0.5em;
+  color: #808285;
+  background: none;
+}
+
+/* =============================================
+   TITLE / CLOSING SLIDES — split layout
+   Left: white panel with logo
+   Right: beige background (via data-background)
+   ============================================= */
+
+.reveal .title-slide {
+  text-align: left;
+  padding: 0 !important;
+}
+
+/* White logo panel — lives OUTSIDE .reveal in the DOM
+   so CSS transforms don't break position: fixed centering */
+.title-logo-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28%;
+  height: 100vh;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.title-logo-panel img {
+  width: 80%;
+  max-width: 300px;
+  /* OPTICAL centring, not geometric. The panel already centres the image BOX
+     exactly (measured: equal gaps at 16:9, 16:10 and 3:2), but the brandmark is
+     bottom-heavy — the airy "Hamilton County" arc is at the top and the dense
+     wordmark sits under it, putting the mark's ink centroid 23.2px below the
+     box centre on a 440px-tall asset, i.e. 5.3% of its own height. Centring the
+     box therefore READS as sitting low. Shift by that measured 5.3%; the unit is
+     % of the element's own height, so it holds at every scale.
+     Re-measure if the asset is ever replaced. */
+  transform: translateY(-5.3%);
+}
+
+/* Title content positioned on the right */
+.reveal .title-slide .title-content {
+  margin-left: 30%;
+  padding: 0 2em;
+  text-align: left;
+  z-index: 51;
+  position: relative;
+}
+
+.reveal .title-slide .title-content h1 {
+  font-size: 1.6em;
+  color: #16243a;
+  margin: 0 0 0.15em 0;
+  line-height: 1.2;
+}
+
+.reveal .title-slide .title-content h2 {
+  font-size: 0.7em;
+  color: #16243a;
+  font-weight: 400;
+  margin: 0 0 1em 0;
+  opacity: 0.75;
+}
+
+.reveal .title-slide .title-content p {
+  font-size: 0.5em;
+  color: #53575A;
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* CHPL logo on title/closing slides */
+.reveal .title-slide .chpl-logo {
+  max-width: 200px;
+  margin-top: 1.2em;
+}
+
+/* =============================================
+   CONTENT SLIDES — beige footer bar with logo
+   ============================================= */
+
+/* Persistent footer bar on all non-title slides
+   Template: 14.4% of slide height, logo is 86% of bar height */
+.reveal .footer-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  /* Sized in CANVAS px scaled by --rv-scale (published by the deck's JS from
+     Reveal.getScale()), because the space reserved for this bar is padding
+     inside the scaled canvas. Fixed 100px chrome against a shrinking
+     reservation is what let the bar eat the last line of slide 7 on a short
+     laptop window. Now both move together: bar 100 canvas px, reservation 110,
+     so there is always 10 canvas px of daylight at every window shape.
+     --rv-scale falls back to 1, which is the old behaviour, if JS never runs. */
+  height: calc(100px * var(--rv-scale, 1));
+  background: #F3E4C5;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: calc(8px * var(--rv-scale, 1));
+  box-sizing: border-box;
+  z-index: 100;
+}
+
+.reveal .footer-bar img {
+  height: calc(86px * var(--rv-scale, 1));
+  width: auto;
+}
+
+.reveal .footer-bar .footer-chpl-logo {
+  height: calc(52px * var(--rv-scale, 1));
+  margin-right: auto;
+  margin-left: calc(12px * var(--rv-scale, 1));
+}
+
+/* Ensure slide content doesn't overlap the footer */
+/* Space reserved for the footer bar, in canvas px.
+   The bar itself is now sized as calc(100px * var(--rv-scale)) — see .footer-bar
+   — so bar and reservation scale together and this 110 is a true 10px of
+   clearance at EVERY window shape, not just the one the deck was tuned on.
+   (Before 2026-08-19 the bar was fixed 100px window chrome while this padding
+   scaled with the canvas: on a short laptop window the reservation fell to
+   ~81px against a 100px bar and the bar covered the last line of the slide.)
+   Do not raise it to "be safe" — every px here comes straight out of the
+   slide's content budget. */
+.reveal .slides section {
+  padding-bottom: 110px;
+}
+
+/* Title slides don't need footer padding */
+.reveal .slides section.title-slide {
+  padding-bottom: 0;
+}
+
+/* Dark background slides (navy) */
+.reveal section[data-background-color="#16243a"] h1,
+.reveal section[data-background-color="#16243a"] h2,
+.reveal section[data-background-color="#16243a"] h3,
+.reveal section[data-background-color="#16243a"] p,
+.reveal section[data-background-color="#16243a"] li,
+.reveal section[data-background-color="#0E2841"] h1,
+.reveal section[data-background-color="#0E2841"] h2,
+.reveal section[data-background-color="#0E2841"] h3,
+.reveal section[data-background-color="#0E2841"] p,
+.reveal section[data-background-color="#0E2841"] li {
+  color: #FFFFFF;
+}
+
+.reveal section[data-background-color="#16243a"] a,
+.reveal section[data-background-color="#0E2841"] a {
+  color: #3291c2;
+}
+
+/* Lists */
+.reveal ul,
+.reveal ol {
+  text-align: left;
+  margin-left: 1em;
+}
+
+.reveal li {
+  margin-bottom: 0.4em;
+  font-size: 0.85em;
+}
+
+/* Code blocks */
+.reveal pre {
+  font-size: 0.55em;
+  box-shadow: none;
+  border: 1px solid #E8E8E8;
+  border-radius: 4px;
+}
+
+.reveal code {
+  font-family: 'Fira Code', 'JetBrains Mono', 'Source Code Pro', monospace;
+}
+
+.reveal p code,
+.reveal li code {
+  background: #E8E8E8;
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Images */
+.reveal img {
+  border: none;
+  box-shadow: none;
+}
+
+/* Two-column layout helper */
+.reveal .columns {
+  display: flex;
+  gap: 2em;
+}
+
+.reveal .columns .col {
+  flex: 1;
+}
+
+/* Screenshot styling */
+.reveal .screenshot {
+  border: 2px solid #E8E8E8;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Tables */
+.reveal table {
+  border-collapse: collapse;
+}
+
+.reveal table th {
+  background: #16243a;
+  color: #FFFFFF;
+  padding: 0.4em 0.6em;
+  font-weight: 600;
+}
+
+.reveal table td {
+  border-bottom: 1px solid #E8E8E8;
+  padding: 0.3em 0.6em;
+}
+
+.reveal table tr:nth-child(even) td {
+  background: #f9f7f3;
+}
+
+/* =============================================
+   MOBILE / SMALL SCREENS
+   ============================================= */
+
+/* ⭐ 2026-08-19 — THE FONT-SHRINK RULE THAT USED TO LIVE HERE IS GONE.
+ * It was `.reveal { font-size: 28px }`, and with a FIXED canvas it did the
+ * opposite of what it looks like it does. Reveal authors every slide inside
+ * the canvas and then scales the whole canvas to the viewport, so cutting the
+ * canvas font 42 -> 28 does not "fit the phone" — it shrinks text that was
+ * already being scaled to 0.30. Measured on a 390px phone: list items landed
+ * at 6.3 CSS px on screen. On an iPad in portrait (768px, where the rule also
+ * fired) 12.3px. The rule is a leftover from a fluid-layout assumption.
+ * The apparent-size knob for a fixed canvas is the CANVAS, not the font —
+ * see the mobileCanvas() block in templates/presentation.html.j2.
+ *
+ * The 820px breakpoint below matches scrollActivationWidth in that same file.
+ * ⚠ THEY MUST STAY EQUAL: below it the deck is a scrolling reading page on a
+ *   portrait canvas; above it, the presenting deck. A gap between the two
+ *   numbers means a window that reads as one and is styled as the other.
+ */
+@media screen and (max-width: 820px) {
+
+  /* Stack title slide vertically instead of split layout */
+  .title-logo-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 50;
+  }
+
+  .title-logo-panel img {
+    width: auto;
+    max-width: none;
+    max-height: 60px;
+    transform: none;  /* top bar, not a centred panel — nothing to optically centre */
+  }
+
+  .reveal .title-slide .title-content {
+    margin-left: 0;
+    margin-top: 60px;
+    padding: 0.5em 1em;
+    text-align: center;
+  }
+
+  .reveal .title-slide .title-content h1 {
+    font-size: 1.2em;
+  }
+
+  .reveal .title-slide .title-content h2 {
+    font-size: 0.6em;
+  }
+
+  /* Smaller footer */
+  .reveal .footer-bar {
+    height: calc(60px * var(--rv-scale, 1));
+  }
+
+  .reveal .footer-bar img {
+    height: calc(50px * var(--rv-scale, 1));
+  }
+
+  .reveal .controls {
+    bottom: 65px !important;
+  }
+
+  .reveal .slides section {
+    padding-bottom: 70px;
+  }
+
+  /* 2026-08-19: was 0.75em — a leftover from the era when the phone got the
+     landscape canvas and every px had to be clawed back. The portrait canvas
+     pays for full-size list text now; check-fit.py's mobile pass is what says
+     whether it still fits. */
+  .reveal li {
+    font-size: 0.85em;
+  }
+
+  .reveal pre {
+    font-size: 0.45em;
+  }
+}
+
+/* =============================================
+   TITLE SLIDE — VERSION STAMP + QR
+   Added 2026-08-18. The deck is published publicly at
+   rayvoelker.github.io/2026-08/our-own-copy/, so slide 1 carries its own
+   version stamp and a scannable link to the canonical copy.
+
+   ⚠ The version <p> lives inside .title-content, whose `p` rule is
+   (0,3,1) — a plain .deck-version selector LOSES to it. The
+   `.title-content p.deck-version` form below is deliberate; do not
+   "simplify" it or the size and margin silently revert.
+   ============================================= */
+
+.reveal .title-slide .title-meta {
+  display: flex;
+  /* flex-start, not flex-end: the byline's first line ("Ray Voelker") tops out
+     level with the QR panel. Bottom-aligning instead hung the name 60px below
+     the QR's top edge, which read as two unrelated blocks. */
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5em;
+  flex-wrap: wrap;
+}
+
+.reveal .title-slide .title-byline {
+  flex: 1 1 auto;
+}
+
+/* Kill reveal's inherited top margin on the first byline paragraph so the flex
+   top edge really is the top of the text, not the top of a margin above it. */
+.reveal .title-slide .title-byline > p:first-child {
+  margin-top: 0;
+}
+
+.reveal .title-slide .title-content p.deck-version {
+  margin-top: 0.85em;
+  font-size: 0.42em;
+  letter-spacing: 0.08em;
+  /* ⚠ NO text-transform: uppercase here. It renders the semver "v" as "V1.0.0",
+     which is not how a version is written. The string is digits either way, so
+     the transform bought nothing and cost correctness. */
+  color: #16243a;
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+.reveal .title-slide .title-qr {
+  flex: 0 0 auto;
+  margin: 0;
+  text-align: center;
+}
+
+/* ⚠ reveal's white theme gives every `section img` a border + box-shadow.
+   Both are cleared here: a framed QR reads as a picture of a QR, and the
+   shadow eats into the quiet zone that scanners need. */
+.reveal .title-slide .title-qr img {
+  display: block;
+  width: 150px;
+  height: 150px;
+  padding: 8px;
+  margin: 0;
+  background: #FFFFFF;
+  border: 0;
+  box-shadow: none;
+  border-radius: 3px;
+}
+
+.reveal .title-slide .title-qr figcaption {
+  margin-top: 0.45em;
+  font-size: 0.32em;
+  line-height: 1.35;
+  color: #53575A;
+}
+
+/* Mobile: the byline/QR row stacks and centres with the rest of the title.
+   Matters more now than it used to — scanning the QR opens the deck on a
+   phone, so the title slide's small-screen form is a real reading surface. */
+@media screen and (max-width: 820px) {
+  .reveal .title-slide .title-meta {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  .reveal .title-slide .title-qr img {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* =============================================
+   SCROLL VIEW (reveal's own mobile reading mode)
+   ============================================= */
+
+/* Reveal flattens the deck into a scrolling page below scrollActivationWidth.
+ * The footer bar is fixed WINDOW chrome — correct for one slide filling the
+ * screen, wrong for a page you scroll, where it would sit over the text for
+ * the whole read and eat ~15% of a phone screen permanently. The brandmark
+ * still opens the read: the title page's logo panel is the first thing on it.
+ * Added 2026-08-19 with the mobile reading pass. */
+.reveal-viewport.reveal-scroll .footer-bar {
+  display: none !important;
+}
+
+/* ...and with no bar there is nothing to reserve space for. On a scrolling page
+   that reservation was 110-ish canvas px of dead air under every slide — and it
+   was the difference between "The shape of a lakehouse architecture" fitting a
+   phone page and running 37px past it. */
+.reveal-viewport.reveal-scroll .slides section {
+  padding-bottom: 0;
+}
